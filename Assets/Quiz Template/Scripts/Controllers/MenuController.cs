@@ -1,9 +1,10 @@
 using System;
-using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using YG;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using DG.Tweening;
 
 public class MenuController : MonoBehaviour
@@ -12,20 +13,30 @@ public class MenuController : MonoBehaviour
 
     public MenuConfig config; // Конфиг нужно назначать из инспектора
 
+    private IntVariable buyCost;
+    private LocalizedString[] errorTexts;
+
     [Space]
     public GameObject buyWindow;
     public TextMeshProUGUI buyError, starCounter;
     public Transform buttonContainer;
 
-    public void Init()
+    private void Awake()
     {
         if (config == null)
         {
             throw new NullReferenceException("No menu config!");
         }
 
+        var source = LocalizationSettings.StringDatabase.SmartFormatter.GetSourceExtension<UnityEngine.Localization.SmartFormat.Extensions.PersistentVariablesSource>();
+        buyCost = source["global"]["levelCost"] as IntVariable;
+        errorTexts = new[] { source["global"]["buyError1"] as LocalizedString, source["global"]["buyError2"] as LocalizedString };
+    }
+
+    public void Init()
+    {
         starCounter.GetComponentInChildren<Image>().sprite = config.cashSprite;
-        starCounter.text = YandexGame.savesData.cash.ToString();
+        starCounter.text = YG.YandexGame.savesData.cash.ToString();
 
         if (config.easyButtonImage != null)
         {
@@ -54,7 +65,7 @@ public class MenuController : MonoBehaviour
         {
             buyWindow.SetActive(true);
             int price = levelNumber == 1 ? config.mediumOpenPrice : config.hardOpenPrice;
-            buyWindow.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = $"Хотите открыть этот уровень за {price} звезд?";
+            buyCost.Value = price;
             return;
         }
 
@@ -63,14 +74,11 @@ public class MenuController : MonoBehaviour
 
     public void BuyButtonPressed()
     {
-        // Ищет в тексте окна покупки число (означающее собственно стоимость уровня) и сохраняет его в num
-        MatchCollection matches = Regex.Matches(buyWindow.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text, @"\d+");
-        int num = int.Parse(matches[0].Value);
-
+        int num = buyCost.Value;
         int index = num == config.mediumOpenPrice ? 1 : 2;
         if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1))
         {
-            DoBuyError("Сначала нужно открыть средний уровень сложности!");
+            DoBuyError(0);
             buyWindow.SetActive(false);
             return;
         }
@@ -78,21 +86,21 @@ public class MenuController : MonoBehaviour
         if (GameManager.ChangeCash(-num))
         { 
             gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
-            YandexGame.SaveProgress();
+            YG.YandexGame.SaveProgress();
         }
         else
         {
-            DoBuyError("У тебя недостаточно звезд!");
+            DoBuyError(1);
         }
 
         buyWindow.SetActive(false);
         Init();
     }
 
-    private void DoBuyError(string text)
+    private void DoBuyError(int textIndex)
     {
-        DOTween.Kill(0); // Не оптимально использовать это
-        buyError.text = text;
+        DOTween.Kill(0);
+        buyError.text = errorTexts[textIndex].GetLocalizedString();
         buyError.GetComponent<RectTransform>().position = new Vector2(Screen.width / 2f, Screen.height / 2.5f);
         buyError.color = Color.white;
         DOTween.Sequence()

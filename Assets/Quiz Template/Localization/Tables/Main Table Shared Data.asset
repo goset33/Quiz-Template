@@ -14,7 +14,79 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TableCollectionName: Main Table
   m_TableCollectionNameGuidString: a2b025560d9220e4f8f138865dba18d1
-  m_Entries: []
+  m_Entries:
+  - m_Id: 314031549796352
+    m_Key: CHOOSE_HEADER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314251834642432
+    m_Key: LEVEL_MENU_HEADER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314405329391616
+    m_Key: EASY_BUTTON
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314434605633536
+    m_Key: MEDIUM_BUTTON
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314450632069120
+    m_Key: HARD_BUTTON
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314487923625984
+    m_Key: WANNA_BUY_LEVEL
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314563236548608
+    m_Key: BUY_WINDOW_TEXT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314840693952512
+    m_Key: BACK
+    m_Metadata:
+      m_Items: []
+  - m_Id: 314866279206912
+    m_Key: BUY_LEVEL_BUTTON
+    m_Metadata:
+      m_Items: []
+  - m_Id: 318117259071488
+    m_Key: IN_MENU
+    m_Metadata:
+      m_Items: []
+  - m_Id: 318372272754688
+    m_Key: BACK_IN_MENU_TEXT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 318447090749440
+    m_Key: NO
+    m_Metadata:
+      m_Items: []
+  - m_Id: 318506263990272
+    m_Key: YES
+    m_Metadata:
+      m_Items: []
+  - m_Id: 320526794444800
+    m_Key: RESULTS_HEADER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 320656733982720
+    m_Key: RESTART
+    m_Metadata:
+      m_Items: []
+  - m_Id: 321015472803840
+    m_Key: RESULT_TEXT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350073673830400
+    m_Key: BUY_LEVEL_ERROR-1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 352165071245312
+    m_Key: BUY_LEVEL_ERROR-2
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
