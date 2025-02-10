@@ -15,6 +15,20 @@ public class ExcelReader
         filePath = path;
     }
 
+    public string[] GetAllSheetNames()
+    {
+        using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        {
+            XSSFWorkbook workbook = new(file);
+            List<string> sheets = new();
+            for (int i = 0; i < workbook.NumberOfSheets; i++)
+            {
+                sheets.Add(workbook.GetSheetName(i));
+            }
+            return sheets.ToArray();
+        }
+    }
+
     // Название таблицы должно точно совпадать с ее реальной копией в файле, с точностью до регистра
     public List<Dictionary<string, string>> ReadSheet(string sheetName)
     {

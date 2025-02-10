@@ -9,7 +9,9 @@ public class QuestionController : MonoBehaviour
     public static GameManager gameManager;
 
     private int rightIndex;
-    private List<QuestionCard> cards = new();
+    private List<int> choosedSequence = new();
+
+    private List<IQuestion> cards = new();
 
     public int currentQuestion;
     public int rightAnswers;
@@ -26,7 +28,7 @@ public class QuestionController : MonoBehaviour
     // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю
     public void Init(CardsContainer container)
     {
-        List<QuestionCard> allPool = new List<QuestionCard>(container.QuestionCards);
+        List<IQuestion> allPool = new(container.QuestionCards);
         if (gameManager.shouldShuffle)
         {
             // allPool.OrderBy(_ => Random.value).Reverse(); 
@@ -35,12 +37,12 @@ public class QuestionController : MonoBehaviour
             for (int i = n - 1; i > 0; i--)
             {
                 int j = Random.Range(0, i + 1);
-                QuestionCard temp = allPool[i];
+                IQuestion temp = allPool[i];
                 allPool[i] = allPool[j];
                 allPool[j] = temp;
             }
         }
-        cards = container.shouldCutCardPool ? new List<QuestionCard>(allPool.Take(container.numberOfQuestions)) : allPool;
+        cards = container.shouldCutCardPool ? new List<IQuestion>(allPool.Take(container.numberOfQuestions)) : allPool;
 
         currentQuestion = 1;
         rightAnswers = 0;
@@ -48,26 +50,43 @@ public class QuestionController : MonoBehaviour
     }
 
     // Функция используется для занесения данных из входной переменной card в интерфейс
-    public void LoadNextQuestion(QuestionCard card)
+    private void LoadNextQuestion(IQuestion card)
     {
-        questionText.text = card.question;
-        image.sprite = card.image;
+        questionText.text = card.QuestionText;
+        image.sprite = card.Image;
         counterText.text = $"{currentQuestion}/{cards.Count}";
 
-        List<string> wrongs = new(card.wrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
-        List<string> allAnswers = new(wrongs.Append(card.rightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
-
-        for (int i = 0; i < allAnswers.Count; i++)
-        { 
-            GameObject button = Instantiate(answerButtonPrefab, answersParent);
-            int index = i;
-            button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
-            button.GetComponentInChildren<TextMeshProUGUI>().text = allAnswers[i];
-
-            if (allAnswers[i] == card.rightAnswer)
+        if (card is MainTypeQuestion)
+        {
+            List<string> wrongs = new(card.OtherAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
+            List<string> allAnswers = new(wrongs.Append(card.FirstAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
+            for (int i = 0; i < allAnswers.Count; i++)
             {
-                rightIndex = i;
-                print("Right index was set: " + i);
+                GameObject button = Instantiate(answerButtonPrefab, answersParent);
+                int index = i;
+                button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
+                button.GetComponentInChildren<TextMeshProUGUI>().text = allAnswers[i];
+
+                if (allAnswers[i] == card.FirstAnswer)
+                {
+                    rightIndex = i;
+                    print("Right index was set: " + i);
+                }
+            }
+        }
+        else if (card is CounterQuestion)
+        {
+            choosedSequence = null;
+            List<string> answers = new(card.OtherAnswers.Take(gameManager.chosenLevelIndex + 2)); // TODO: Нужно ли обрезать?
+            List<string> randomizedAnswers = new(answers.OrderBy(_ => Random.value));
+            for (int i = 0; i < answers.Count; i++)
+            {
+                GameObject button = Instantiate(answerButtonPrefab, answersParent);
+                int index = i;
+                button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index)); // TODO: Использовать другой метод?
+                button.GetComponentInChildren<TextMeshProUGUI>().text = answers[i];
+
+                choosedSequence.Add(card.OtherAnswers.IndexOf(answers[i]));
             }
         }
     }
