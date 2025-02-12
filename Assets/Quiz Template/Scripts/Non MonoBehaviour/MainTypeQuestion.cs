@@ -25,4 +25,12 @@ public class MainTypeQuestion : IQuestion
         rightAnswer = answer1;
         wrongAnswers = answers;
     }
+
+    public MainTypeQuestion(MainTypeQuestion instance)
+    {
+        question = instance.QuestionText;
+        image = instance.Image;
+        rightAnswer = instance.FirstAnswer;
+        wrongAnswers = instance.OtherAnswers;
+    }
 }

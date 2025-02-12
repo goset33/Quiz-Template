@@ -1,23 +1,30 @@
-// Класс, требуемый для сохранения информации о купленных уровнях 
+using UnityEngine;
+
 public class DoubleInt
 {
-    public int quiz = -1;
-    public int difficult = -1;
+    public int first;
+    public int second;
 
-    public DoubleInt(int quizIndex, int levelIndex)
+    public DoubleInt(int firstInt, int secondInt)
     {
-        quiz = quizIndex;
-        difficult = levelIndex;
+        first = firstInt;
+        second = secondInt;
+    }
+
+    public DoubleInt()
+    {
+        first = 0;
+        second = 0;
     }
 
     public float GetBothAsFloat()
     {
-        return quiz + (difficult / 10f);
+        return first + (second / Mathf.Pow(10f, second.ToString().Length));
     }
 
-    public string GetBothAsString() 
+    public string GetBothAsString(string separator) 
     {
-        return $"{quiz} {difficult}";
+        return $"{first}{separator}{second}";
     }
 
 }

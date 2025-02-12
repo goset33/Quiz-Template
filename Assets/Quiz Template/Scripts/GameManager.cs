@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsLevelWasOpened(int quizIndex, int levelIndex)
     {
-        return OpenedLevels.Any(obj => obj.quiz == quizIndex && obj.difficult == levelIndex);
+        return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
     }
 
     private void LoadNewWindow(Transform oldWindow, Transform newWindow)

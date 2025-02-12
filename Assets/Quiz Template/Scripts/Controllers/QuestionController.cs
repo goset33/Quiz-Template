@@ -9,7 +9,7 @@ public class QuestionController : MonoBehaviour
     public static GameManager gameManager;
 
     private int rightIndex;
-    private List<int> choosedSequence = new();
+    private List<DoubleInt> choosedSequence = new(); // В данном случае DoubleInt.first хранит правильный индекс, а DoubleInt.second индекс нажатой очереди
 
     private List<IQuestion> cards = new();
 
@@ -31,8 +31,6 @@ public class QuestionController : MonoBehaviour
         List<IQuestion> allPool = new(container.QuestionCards);
         if (gameManager.shouldShuffle)
         {
-            // allPool.OrderBy(_ => Random.value).Reverse(); 
-
             int n = allPool.Count;
             for (int i = n - 1; i > 0; i--)
             {
@@ -47,6 +45,16 @@ public class QuestionController : MonoBehaviour
         currentQuestion = 1;
         rightAnswers = 0;
         LoadNextQuestion(cards[currentQuestion - 1]);
+    }
+
+    private void ClearScreen()
+    {
+        nextButton.SetActive(false);
+        showRightButton.SetActive(false);
+        for (int i = 0; i < answersParent.childCount; i++)
+        {
+            Destroy(answersParent.GetChild(i).gameObject);
+        }
     }
 
     // Функция используется для занесения данных из входной переменной card в интерфейс
@@ -64,8 +72,8 @@ public class QuestionController : MonoBehaviour
             {
                 GameObject button = Instantiate(answerButtonPrefab, answersParent);
                 int index = i;
-                button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index));
-                button.GetComponentInChildren<TextMeshProUGUI>().text = allAnswers[i];
+                button.GetComponent<Button>().onClick.AddListener(() => MainTypeAnswer(index));
+                button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = allAnswers[i];
 
                 if (allAnswers[i] == card.FirstAnswer)
                 {
@@ -76,54 +84,92 @@ public class QuestionController : MonoBehaviour
         }
         else if (card is CounterQuestion)
         {
-            choosedSequence = null;
-            List<string> answers = new(card.OtherAnswers.Take(gameManager.chosenLevelIndex + 2)); // TODO: Нужно ли обрезать?
+            choosedSequence.Clear();
+            List<string> answers = new(card.OtherAnswers.Take(gameManager.chosenLevelIndex + 2));
             List<string> randomizedAnswers = new(answers.OrderBy(_ => Random.value));
-            for (int i = 0; i < answers.Count; i++)
+            for (int i = 0; i < randomizedAnswers.Count; i++)
             {
                 GameObject button = Instantiate(answerButtonPrefab, answersParent);
-                int index = i;
-                button.GetComponent<Button>().onClick.AddListener(() => AnswerButtonPressed(index)); // TODO: Использовать другой метод?
-                button.GetComponentInChildren<TextMeshProUGUI>().text = answers[i];
-
-                choosedSequence.Add(card.OtherAnswers.IndexOf(answers[i]));
+                int realIndex = answers.IndexOf(randomizedAnswers[i]);
+                int workIndex = i;
+                button.GetComponent<Button>().onClick.AddListener(() => CountAnswer(realIndex, workIndex)); 
+                button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = randomizedAnswers[i];
             }
         }
     }
 
-    private void ClearScreen()
+    private void MainTypeAnswer(int index)
     {
-        nextButton.SetActive(false);
-        showRightButton.SetActive(false);
-        for (int i = 0; i < answersParent.childCount; i++)
-        {
-            Destroy(answersParent.GetChild(i).gameObject);
-        }
-    }
-
-    // Нажатие кнопки ответа. На вход подается номер кнопки начиная с 0
-    public void AnswerButtonPressed(int buttonIndex)
-    {
-        if (nextButton.activeSelf) return;
-
         nextButton.SetActive(true);
-        Image pressedImage = answersParent.GetChild(buttonIndex).GetComponent<Image>();
-        if (buttonIndex == rightIndex)
+        Image pressedButtonImage = answersParent.GetChild(index).GetComponent<Image>();
+        if (index == rightIndex)
         {
             rightAnswers++;
             GameManager.ChangeCash(1);
 
-            pressedImage.sprite = gameManager.questionConfig.rightAnswerSprite;
-            pressedImage.color = gameManager.questionConfig.rightButtonColor;
+            pressedButtonImage.sprite = gameManager.questionConfig.rightAnswerSprite;
+            pressedButtonImage.color = gameManager.questionConfig.rightButtonColor;
             print("Right!");
         }
         else
         {
             showRightButton.SetActive(true);
-            pressedImage.sprite = gameManager.questionConfig.wrongAnswerSprite;
-            pressedImage.color = gameManager.questionConfig.wrongButtonColor;
-
+            pressedButtonImage.sprite = gameManager.questionConfig.wrongAnswerSprite;
+            pressedButtonImage.color = gameManager.questionConfig.wrongButtonColor;
             print("Incorrect!");
+        }
+    }
+
+    private void CountAnswer(int rightIndex, int pressedIndex)
+    {
+        choosedSequence.Add(new DoubleInt(rightIndex, pressedIndex));
+        UpdateButtonIndexes(pressedIndex);
+        if (choosedSequence.Count == gameManager.chosenLevelIndex + 2)
+        {
+            int rightCounter = 0;
+            for (int i = 0; i < choosedSequence.Count; i++)
+            {
+                if (choosedSequence[i].first == i)
+                {
+                    rightCounter++;
+                }
+            }
+            nextButton.SetActive(true);
+            if (rightCounter == gameManager.chosenLevelIndex + 2)
+            {
+                rightAnswers++;
+                GameManager.ChangeCash(1);
+                for (int i = 0; i < answersParent.childCount; i++)
+                {
+                    Image image = answersParent.GetChild(i).GetComponent<Image>();
+                    image.sprite = gameManager.questionConfig.rightAnswerSprite;
+                    image.color = gameManager.questionConfig.rightButtonColor;
+                }
+            }
+            else
+            {
+                showRightButton.SetActive(true);
+                for (int i = 0; i < answersParent.childCount; i++)
+                {
+                    Image image = answersParent.GetChild(i).GetComponent<Image>();
+                    image.sprite = gameManager.questionConfig.wrongAnswerSprite;
+                    image.color = gameManager.questionConfig.wrongButtonColor;
+                }
+            }
+        }
+    }
+
+    private void UpdateButtonIndexes(int changedIndex)
+    {
+        GameObject changed = answersParent.GetChild(changedIndex).GetChild(1).gameObject;
+        changed.SetActive(!changed.activeSelf);
+        for (int i = 0; i < choosedSequence.Count; i++)
+        {
+            GameObject numberText = answersParent.GetChild(choosedSequence[i].second).GetChild(1).gameObject;
+            if (numberText.activeSelf)
+            {
+                numberText.GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
+            }
         }
     }
 
@@ -143,8 +189,9 @@ public class QuestionController : MonoBehaviour
 
     public void ShowRightAnswer()
     {
-        if (GameManager.ChangeCash(-1))
+        if (GameManager.ChangeCash(-1)) // TODO: Кнопку можно тыкать бесконечное кол-во раз пока деньги не кончатся
         {
+            // TODO: Для 3 типа не обрабатывается правильно показ ответа
             Image rightButton = answersParent.GetChild(rightIndex).GetComponent<Image>();
             rightButton.sprite = gameManager.questionConfig.rightAnswerSprite;
             rightButton.color = gameManager.questionConfig.rightButtonColor;

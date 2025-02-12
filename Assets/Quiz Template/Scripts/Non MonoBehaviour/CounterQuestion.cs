@@ -18,7 +18,7 @@ public class CounterQuestion : IQuestion
 
     public CounterQuestion(string questionString, Sprite sprite, string answer1, List<string> otherAnswers)
     {
-        if (answers.Count != 3) return;
+        if (otherAnswers.Count != 3) return;
 
         question = questionString;
         image = sprite;
