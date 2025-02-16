@@ -67,15 +67,21 @@ public class GameManager : MonoBehaviour
 
     public GameState GetGameState() { return state; }
 
-    public static bool ChangeCash(int cost)
+    public static bool HaveEnoughCash(int cost)
     {
         if (cost < 0 && YandexGame.savesData.cash < Math.Abs(cost))
         {
             return false;
         }
+        return true;
+    }
+
+    public static void ChangeCash(int cost)
+    {
+        if (!HaveEnoughCash(cost)) return;
+
         YandexGame.savesData.cash += cost;
         YandexGame.SaveProgress();
-        return true;
     }
 
     public bool IsLevelWasOpened(int quizIndex, int levelIndex)

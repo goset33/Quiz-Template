@@ -83,8 +83,9 @@ public class MenuController : MonoBehaviour
             return;
         }
 
-        if (GameManager.ChangeCash(-num))
-        { 
+        if (GameManager.HaveEnoughCash(-num))
+        {
+            GameManager.ChangeCash(-num);
             gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
             YG.YandexGame.SaveProgress();
         }

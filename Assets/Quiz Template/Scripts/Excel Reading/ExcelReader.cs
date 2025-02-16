@@ -60,12 +60,11 @@ public class ExcelReader
                         {
                             string base64Image = Convert.ToBase64String(pictureData);
                             rowData[header] = base64Image;
-                            Debug.Log($"Найдено изображение: {rowData[header]}");
                         }
                         else
                         {
                             rowData[header] = string.Empty;
-                            Debug.LogWarning("Изображение не найдено");
+                            Debug.LogWarning("Одно изображение не найдено!");
                         }
                     }
                     else

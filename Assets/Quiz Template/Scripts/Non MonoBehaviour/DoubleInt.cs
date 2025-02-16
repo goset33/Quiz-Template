@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DoubleInt
@@ -15,6 +16,22 @@ public class DoubleInt
     {
         first = 0;
         second = 0;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        DoubleInt other = (DoubleInt) obj;
+        return first == other.first && second == other.second;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(first, second);
     }
 
     public float GetBothAsFloat()
