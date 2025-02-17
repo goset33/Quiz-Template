@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MainTypeQuestion : IQuestion
@@ -7,30 +7,34 @@ public class MainTypeQuestion : IQuestion
     private readonly Sprite image;
 
     private readonly string rightAnswer;
-    private readonly List<string> wrongAnswers = new(3);
+    private readonly string[] wrongAnswers = new string[3];
+    private readonly string[] allAnswers = new string[4];
 
 
     public string QuestionText { get => question; }
     public Sprite Image { get => image; }
 
-    public string FirstAnswer { get => rightAnswer; }
-    public List<string> OtherAnswers { get => wrongAnswers; }
+    public string RightAnswer { get => rightAnswer; }
+    public string[] WrongAnswers { get => wrongAnswers; }
+    public string[] AllAnswers { get => allAnswers; }
 
-    public MainTypeQuestion(string questionString, Sprite sprite, string answer1, List<string> answers)
+    public MainTypeQuestion(string questionString, Sprite sprite, string[] answers)
     {
-        if (answers.Count != 3) return;
+        if (answers.Length != 4) return;
 
         question = questionString;
         image = sprite;
-        rightAnswer = answer1;
-        wrongAnswers = answers;
+        rightAnswer = answers[0];
+        wrongAnswers = answers.Skip(1).ToArray();
+        allAnswers = answers;
     }
 
     public MainTypeQuestion(MainTypeQuestion instance)
     {
         question = instance.QuestionText;
         image = instance.Image;
-        rightAnswer = instance.FirstAnswer;
-        wrongAnswers = instance.OtherAnswers;
+        rightAnswer = instance.RightAnswer;
+        wrongAnswers = instance.WrongAnswers;
+        allAnswers = instance.AllAnswers;
     }
 }

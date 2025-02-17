@@ -39,20 +39,66 @@ public class QuestionController : MonoBehaviour
         List<IQuestion> allPool = new(container.QuestionCards);
         if (gameManager.shouldShuffle)
         {
-            int n = allPool.Count;
-            for (int i = n - 1; i > 0; i--)
-            {
-                int j = Random.Range(0, i + 1);
-                IQuestion temp = allPool[i];
-                allPool[i] = allPool[j];
-                allPool[j] = temp;
-            }
+            allPool = MixQuestions(allPool);
         }
-        cards = container.shouldCutCardPool ? new List<IQuestion>(allPool.Take(container.numberOfQuestions)) : allPool;
+
+        int amount = 0;
+        switch (gameManager.chosenLevelIndex)
+        {
+            case 0:
+                amount = container.easyAmount;
+                break;
+            case 1:
+                amount = container.mediumAmount;
+                break;
+            case 2:
+                amount = container.hardAmount;
+                break;
+        }
+        cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
 
         currentQuestion = 1;
         rightAnswers = 0;
         LoadNextQuestion(cards[currentQuestion - 1]);
+    }
+
+    private List<IQuestion> MixQuestions(List<IQuestion> inputQuestions)
+    {
+        List<IQuestion> questions = new(inputQuestions);
+        int n = questions.Count;
+        for (int i = n - 1; i > 0; i--)
+        {
+            // Базовая рандомизация
+            int j = Random.Range(0, i + 1);
+            IQuestion temp = questions[i];
+            questions[i] = questions[j];
+            questions[j] = temp;
+
+            // Проверяем рандом и тусуем
+            if (i > 0 && questions[i].GetType() == questions[i - 1].GetType() &&
+                (questions[i] is CounterQuestion || questions[i] is ConnectQuestion))
+            {
+                // Находим безопасный индекс и меняем если возможно
+                int swapIndex = -1;
+                for (int k = i + 1; k < n; k++)
+                {
+                    if (questions[k].GetType() != questions[i].GetType() &&
+                        questions[k].GetType() != questions[i - 1].GetType())
+                    {
+                        swapIndex = k;
+                        break;
+                    }
+                }
+
+                if (swapIndex != -1)
+                {
+                    IQuestion swapTemp = questions[i];
+                    questions[i] = questions[swapIndex];
+                    questions[swapIndex] = swapTemp;
+                }
+            }
+        }
+        return questions;
     }
 
     // Функция используется для занесения данных из входной переменной card в интерфейс 
@@ -62,10 +108,10 @@ public class QuestionController : MonoBehaviour
         image.sprite = card.Image;
         counterText.text = $"{currentQuestion}/{cards.Count}";
 
-        if (card is MainTypeQuestion)
+        if (card is MainTypeQuestion question)
         {
-            List<string> wrongs = new(card.OtherAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
-            List<string> allAnswers = new(wrongs.Append(card.FirstAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
+            List<string> wrongs = new(question.WrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
+            List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
             for (int i = 0; i < allAnswers.Count; i++)
             {
                 GameObject button = Instantiate(answerButtonPrefab, answersParent);
@@ -73,7 +119,7 @@ public class QuestionController : MonoBehaviour
                 button.GetComponent<Button>().onClick.AddListener(() => MainTypeAnswer(index));
                 button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = allAnswers[i];
 
-                if (allAnswers[i] == card.FirstAnswer)
+                if (allAnswers[i] == question.RightAnswer)
                 {
                     rightIndex = i;
                     print("Right index was set: " + i);
@@ -85,7 +131,7 @@ public class QuestionController : MonoBehaviour
             choosedSequence.Clear();
             rightSequence = new GameObject[gameManager.chosenLevelIndex + 2];
 
-            List<string> answers = new(card.OtherAnswers.Take(gameManager.chosenLevelIndex + 2));
+            List<string> answers = new(card.AllAnswers.Take(gameManager.chosenLevelIndex + 2));
             List<string> randomizedAnswers = new(answers.OrderBy(_ => Random.value));
             for (int i = 0; i < randomizedAnswers.Count; i++)
             {
@@ -94,6 +140,10 @@ public class QuestionController : MonoBehaviour
                 rightSequence[answers.IndexOf(randomizedAnswers[i])] = button;
                 button.GetComponent<Button>().onClick.AddListener(() => CountAnswer(button));
             }
+        }
+        else if (card is ConnectQuestion)
+        {
+
         }
     }
 

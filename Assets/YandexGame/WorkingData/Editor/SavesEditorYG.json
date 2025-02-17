@@ -1,5 +1,5 @@
 {
-  "idSave": 998,
+  "idSave": 1035,
   "isFirstSession": false,
   "language": "ru",
   "promptDone": false,
@@ -11,12 +11,7 @@
     false
   ],
   "passedLevels": 0,
-  "openedLevels": [
-    {
-      "first": 0,
-      "second": 1
-    }
-  ],
-  "cash": 74,
+  "openedLevels": [],
+  "cash": 104,
   "isMusicPlaying": false
 }

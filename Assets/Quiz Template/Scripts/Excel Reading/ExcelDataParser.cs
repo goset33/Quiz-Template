@@ -13,17 +13,21 @@ public class ExcelDataParser
             texture.LoadImage(Convert.FromBase64String(row["Изображение"]));
 
             int type = int.Parse(row["Тип вопроса"]);
-            List<string> otherAnswers = new() { row["Неправильный ответ 1"], row["Неправильный ответ 2"], row["Неправильный ответ 3"] };
+            string[] allAnswers = new string[4] { row["Правильный ответ"], row["Неправильный ответ 1"], row["Неправильный ответ 2"], row["Неправильный ответ 3"] };
             Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
 
             IQuestion card = null;
             if (type == 1 || type == 2)
             {
-                card = new MainTypeQuestion(row["Вопрос"], image, row["Правильный ответ"], otherAnswers);
+                card = new MainTypeQuestion(row["Вопрос"], image, allAnswers);
             }
             else if (type == 3)
             {
-                card = new CounterQuestion(row["Вопрос"], image, row["Правильный ответ"], otherAnswers);
+                card = new CounterQuestion(row["Вопрос"], image, allAnswers);
+            }
+            else if (type == 4)
+            {
+
             }
             questions.Add(card);
         }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+// [TODO]: Тут нужно обрабатывать дополнительные столбцы для вопроса 4
+// А еще парсятся формулы тоже
 public class ExcelReader
 {
     private string filePath;
@@ -17,63 +19,61 @@ public class ExcelReader
 
     public string[] GetAllSheetNames()
     {
-        using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        using FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+        XSSFWorkbook workbook = new(file);
+        List<string> sheets = new();
+        for (int i = 0; i < workbook.NumberOfSheets; i++)
         {
-            XSSFWorkbook workbook = new(file);
-            List<string> sheets = new();
-            for (int i = 0; i < workbook.NumberOfSheets; i++)
-            {
-                sheets.Add(workbook.GetSheetName(i));
-            }
-            return sheets.ToArray();
+            sheets.Add(workbook.GetSheetName(i));
         }
+        return sheets.ToArray();
     }
 
     // Название таблицы должно точно совпадать с ее реальной копией в файле, с точностью до регистра
     public List<Dictionary<string, string>> ReadSheet(string sheetName)
     {
         List<Dictionary<string, string>> sheetData = new List<Dictionary<string, string>>();
-        using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        using FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+        XSSFWorkbook workbook = new XSSFWorkbook(file);
+        XSSFSheet sheet = workbook.GetSheet(sheetName) as XSSFSheet ?? throw new Exception($"Таблица '{sheetName}' не найдена");
+        IRow headerRow = sheet.GetRow(0);
+        for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)
         {
-            XSSFWorkbook workbook = new XSSFWorkbook(file);
-            XSSFSheet sheet = workbook.GetSheet(sheetName) as XSSFSheet ?? throw new Exception($"Таблица '{sheetName}' не найдена");
-            IRow headerRow = sheet.GetRow(0);
-            for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)
+            IRow row = sheet.GetRow(rowIndex);
+            if (IsRowEmpty(row)) continue;
+
+            Dictionary<string, string> rowData = new Dictionary<string, string>();
+            for (int columnIndex = 0; columnIndex < headerRow.LastCellNum; columnIndex++) // Обработка строки по столбцам
             {
-                IRow row = sheet.GetRow(rowIndex);
-                if (IsRowEmpty(row)) continue;
-
-                Dictionary<string, string> rowData = new Dictionary<string, string>();
-                for (int columnIndex = 0; columnIndex < headerRow.LastCellNum; columnIndex++) // Обработка строки по столбцам
+                string header = headerRow.GetCell(columnIndex)?.ToString()?.Trim() ?? $"Column-{columnIndex}";
+                ICell cell = row.GetCell(columnIndex);
+                if (cell == null)
                 {
-                    string header = headerRow.GetCell(columnIndex)?.ToString()?.Trim() ?? $"Column-{columnIndex}";
-                    ICell cell = row.GetCell(columnIndex);
-                    if (cell == null)
-                    {
-                        rowData[header] = string.Empty;
-                    }
+                    rowData[header] = string.Empty;
+                }
 
-                    else if (headerRow.GetCell(columnIndex).ToString() == "Изображение" && cell is XSSFCell xssfCell) // Обработка изображений
+                else if (headerRow.GetCell(columnIndex).ToString() == "Изображение" && cell is XSSFCell xssfCell) // Обработка изображений
+                {
+                    var pictureData = GetPictureFromCell(xssfCell);
+                    if (pictureData != null)
                     {
-                        var pictureData = GetPictureFromCell(xssfCell);
-                        if (pictureData != null)
-                        {
-                            string base64Image = Convert.ToBase64String(pictureData);
-                            rowData[header] = base64Image;
-                        }
-                        else
-                        {
-                            rowData[header] = string.Empty;
-                            Debug.LogWarning("Одно изображение не найдено!");
-                        }
+                        string base64Image = Convert.ToBase64String(pictureData);
+                        rowData[header] = base64Image;
                     }
                     else
                     {
-                        rowData[header] = cell.ToString();
+                        rowData[header] = string.Empty;
+                        Debug.LogWarning("Изображение не найдено!");
                     }
                 }
-                sheetData.Add(rowData);
+                else
+                {
+                    rowData[header] = cell.ToString();
+                }
             }
+            sheetData.Add(rowData);
         }
         return sheetData;
     }
@@ -89,7 +89,7 @@ public class ExcelReader
         Debug.Log($"Найдено изображений: {drawing.GetShapes().Count}");
 
         foreach (XSSFShape shape in drawing.GetShapes())
-        { 
+        {
             if (shape is XSSFPicture picture)
             {
                 IClientAnchor anchor = picture.ClientAnchor;

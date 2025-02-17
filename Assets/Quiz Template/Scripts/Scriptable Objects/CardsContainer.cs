@@ -3,8 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Question Container", menuName = "Quiz Objects/Question Container", order = 51)]
 public class CardsContainer : ScriptableObject
 {
-    public bool shouldCutCardPool; // Следует ли ограничивать количество вопросов по numberOfQuestions. Если включено то советую использовать shouldShuffle в GameManager
-    public int numberOfQuestions = 0;
+    // Количество вопросов в каждой сложности. Если 0 то все
+    public int easyAmount, mediumAmount, hardAmount = 0;
+
     public IQuestion[] QuestionCards
     {
         get { return new ExcelDataParser().ParseQuestions(filePath, sheetName).ToArray(); }
