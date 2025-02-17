@@ -1,3 +1,4 @@
+using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using YG;
 
-// TODO: Метод нажатия на кнопки тестов, запуск меню сложности, запоминание всех выборов
 public class GameManager : MonoBehaviour
 {
     public string Language => YandexGame.lang;
@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public enum GameState
     {
         ChoosingQuiz,
+        InShop,
         InLevelMenu,
         SolvingQuestions,
         GettingResults
@@ -89,51 +90,38 @@ public class GameManager : MonoBehaviour
         return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
     }
 
-    private void LoadNewWindow(Transform oldWindow, Transform newWindow)
+    // Общая функция для переключения всех окон в игре.
+    // В случае ошибки (например отсутствия integer когда он нужен) перенаправляет игрока на окно выбора теста
+    public void ChangeActiveWindow(Transform currentController, GameState requredState, int? integer)
     {
-        oldWindow.parent.gameObject.SetActive(false);
-        newWindow.parent.gameObject.SetActive(true);
-    }
-
-    // Общая функция для основного потока переключения окон
-    // Основной поток: Выбор теста -> Выбор сложности -> Сам тест -> Результат -> Сам тест...
-    public void NextStep(int requiredInt, Transform currentWindow)
-    {
-        if (currentWindow.TryGetComponent(out ChooseController _))
+        state = requredState;
+        currentController.parent.gameObject.SetActive(false);
+        if (requredState == GameState.InLevelMenu && integer.HasValue)
         {
-            chosenQuizIndex = requiredInt;
-            state = GameState.InLevelMenu;
-            LoadNewWindow(currentWindow, menuController.transform);
-            menuController.Init();
+            chosenQuizIndex = integer.Value;
+            menuController.transform.parent.gameObject.SetActive(true);
+            return;
         }
-        else if (currentWindow.TryGetComponent(out MenuController _))
+        else if (requredState == GameState.SolvingQuestions) 
         {
-            chosenLevelIndex = requiredInt;
-            state = GameState.SolvingQuestions;
-            LoadNewWindow(currentWindow, questionController.transform);
-            questionController.Init(quizzes[chosenQuizIndex].testContainer);
+            if (integer.HasValue)
+            {
+                chosenLevelIndex = integer.Value;
+            }
+            if (chosenLevelIndex != -1)
+            {
+                questionController.transform.parent.gameObject.SetActive(true);
+                return;
+            }
         }
-        else if (currentWindow.TryGetComponent(out QuestionController _))
+        else if (requredState == GameState.GettingResults && integer.HasValue)
         {
-            state = GameState.GettingResults;
-            LoadNewWindow(currentWindow, resultController.transform);
-            resultController.Init(requiredInt);
+            resultController.transform.parent.gameObject.SetActive(true);
+            resultController.Init(integer.Value);
+            return;
         }
-        else if (currentWindow.TryGetComponent(out ResultController _))
-        {
-            state = GameState.SolvingQuestions;
-            LoadNewWindow(currentWindow, questionController.transform);
-            questionController.Init(quizzes[chosenQuizIndex].testContainer);
-        }
-    }
-
-    public void RestartLastQuiz(Transform window) { NextStep(chosenLevelIndex, window); }
-
-    // Общая функция для всех кнопок возвращения в меню
-    public void BackInMenu(Transform lastWindow)
-    {
+        chooseController.transform.parent.gameObject.SetActive(true);
         state = GameState.ChoosingQuiz;
-        LoadNewWindow(lastWindow, chooseController.transform);
     }
 
     // Функция для обработки нажатия кнопки включения/выключения музыки

@@ -33,12 +33,12 @@ public class ResultController : MonoBehaviour
     public void RestartButtonPressed()
     {
         DOTween.KillAll();
-        gameManager.RestartLastQuiz(transform);
+        gameManager.ChangeActiveWindow(transform, GameManager.GameState.SolvingQuestions, null);
     }
 
     public void BackButtonPressed()
     {
         DOTween.KillAll();
-        gameManager.BackInMenu(transform);
+        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
     }
 }

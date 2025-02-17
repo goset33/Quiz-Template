@@ -33,7 +33,7 @@ public class MenuController : MonoBehaviour
         errorTexts = new[] { source["global"]["buyError1"] as LocalizedString, source["global"]["buyError2"] as LocalizedString };
     }
 
-    public void Init()
+    private void OnEnable()
     {
         starCounter.GetComponentInChildren<Image>().sprite = config.cashSprite;
         starCounter.text = YG.YandexGame.savesData.cash.ToString();
@@ -69,7 +69,7 @@ public class MenuController : MonoBehaviour
             return;
         }
 
-        gameManager.NextStep(levelNumber, transform);
+        gameManager.ChangeActiveWindow(transform, GameManager.GameState.SolvingQuestions, levelNumber);
     }
 
     public void BuyButtonPressed()
@@ -95,7 +95,7 @@ public class MenuController : MonoBehaviour
         }
 
         buyWindow.SetActive(false);
-        Init();
+        OnEnable();
     }
 
     private void DoBuyError(int textIndex)
@@ -117,6 +117,6 @@ public class MenuController : MonoBehaviour
 
     public void BackInMenuButtonPressed()
     {
-        gameManager.BackInMenu(transform);
+        gameManager.ChangeActiveWindow(transform, GameManager.GameState.InLevelMenu, null);
     }
 }

@@ -27,9 +27,14 @@ public class QuestionController : MonoBehaviour
     public RectTransform answersParent;
     public GameObject answerButtonPrefab;
 
+    private void OnEnable()
+    {
+        Init(gameManager.quizzes[gameManager.chosenQuizIndex].testContainer);
+    }
+
     // Инициализация контроллера. Обязательно вызвать ПЕРЕД началом каждого ответа на вопросы
     // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю
-    public void Init(CardsContainer container)
+    private void Init(CardsContainer container)
     {
         List<IQuestion> allPool = new(container.QuestionCards);
         if (gameManager.shouldShuffle)
@@ -204,7 +209,7 @@ public class QuestionController : MonoBehaviour
         }
         else
         {
-            gameManager.NextStep(rightAnswers, transform);
+            gameManager.ChangeActiveWindow(transform, GameManager.GameState.GettingResults, rightAnswers);
         }
     }
 
@@ -244,6 +249,6 @@ public class QuestionController : MonoBehaviour
     {
         ClearScreen();
         inMenuWindow.SetActive(false);
-        gameManager.BackInMenu(transform);
+        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
     }
 }

@@ -1,5 +1,5 @@
 {
-  "idSave": 952,
+  "idSave": 998,
   "isFirstSession": false,
   "language": "ru",
   "promptDone": false,
@@ -15,12 +15,8 @@
     {
       "first": 0,
       "second": 1
-    },
-    {
-      "first": 0,
-      "second": 2
     }
   ],
-  "cash": 56,
+  "cash": 74,
   "isMusicPlaying": false
 }
