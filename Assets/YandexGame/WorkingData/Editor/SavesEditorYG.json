@@ -1,17 +1,16 @@
 {
-  "idSave": 1035,
-  "isFirstSession": false,
-  "language": "ru",
-  "promptDone": false,
-  "money": 1,
-  "newPlayerName": "Hello!",
-  "openLevels": [
-    false,
-    true,
-    false
-  ],
-  "passedLevels": 0,
-  "openedLevels": [],
-  "cash": 104,
-  "isMusicPlaying": false
+    "idSave": 1128,
+    "isFirstSession": false,
+    "language": "ru",
+    "promptDone": false,
+    "money": 1,
+    "newPlayerName": "Hello!",
+    "openLevels": [
+        false,
+        true,
+        false
+    ],
+    "passedLevels": 0,
+    "cash": 174,
+    "isMusicPlaying": false
 }

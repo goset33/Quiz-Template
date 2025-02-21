@@ -32,7 +32,7 @@ public class QuestionController : MonoBehaviour
         Init(gameManager.quizzes[gameManager.chosenQuizIndex].testContainer);
     }
 
-    // Инициализация контроллера. Обязательно вызвать ПЕРЕД началом каждого ответа на вопросы
+    // Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
     // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю
     private void Init(CardsContainer container)
     {
@@ -62,10 +62,13 @@ public class QuestionController : MonoBehaviour
         LoadNextQuestion(cards[currentQuestion - 1]);
     }
 
+    // Метод для рандомизации входящего списка из IQuestion
+    // TODO: Он не совсем работает. Тупой Qwen
     private List<IQuestion> MixQuestions(List<IQuestion> inputQuestions)
     {
         List<IQuestion> questions = new(inputQuestions);
         int n = questions.Count;
+
         for (int i = n - 1; i > 0; i--)
         {
             // Базовая рандомизация
@@ -74,22 +77,28 @@ public class QuestionController : MonoBehaviour
             questions[i] = questions[j];
             questions[j] = temp;
 
-            // Проверяем рандом и тусуем
-            if (i > 0 && questions[i].GetType() == questions[i - 1].GetType() &&
-                (questions[i] is CounterQuestion || questions[i] is ConnectQuestion))
+            // Проверяем правила размещения
+            if (i > 0 &&
+                ((questions[i].GetType() == questions[i - 1].GetType() &&
+                  (questions[i] is CounterQuestion || questions[i] is ConnectQuestion)) ||
+                 (questions[i] is MainTypeQuestion mainA && questions[i - 1] is MainTypeQuestion mainB &&
+                  mainA.Type == 2 && mainB.Type == 2)))
             {
-                // Находим безопасный индекс и меняем если возможно
+                // Находим безопасный индекс для обмена
                 int swapIndex = -1;
                 for (int k = i + 1; k < n; k++)
                 {
-                    if (questions[k].GetType() != questions[i].GetType() &&
-                        questions[k].GetType() != questions[i - 1].GetType())
+                    if (!(questions[k].GetType() == questions[i - 1].GetType() &&
+                          (questions[k] is CounterQuestion || questions[k] is ConnectQuestion)) &&
+                        !(questions[k] is MainTypeQuestion mainK && questions[i - 1] is MainTypeQuestion mainPrev &&
+                          mainK.Type == 2 && mainPrev.Type == 2))
                     {
                         swapIndex = k;
                         break;
                     }
                 }
 
+                // Если найден безопасный индекс, производим обмен
                 if (swapIndex != -1)
                 {
                     IQuestion swapTemp = questions[i];
@@ -98,10 +107,11 @@ public class QuestionController : MonoBehaviour
                 }
             }
         }
+
         return questions;
     }
 
-    // Функция используется для занесения данных из входной переменной card в интерфейс 
+    // Переносит данные из класса вопроса в интерфейс
     private void LoadNextQuestion(IQuestion card)
     {
         questionText.text = card.QuestionText;
@@ -249,6 +259,7 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    // Вызывается при нажатии кнопки следующего вопроса
     public void NextButtonPressed()
     {
         ClearScreen();
@@ -263,6 +274,7 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    // Вызывается при нажатии кнопки показа правильного варианта ответа
     public void ShowRightAnswer()
     {
         if (GameManager.HaveEnoughCash(-1) && !isAnswerShowed)

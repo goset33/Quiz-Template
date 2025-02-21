@@ -47,7 +47,7 @@ public class ExcelReader
             Dictionary<string, string> rowData = new Dictionary<string, string>();
             for (int columnIndex = 0; columnIndex < headerRow.LastCellNum; columnIndex++) // Обработка строки по столбцам
             {
-                string header = headerRow.GetCell(columnIndex)?.ToString()?.Trim() ?? $"Column-{columnIndex}";
+                string header = headerRow.GetCell(columnIndex)?.ToString().Trim() ?? $"Column-{columnIndex}";
                 ICell cell = row.GetCell(columnIndex);
                 if (cell == null)
                 {
@@ -70,7 +70,14 @@ public class ExcelReader
                 }
                 else
                 {
-                    rowData[header] = cell.ToString();
+                    try
+                    {
+                        rowData[header] = cell.StringCellValue;
+                    }
+                    catch
+                    {
+                        rowData[header] = cell.NumericCellValue.ToString();
+                    }
                 }
             }
             sheetData.Add(rowData);

@@ -1,4 +1,3 @@
-using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +13,7 @@ public class GameManager : MonoBehaviour
     public enum GameState
     {
         ChoosingQuiz,
-        InShop,
-        InLevelMenu,
+        ChoosingLevel,
         SolvingQuestions,
         GettingResults
     }
@@ -46,6 +44,8 @@ public class GameManager : MonoBehaviour
         OpenedLevels.Clear(); // Óáðàòü
         YandexGame.savesData.passedLevels = 0; // ! ÓÁÐÀÒÜ ÏÅÐÅÄ ÐÅËÈÇÎÌ ÒÐÈ ÑÒÐÎÊÈ
         YandexGame.SaveProgress(); // ! ÑÒÐÎÊÈ ÄËß ÄÅÁÀÃÀ
+
+        // Ñòàâèòü ëîêàëèçàöèþ
 
         ChooseController.gameManager = this;
         MenuController.gameManager = this;
@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
         YandexGame.SaveProgress();
     }
 
+    // Ïðîâåðÿåò â ñîõðàíåíèÿõ áûë ëè óðîâåí îòêðûò
     public bool IsLevelWasOpened(int quizIndex, int levelIndex)
     {
         return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
@@ -96,7 +97,7 @@ public class GameManager : MonoBehaviour
     {
         state = requredState;
         currentController.parent.gameObject.SetActive(false);
-        if (requredState == GameState.InLevelMenu && integer.HasValue)
+        if (requredState == GameState.ChoosingLevel && integer.HasValue)
         {
             chosenQuizIndex = integer.Value;
             menuController.transform.parent.gameObject.SetActive(true);

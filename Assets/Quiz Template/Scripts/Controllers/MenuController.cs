@@ -33,6 +33,7 @@ public class MenuController : MonoBehaviour
         errorTexts = new[] { source["global"]["buyError1"] as LocalizedString, source["global"]["buyError2"] as LocalizedString };
     }
 
+    // Инициализация меню после каждого включения
     private void OnEnable()
     {
         starCounter.GetComponentInChildren<Image>().sprite = config.cashSprite;
@@ -72,6 +73,7 @@ public class MenuController : MonoBehaviour
         gameManager.ChangeActiveWindow(transform, GameManager.GameState.SolvingQuestions, levelNumber);
     }
 
+    // Вызывается при нажатии кнопки покупки уровня
     public void BuyButtonPressed()
     {
         int num = buyCost.Value;
@@ -98,6 +100,7 @@ public class MenuController : MonoBehaviour
         OnEnable();
     }
 
+    // Создает всплывающий текст об ошибке
     private void DoBuyError(int textIndex)
     {
         DOTween.Kill(0);
@@ -117,6 +120,6 @@ public class MenuController : MonoBehaviour
 
     public void BackInMenuButtonPressed()
     {
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.InLevelMenu, null);
+        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingLevel, null);
     }
 }

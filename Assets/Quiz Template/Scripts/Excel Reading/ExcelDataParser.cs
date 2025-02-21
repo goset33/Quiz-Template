@@ -19,7 +19,7 @@ public class ExcelDataParser
             IQuestion card = null;
             if (type == 1 || type == 2)
             {
-                card = new MainTypeQuestion(row["Вопрос"], image, allAnswers);
+                card = new MainTypeQuestion(row["Вопрос"], type, image, allAnswers);
             }
             else if (type == 3)
             {
@@ -27,7 +27,7 @@ public class ExcelDataParser
             }
             else if (type == 4)
             {
-
+                
             }
             questions.Add(card);
         }

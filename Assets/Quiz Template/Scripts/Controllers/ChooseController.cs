@@ -19,6 +19,6 @@ public class ChooseController : MonoBehaviour
 
     public void OnQuizChoosed(int index)
     {
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.InLevelMenu, index);
+        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingLevel, index);
     }
 }
