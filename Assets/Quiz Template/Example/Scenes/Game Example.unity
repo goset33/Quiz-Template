@@ -412,7 +412,6 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -428,18 +427,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
---- !u!114 &519420030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -575,50 +562,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caf9732433f4dc044845763962493607, type: 3}
---- !u!1 &619394800
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 619394802}
-  - component: {fileID: 619394801}
-  m_Layer: 0
-  m_Name: Global Light 2D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &619394801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 619394800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &619394802
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 619394800}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1064075431
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,7 +682,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -946,10 +889,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1685956648}
     - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: questionConfig
-      value: 
-      objectReference: {fileID: 11400000, guid: e4e6d52ed2c6b844382eeddef9d61c17, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: chooseController
       value: 
       objectReference: {fileID: 7479179359432650910}
@@ -961,46 +900,6 @@ PrefabInstance:
       propertyPath: questionController
       value: 
       objectReference: {fileID: 446334165}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[3]
-      value: 
-      objectReference: {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[4]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[5]
-      value: 
-      objectReference: {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[6]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[7]
-      value: 
-      objectReference: {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
-    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
-      propertyPath: quizzes.Array.data[8]
-      value: 
-      objectReference: {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
     - target: {fileID: 4150746042448487324, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 374.29892
@@ -1051,7 +950,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
-  - {fileID: 619394802}
   - {fileID: 1064075434}
   - {fileID: 533833728}
   - {fileID: 9203003413255269356}

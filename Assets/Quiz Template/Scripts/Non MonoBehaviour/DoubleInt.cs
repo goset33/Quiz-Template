@@ -18,6 +18,12 @@ public class DoubleInt
         second = 0;
     }
 
+    public DoubleInt((int, int) tuple)
+    {
+        first = tuple.Item1;
+        second = tuple.Item2;
+    }
+
     public override bool Equals(object obj)
     {
         if (obj == null || GetType() != obj.GetType())
@@ -34,14 +40,19 @@ public class DoubleInt
         return HashCode.Combine(first, second);
     }
 
-    public float GetBothAsFloat()
+    public float GetAsFloat()
     {
         return first + (second / Mathf.Pow(10f, second.ToString().Length));
     }
 
-    public string GetBothAsString(string separator) 
+    public string GetAsString(string separator) 
     {
         return $"{first}{separator}{second}";
+    }
+
+    public (int, int) GetAsTuple()
+    {
+        return new Tuple<int, int>(first, second).ToValueTuple();
     }
 
 }

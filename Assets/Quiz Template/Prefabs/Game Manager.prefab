@@ -49,8 +49,18 @@ MonoBehaviour:
   musicSprites:
   - {fileID: 21300000, guid: b0fab24071187fa409427c385727f77a, type: 3}
   - {fileID: 21300000, guid: 67dc219b95f2a34468fc492622aa5bce, type: 3}
-  quizzes: []
+  quizzes:
+  - {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
+  - {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
+  - {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
+  - {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
+  - {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
+  - {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
+  - {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
+  - {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
+  - {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
   chosenQuizIndex: -1
+  questionConfig: {fileID: 11400000, guid: e4e6d52ed2c6b844382eeddef9d61c17, type: 2}
   shouldShuffle: 1
   chosenLevelIndex: -1
   chooseController: {fileID: 0}

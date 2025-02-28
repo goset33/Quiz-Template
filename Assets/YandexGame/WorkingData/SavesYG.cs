@@ -11,15 +11,11 @@ namespace YG
         public string language = "ru";
         public bool promptDone;
 
-        // Тестовые сохранения для демо сцены
-        // Можно удалить этот код, но тогда удалите и демо (папка Example)
-        public int money = 1;                       // Можно задать полям значения по умолчанию
-        public string newPlayerName = "Hello!";
-        public bool[] openLevels = new bool[3];
-
         // Ваши сохранения
-        public int passedLevels = 0;
         public HashSet<DoubleInt> openedLevels = new();
+        public int level = 1;
+        public int experience = 0;
+        public int requiredExp = 100;
         public int cash = 0;
         public bool isMusicPlaying = true;
 
@@ -31,7 +27,6 @@ namespace YG
         {
             // Допустим, задать значения по умолчанию для отдельных элементов массива
 
-            openLevels[1] = true;
         }
     }
 }

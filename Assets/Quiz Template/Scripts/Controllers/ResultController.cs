@@ -21,6 +21,7 @@ public class ResultController : MonoBehaviour
     public void Init(int rightAnswers)
     {
         rightAnswersLocale.Value = rightAnswers;
+        gameManager.AddExperience(rightAnswers * 2);
 
         //resultText.transform.localScale = new Vector3(7f, 7f, 7f);
         //resultText.transform.rotation = Quaternion.Euler(0f, 0f, -10f);

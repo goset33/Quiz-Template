@@ -6,6 +6,12 @@ public class ChooseController : MonoBehaviour
 
     public GameObject quizCardPrefab;
     public Transform cardsContainer;
+    public LevelHandler levelHandler;
+
+    private void OnEnable()
+    {
+        levelHandler.UpdateLevelUI();
+    }
 
     public void OnGameStart(QuizCard[] quizCards)
     {

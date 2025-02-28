@@ -41,11 +41,11 @@ public class GameManager : MonoBehaviour
     // Bootstrap для всей игры. На старте запускает инициализацию меню 
     public void Awake()
     {
-        OpenedLevels.Clear(); // Убрать
-        YandexGame.savesData.passedLevels = 0; // ! УБРАТЬ ПЕРЕД РЕЛИЗОМ ТРИ СТРОКИ
-        YandexGame.SaveProgress(); // ! СТРОКИ ДЛЯ ДЕБАГА
-
-        // Ставить локализацию
+        // Место для дебаг строк
+        YandexGame.savesData.level = 1;
+        YandexGame.savesData.experience = 0;
+        YandexGame.savesData.requiredExp = 1;
+        // Удалить потом обязательно
 
         ChooseController.gameManager = this;
         MenuController.gameManager = this;
@@ -83,6 +83,11 @@ public class GameManager : MonoBehaviour
 
         YandexGame.savesData.cash += cost;
         YandexGame.SaveProgress();
+    }
+
+    public void AddExperience(int addedExp)
+    {
+        chooseController.levelHandler.AddExp(addedExp);
     }
 
     // Проверяет в сохранениях был ли уровен открыт
