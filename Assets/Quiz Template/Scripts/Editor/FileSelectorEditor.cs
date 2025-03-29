@@ -21,11 +21,19 @@ public class FileSelectorEditor : Editor
         // Загрузка имен листов
         if (!string.IsNullOrEmpty(script.FilePath) && sheetNames == null)
         {
-            sheetNames = new ExcelReader(script.FilePath).GetAllSheetNames();
-            selectedSheetIndex = System.Array.IndexOf(sheetNames, script.sheetName);
-            if (selectedSheetIndex == -1)
+            try
             {
-                selectedSheetIndex = 0;
+                sheetNames = new ExcelReader(script.FilePath).GetAllSheetNames();
+                selectedSheetIndex = System.Array.IndexOf(sheetNames, script.sheetName);
+                if (selectedSheetIndex == -1)
+                {
+                    selectedSheetIndex = 0;
+                }
+            }
+            catch
+            {
+                Debug.LogError("Не удалось загрузить имена листов из файла.");
+                sheetNames = null;
             }
         }
 

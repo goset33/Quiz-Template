@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.UI;
 
 public class QuestionController : MonoBehaviour
@@ -20,20 +21,29 @@ public class QuestionController : MonoBehaviour
     private List<IQuestion> cards = new();
 
     [Space]
-    public GameObject inMenuWindow;
-    public GameObject showRightButton, nextButton;
-    public TextMeshProUGUI questionText, counterText;
-    public Image image;
-    public RectTransform answersParent;
-    public GameObject answerButtonPrefab;
+    [SerializeField] private GameObject showRightButton;
+    [SerializeField] private GameObject nextButton;
+    [SerializeField] private TextMeshProUGUI questionText;
+    [SerializeField] private HeartContainer heartContainer;
+    [SerializeField] private Image imageField;
+    [SerializeField] private RectTransform answersParent;
+    [SerializeField] private GameObject answerButtonPrefab;
+
+    [Header("Locales")]
+    [SerializeField] LocalizedString[] backInMenuLocales;
+    [SerializeField] LocalizedString[] showAnswerLocales;
 
     private void OnEnable()
     {
         Init(gameManager.quizzes[gameManager.chosenQuizIndex].testContainer);
     }
 
-    // Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
-    // Принимает на вход контейнер с вопросами, на которые потребуется отвечать пользователю
+    /// <summary>
+    /// Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
+    /// </summary>
+    /// <param name="container">
+    /// Контейнер с вопросами, на которые потребуется отвечать пользователю
+    /// </param>
     private void Init(CardsContainer container)
     {
         List<IQuestion> allPool = new(container.QuestionCards);
@@ -43,67 +53,76 @@ public class QuestionController : MonoBehaviour
         }
 
         int amount = 0;
-        switch (gameManager.chosenLevelIndex)
+        if (gameManager.chosenLevelIndex == 0)
         {
-            case 0:
-                amount = container.easyAmount;
-                break;
-            case 1:
-                amount = container.mediumAmount;
-                break;
-            case 2:
-                amount = container.hardAmount;
-                break;
+            amount = container.easyAmount;
+        }
+        else if (gameManager.chosenLevelIndex == 1)
+        {
+            amount = container.mediumAmount;
+        }
+        else if (gameManager.chosenLevelIndex == 2)
+        {
+            amount = container.hardAmount;
         }
         cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
+
+        heartContainer.InitializeHearts(gameManager.startHeartsCount);
 
         currentQuestion = 1;
         rightAnswers = 0;
         LoadNextQuestion(cards[currentQuestion - 1]);
     }
 
-    // Метод для рандомизации входящего списка из IQuestion
-    // TODO: Он не совсем работает. Тупой Qwen
+    /// <summary>
+    /// Метод для рандомизации входящего списка из IQuestion
+    /// </summary>
+    /// <param name="inputQuestions">Входной, не рандомизированный список</param>
+    /// <returns>Рандомизированный список</returns>
     private List<IQuestion> MixQuestions(List<IQuestion> inputQuestions)
     {
         List<IQuestion> questions = new(inputQuestions);
         int n = questions.Count;
 
+        // Базовая рандомизация (алгоритм Фишера-Йейтса)
         for (int i = n - 1; i > 0; i--)
         {
-            // Базовая рандомизация
             int j = Random.Range(0, i + 1);
             IQuestion temp = questions[i];
             questions[i] = questions[j];
             questions[j] = temp;
+        }
 
-            // Проверяем правила размещения
-            if (i > 0 &&
-                ((questions[i].GetType() == questions[i - 1].GetType() &&
-                  (questions[i] is CounterQuestion || questions[i] is ConnectQuestion)) ||
-                 (questions[i] is MainTypeQuestion mainA && questions[i - 1] is MainTypeQuestion mainB &&
-                  mainA.Type == 2 && mainB.Type == 2)))
+        // Поиск что нужно заменить и замена
+        for (int i = 0; i < n; i++)
+        {
+            IQuestion current = questions[i];
+            IQuestion prev = i > 0 ? questions[i - 1] : null;
+            IQuestion next = i < n - 1 ? questions[i + 1] : null;
+
+            if (current.GetType() == typeof(MainTypeQuestion)) continue;
+
+            if (prev != null && prev.GetType() == current.GetType() ||
+                next != null && next.GetType() == current.GetType())
             {
-                // Находим безопасный индекс для обмена
-                int swapIndex = -1;
-                for (int k = i + 1; k < n; k++)
+                bool replaced = false;
+                for (int j = 0; j < n && !replaced; j++)
                 {
-                    if (!(questions[k].GetType() == questions[i - 1].GetType() &&
-                          (questions[k] is CounterQuestion || questions[k] is ConnectQuestion)) &&
-                        !(questions[k] is MainTypeQuestion mainK && questions[i - 1] is MainTypeQuestion mainPrev &&
-                          mainK.Type == 2 && mainPrev.Type == 2))
+                    IQuestion replaceable = questions[j];
+                    IQuestion prev1 = j > 0 ? questions[j - 1] : null;
+                    IQuestion next1 = j < n - 1 ? questions[j + 1] : null;
+
+                    if ((prev1 == null || prev1.GetType() != current.GetType())
+                        && (next1 == null || next1.GetType() != current.GetType()))
                     {
-                        swapIndex = k;
-                        break;
+                        questions[j] = current;
+                        questions[i] = replaceable;
+                        replaced = true;
                     }
                 }
-
-                // Если найден безопасный индекс, производим обмен
-                if (swapIndex != -1)
+                if (!replaced)
                 {
-                    IQuestion swapTemp = questions[i];
-                    questions[i] = questions[swapIndex];
-                    questions[swapIndex] = swapTemp;
+                    Debug.LogWarning($"Не удалось заменить вопрос {current} на позиции {i}");
                 }
             }
         }
@@ -115,8 +134,8 @@ public class QuestionController : MonoBehaviour
     private void LoadNextQuestion(IQuestion card)
     {
         questionText.text = card.QuestionText;
-        image.sprite = card.Image;
-        counterText.text = $"{currentQuestion}/{cards.Count}";
+        imageField.sprite = card.Image;
+        //counterText.text = $"{currentQuestion}/{cards.Count}";
 
         if (card is MainTypeQuestion question)
         {
@@ -126,10 +145,28 @@ public class QuestionController : MonoBehaviour
             {
                 GameObject button = Instantiate(answerButtonPrefab, answersParent);
                 int index = i;
-                button.GetComponent<Button>().onClick.AddListener(() => MainTypeAnswer(index));
+                button.GetComponent<Button>().onClick.AddListener(() => DefaultAnswer(index));
                 button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = allAnswers[i];
 
                 if (allAnswers[i] == question.RightAnswer)
+                {
+                    rightIndex = i;
+                    print("Right index was set: " + i);
+                }
+            }
+        }
+        else if (card is PictureQuestion picQuestion)
+        {
+            List<string> wrongs = new(picQuestion.WrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
+            List<string> allAnswers = new(wrongs.Append(picQuestion.RightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
+            for (int i = 0; i < allAnswers.Count; i++)
+            {
+                GameObject button = Instantiate(answerButtonPrefab, answersParent);
+                int index = i;
+                button.GetComponent<Button>().onClick.AddListener(() => DefaultAnswer(index));
+                button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = allAnswers[i];
+
+                if (allAnswers[i] == picQuestion.RightAnswer)
                 {
                     rightIndex = i;
                     print("Right index was set: " + i);
@@ -158,28 +195,23 @@ public class QuestionController : MonoBehaviour
     }
 
     // Обработка нажатия кнопки при вопросе типов 1, 2
-    private void MainTypeAnswer(int index)
+    private void DefaultAnswer(int index)
     {
         if (nextButton.activeSelf) return;
 
-        nextButton.SetActive(true);
         Image pressedButtonImage = answersParent.GetChild(index).GetComponent<Image>();
-        if (index == rightIndex)
+        bool isRight = index == rightIndex;
+        if (isRight)
         {
-            rightAnswers++;
-            GameManager.ChangeCash(1);
-
             pressedButtonImage.sprite = gameManager.questionConfig.rightAnswerSprite;
             pressedButtonImage.color = gameManager.questionConfig.rightButtonColor;
-            print("Right!");
         }
         else
         {
-            showRightButton.SetActive(true);
             pressedButtonImage.sprite = gameManager.questionConfig.wrongAnswerSprite;
             pressedButtonImage.color = gameManager.questionConfig.wrongButtonColor;
-            print("Incorrect!");
         }
+        Answered(isRight);
     }
 
     // Обработка нажатия кнопки при вопросе типа 3
@@ -199,11 +231,9 @@ public class QuestionController : MonoBehaviour
                 }
             }
 
-            nextButton.SetActive(true);
-            if (rightCounter == gameManager.chosenLevelIndex + 2)
+            bool isRight = rightCounter == gameManager.chosenLevelIndex + 2;
+            if (isRight)
             {
-                rightAnswers++;
-                GameManager.ChangeCash(1);
                 for (int i = 0; i < answersParent.childCount; i++)
                 {
                     Image image = answersParent.GetChild(i).GetComponent<Image>();
@@ -213,7 +243,6 @@ public class QuestionController : MonoBehaviour
             }
             else
             {
-                showRightButton.SetActive(true);
                 for (int i = 0; i < answersParent.childCount; i++)
                 {
                     Image image = answersParent.GetChild(i).GetComponent<Image>();
@@ -221,6 +250,7 @@ public class QuestionController : MonoBehaviour
                     image.color = gameManager.questionConfig.wrongButtonColor;
                 }
             }
+            Answered(isRight);
         }
     }
 
@@ -245,6 +275,26 @@ public class QuestionController : MonoBehaviour
         {
             choosedSequence[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = (i + 1).ToString();
         }
+    }
+
+    // Общие действия когда игрок дает ответ на вопрос
+    private void Answered(bool isRight)
+    {
+        nextButton.SetActive(true);
+        
+        if (isRight)
+        {
+            rightAnswers++;
+            GameManager.ChangeCash(1);
+            print("Right!");
+        }
+        else
+        {
+            showRightButton.SetActive(true);
+            heartContainer.TakeOneDamage();
+            print("Incorrect!");
+        }
+
     }
 
     // Чистит экран и обнуляет все что нужно обнулить. Вызывать после каждого вопроса
@@ -275,9 +325,20 @@ public class QuestionController : MonoBehaviour
     }
 
     // Вызывается при нажатии кнопки показа правильного варианта ответа
-    public void ShowRightAnswer()
+    public void ShowRightAnswerButtonPressed()
     {
-        if (GameManager.HaveEnoughCash(-1) && !isAnswerShowed)
+        if (isAnswerShowed) return;
+
+        gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales));
+        TimelessController.OnButtonPressed += ShowRightAnswer;
+    }
+
+    private void ShowRightAnswer(int buttonIndex)
+    {
+        TimelessController.OnButtonPressed -= ShowRightAnswer;
+        if (buttonIndex != 1) return;
+
+        if (GameManager.HaveEnoughCash(-1))
         {
             isAnswerShowed = true;
             GameManager.ChangeCash(-1);
@@ -300,17 +361,25 @@ public class QuestionController : MonoBehaviour
                 UpdateButtonIndexes(null);
             }
         }
+        else
+        {
+            gameManager.InvokeNotification(0);
+        }
     }
 
     public void MenuButtonPressed()
     {
-        inMenuWindow.SetActive(!inMenuWindow.activeSelf);
+        gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
+        TimelessController.OnButtonPressed += BackInMenu;
     }
 
-    public void BackInMenu()
+    public void BackInMenu(int pressedIndex)
     {
-        ClearScreen();
-        inMenuWindow.SetActive(false);
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
+        TimelessController.OnButtonPressed -= BackInMenu;
+        if (pressedIndex == 1)
+        {
+            ClearScreen();
+            gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
+        }
     }
 }

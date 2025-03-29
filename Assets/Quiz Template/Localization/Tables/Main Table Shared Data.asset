@@ -36,11 +36,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 314487923625984
-    m_Key: WANNA_BUY_LEVEL
+    m_Key: ARE_YOU_SURE
     m_Metadata:
       m_Items: []
   - m_Id: 314563236548608
-    m_Key: BUY_WINDOW_TEXT
+    m_Key: BUY_LEVEL_TEXT
     m_Metadata:
       m_Items: []
   - m_Id: 314840693952512
@@ -79,12 +79,16 @@ MonoBehaviour:
     m_Key: RESULT_TEXT
     m_Metadata:
       m_Items: []
-  - m_Id: 350073673830400
-    m_Key: BUY_LEVEL_ERROR-1
+  - m_Id: 18907080118849536
+    m_Key: SHOW_RIGHT_ANSWER_TEXT
     m_Metadata:
       m_Items: []
   - m_Id: 352165071245312
-    m_Key: BUY_LEVEL_ERROR-2
+    m_Key: NOTIFY_NO_CASH
+    m_Metadata:
+      m_Items: []
+  - m_Id: 350073673830400
+    m_Key: NOTIFY_WRONG_ORDER
     m_Metadata:
       m_Items: []
   m_Metadata:

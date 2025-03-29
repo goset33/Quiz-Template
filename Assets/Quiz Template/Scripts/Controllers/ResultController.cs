@@ -1,8 +1,8 @@
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
+using UnityEngine.UI;
 
 public class ResultController : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class ResultController : MonoBehaviour
     private IntVariable rightAnswersLocale;
 
     public TextMeshProUGUI resultText;
+    public Transform addingObject;
 
     private void Awake()
     {
@@ -21,6 +22,9 @@ public class ResultController : MonoBehaviour
     public void Init(int rightAnswers)
     {
         rightAnswersLocale.Value = rightAnswers;
+        addingObject.GetComponentInChildren<Image>().sprite = gameManager.config.cashSprite;
+        addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * 2}";
+        GameManager.ChangeCash(rightAnswers);
         gameManager.AddExperience(rightAnswers * 2);
 
         //resultText.transform.localScale = new Vector3(7f, 7f, 7f);
@@ -30,15 +34,13 @@ public class ResultController : MonoBehaviour
         //resultText.transform.DOLocalRotate(new Vector3(0f, 0f, 10f), 5f).SetEase(Ease.Flash).SetLoops(-1, LoopType.Yoyo).SetDelay(0.1f);
     }
 
-    public void RestartButtonPressed()
+    public void MultiplyReward()
     {
-        DOTween.KillAll();
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.SolvingQuestions, null);
+
     }
 
     public void BackButtonPressed()
     {
-        DOTween.KillAll();
         gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
     }
 }

@@ -65,7 +65,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 318372272754688
-    m_Localized: Do you want to back in menu?
+    m_Localized: Do you want to back in menu? You won't get a reward for completely
+      solving the quiz!
     m_Metadata:
       m_Items: []
   - m_Id: 318447090749440
@@ -101,6 +102,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 352165071245312
     m_Localized: You don't have enough money!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 18907080118849536
+    m_Localized: Are you sure you want to see the right answer? It will cost 1
     m_Metadata:
       m_Items: []
   references:

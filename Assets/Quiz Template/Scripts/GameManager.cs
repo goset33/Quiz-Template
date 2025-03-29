@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Localization;
 using YG;
 
 public class GameManager : MonoBehaviour
@@ -19,26 +19,28 @@ public class GameManager : MonoBehaviour
     }
     private GameState state;
 
-    [Header("Music settings")]
-    public GameObject musicButton;
-    public Sprite[] musicSprites = new Sprite[2];
+    public GameConfig config;
 
-    [Header("Choose settings")]
+    [Header("Choose Settings")]
     public QuizCard[] quizzes;
     [HideInInspector] public int chosenQuizIndex = -1;
 
-    [Header("Questions settings")]
+    [Header("Questions Settings")]
     public QuestionConfig questionConfig;
+    public int startHeartsCount = 3; // Сколько сердец будет у игрока на старте
     public bool shouldShuffle; // Следует ли рандомизировать порядок вопросов
     [HideInInspector] public int chosenLevelIndex = -1;
 
     [Header("Controllers")]
-    public ChooseController chooseController;
-    public MenuController menuController;
-    public QuestionController questionController;
-    public ResultController resultController;
+    [SerializeField] TimelessController timelessController;
+    [SerializeField] ChooseController chooseController;
+    [SerializeField] MenuController menuController;
+    [SerializeField] QuestionController questionController;
+    [SerializeField] ResultController resultController;
 
-    // Bootstrap для всей игры. На старте запускает инициализацию меню 
+    /// <summary>
+    /// Bootstrap для всей игры. На старте запускает инициализацию меню 
+    /// </summary>
     public void Awake()
     {
         // Место для дебаг строк
@@ -52,18 +54,6 @@ public class GameManager : MonoBehaviour
         QuestionController.gameManager = this;
         ResultController.gameManager = this;
         chooseController.OnGameStart(quizzes);
-
-        if (!YandexGame.savesData.isMusicPlaying)
-        {
-            GetComponent<AudioSource>().Stop();
-            musicButton.GetComponent<Image>().sprite = musicSprites[0];
-            musicButton.transform.localScale = new Vector3(0.94f, 0.94f, 0.94f);
-        }
-        else
-        {
-            musicButton.GetComponent<Image>().sprite = musicSprites[1];
-            musicButton.transform.localScale = Vector3.one;
-        }
     }
 
     public GameState GetGameState() { return state; }
@@ -90,14 +80,35 @@ public class GameManager : MonoBehaviour
         chooseController.levelHandler.AddExp(addedExp);
     }
 
-    // Проверяет в сохранениях был ли уровен открыт
+    public void InvokePopup(PopupSettings settings)
+    {
+        timelessController.CreatePopup(settings);
+    }
+
+    public void InvokeNotification(int notifyIndex)
+    {
+        timelessController.CreateNotification(config.notifyLocales[notifyIndex]);
+    }
+
+    /// <summary>
+    /// Проверяет в сохранениях, был ли открыт уровень
+    /// </summary>
+    /// <param name="quizIndex">Индекс квиза</param>
+    /// <param name="levelIndex">Индекс уровня сложности</param>
     public bool IsLevelWasOpened(int quizIndex, int levelIndex)
     {
         return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
     }
 
-    // Общая функция для переключения всех окон в игре.
-    // В случае ошибки (например отсутствия integer когда он нужен) перенаправляет игрока на окно выбора теста
+    /// <summary>
+    /// Общая функция для переключения всех окон в игре.
+    /// </summary>
+    /// <param name="currentController">Контроллер, вызвавший функцию</param>
+    /// <param name="requredState">Состояние, на которое требуется переключться</param>
+    /// <param name="integer">В некоторых случаях требует число</param>
+    /// <exception>
+    /// В случае, например, отсутствия integer когда он нужен перенаправляет игрока на окно выбора теста
+    /// </exception>
     public void ChangeActiveWindow(Transform currentController, GameState requredState, int? integer)
     {
         state = requredState;
@@ -128,29 +139,5 @@ public class GameManager : MonoBehaviour
         }
         chooseController.transform.parent.gameObject.SetActive(true);
         state = GameState.ChoosingQuiz;
-    }
-
-    // Функция для обработки нажатия кнопки включения/выключения музыки
-    public void MusicButtonPressed()
-    {
-        AudioSource audioSource = GetComponent<AudioSource>();
-        if (audioSource.isPlaying && YandexGame.savesData.isMusicPlaying)
-        {
-            YandexGame.savesData.isMusicPlaying = false;
-            YandexGame.SaveProgress();
-
-            audioSource.Stop();
-            musicButton.GetComponent<Image>().sprite = musicSprites[0];
-            musicButton.transform.localScale = new Vector3(0.94f, 0.94f, 0.94f);
-        }
-        else
-        {
-            YandexGame.savesData.isMusicPlaying = true;
-            YandexGame.SaveProgress();
-
-            audioSource.Play();
-            musicButton.GetComponent<Image>().sprite = musicSprites[1];
-            musicButton.transform.localScale = Vector3.one;
-        }
     }
 }

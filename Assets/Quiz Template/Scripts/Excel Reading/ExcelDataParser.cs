@@ -17,9 +17,13 @@ public class ExcelDataParser
             Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
 
             IQuestion card = null;
-            if (type == 1 || type == 2)
+            if (type == 1)
             {
-                card = new MainTypeQuestion(row["Вопрос"], type, image, allAnswers);
+                card = new MainTypeQuestion(row["Вопрос"], image, allAnswers);
+            }
+            else if (type == 2)
+            {
+                card = new PictureQuestion(row["Вопрос"], image, allAnswers);
             }
             else if (type == 3)
             {
@@ -27,7 +31,7 @@ public class ExcelDataParser
             }
             else if (type == 4)
             {
-                
+                card = new ConnectQuestion(row["Вопрос"], image, allAnswers);
             }
             questions.Add(card);
         }
@@ -36,6 +40,8 @@ public class ExcelDataParser
 
     public List<IQuestion> ParseQuestions(string path, string sheet)
     {
+        if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(sheet)) return null;
+
         return ParseQuestions(new ExcelReader(path).ReadSheet(sheet));
     }
 }

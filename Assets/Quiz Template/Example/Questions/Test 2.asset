@@ -15,6 +15,6 @@ MonoBehaviour:
   easyAmount: 0
   mediumAmount: 0
   hardAmount: 0
-  sheetName: "\u041B\u0438\u0441\u04421"
-  filePath: "Assets/Quiz Template/Example/Sheets/\u0428\u0430\u0431\u043B\u043E\u043D
-    \u0437\u0430\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u044F \u043A\u0432\u0438\u0437\u0430.xlsx"
+  sheetName: "\u041C\u0430\u0439\u043D\u043A\u0440\u0430\u0444\u0442"
+  filePath: "Assets/Quiz Template/Example/Sheets/\u041A\u0432\u0438\u0437 \u043F\u043E
+    \u0438\u0433\u0440\u0430\u043C.xlsx"

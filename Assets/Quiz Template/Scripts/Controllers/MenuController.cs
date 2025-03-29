@@ -1,121 +1,90 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
-using DG.Tweening;
 
 public class MenuController : MonoBehaviour
 {
     public static GameManager gameManager;
 
-    public MenuConfig config; // Конфиг нужно назначать из инспектора
-
     private IntVariable buyCost;
-    private LocalizedString[] errorTexts;
 
     [Space]
-    public GameObject buyWindow;
-    public TextMeshProUGUI buyError, starCounter;
-    public Transform buttonContainer;
+    [SerializeField] TextMeshProUGUI starCounter;
+    [SerializeField] Transform buttonContainer;
+
+    [Space]
+    public LocalizedString[] buyLevelLocales;
 
     private void Awake()
     {
-        if (config == null)
-        {
-            throw new NullReferenceException("No menu config!");
-        }
-
         var source = LocalizationSettings.StringDatabase.SmartFormatter.GetSourceExtension<UnityEngine.Localization.SmartFormat.Extensions.PersistentVariablesSource>();
         buyCost = source["global"]["levelCost"] as IntVariable;
-        errorTexts = new[] { source["global"]["buyError1"] as LocalizedString, source["global"]["buyError2"] as LocalizedString };
     }
 
     // Инициализация меню после каждого включения
     private void OnEnable()
     {
-        starCounter.GetComponentInChildren<Image>().sprite = config.cashSprite;
+        starCounter.GetComponentInChildren<Image>().sprite = gameManager.config.cashSprite;
         starCounter.text = YG.YandexGame.savesData.cash.ToString();
 
-        if (config.easyButtonImage != null)
-        {
-            buttonContainer.GetChild(0).GetComponent<Image>().sprite = config.easyButtonImage;
-            buttonContainer.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().color = config.easyTextColor;
-        }
-
         bool isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1);
-        Sprite sprite = isOpen ? config.mediumButtonImage : config.lockImage;
-        Color color = isOpen ? config.mediumTextColor : config.lockColor;
-        buttonContainer.GetChild(1).GetComponent<Image>().sprite = sprite;
-        buttonContainer.GetChild(1).GetComponentInChildren<TextMeshProUGUI>().color = color;
+        buttonContainer.GetChild(1).GetChild(1).gameObject.SetActive(!isOpen);
 
         isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 2);
-        sprite = isOpen ? config.hardButtonImage : config.lockImage;
-        color = isOpen ? config.hardTextColor : config.lockColor;
-        buttonContainer.GetChild(2).GetComponent<Image>().sprite = sprite;
-        buttonContainer.GetChild(2).GetComponentInChildren<TextMeshProUGUI>().color = color;
+        buttonContainer.GetChild(2).GetChild(1).gameObject.SetActive(!isOpen);
     }
 
-    // Функция для обработки нажатия кнопки уровня. На вход принимает номер уровня начиная с 0
-    // Метод отбрасывает нажатия кнопок уровней, которые не должны запускаться
+    /// <summary>
+    /// Функция для обработки нажатия кнопки уровня сложности
+    /// </summary>
+    /// <param name="levelNumber">Номер уровня сложности начиная с 0</param>
     public void LevelButtonPressed(int levelNumber)
     {
         if (!gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, levelNumber) && levelNumber != 0)
         {
-            buyWindow.SetActive(true);
-            int price = levelNumber == 1 ? config.mediumOpenPrice : config.hardOpenPrice;
+            int price = levelNumber == 1 ? gameManager.config.mediumPrice : gameManager.config.hardPrice;
             buyCost.Value = price;
+
+            gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, buyLevelLocales));
+            TimelessController.OnButtonPressed += BuyButtonPressed;
             return;
         }
 
         gameManager.ChangeActiveWindow(transform, GameManager.GameState.SolvingQuestions, levelNumber);
     }
 
-    // Вызывается при нажатии кнопки покупки уровня
-    public void BuyButtonPressed()
+    /// <summary>
+    /// Вызывается при нажатии кнопки покупки уровня сложности
+    /// </summary>
+    public void BuyButtonPressed(int buttonIndex)
     {
-        int num = buyCost.Value;
-        int index = num == config.mediumOpenPrice ? 1 : 2;
-        if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1))
+        TimelessController.OnButtonPressed -= BuyButtonPressed;
+        if (buttonIndex == 1)
         {
-            DoBuyError(0);
-            buyWindow.SetActive(false);
-            return;
+            int num = buyCost.Value;
+            int index = num == gameManager.config.mediumPrice ? 1 : 2;
+            if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1))
+            {
+                gameManager.InvokeNotification(1);
+                return;
+            }
+
+            if (GameManager.HaveEnoughCash(-num))
+            {
+                GameManager.ChangeCash(-num);
+                gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
+                YG.YandexGame.SaveProgress();
+            }
+            else
+            {
+                gameManager.InvokeNotification(0);
+            }
+
+            OnEnable();
         }
-
-        if (GameManager.HaveEnoughCash(-num))
-        {
-            GameManager.ChangeCash(-num);
-            gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
-            YG.YandexGame.SaveProgress();
-        }
-        else
-        {
-            DoBuyError(1);
-        }
-
-        buyWindow.SetActive(false);
-        OnEnable();
-    }
-
-    // Создает всплывающий текст об ошибке
-    private void DoBuyError(int textIndex)
-    {
-        DOTween.Kill(0);
-        buyError.text = errorTexts[textIndex].GetLocalizedString();
-        buyError.GetComponent<RectTransform>().position = new Vector2(Screen.width / 2f, Screen.height / 2.5f);
-        buyError.color = Color.white;
-        DOTween.Sequence()
-            .Append(buyError.GetComponent<RectTransform>().DOAnchorPosY(buyError.transform.position.y + 1f, 2f))    
-            .Join(buyError.DOFade(0f, 2f))
-            .SetId(0);
-    }
-
-    public void BackButtonPressed()
-    {
-        buyWindow.SetActive(false);
     }
 
     public void BackInMenuButtonPressed()

@@ -19,42 +19,14 @@ MonoBehaviour:
   - name: rightAnswers
     variable:
       rid: 6898860568132976706
-  - name: buyError1
-    variable:
-      rid: 6898860568132976713
-  - name: buyError2
-    variable:
-      rid: 6898860568132976714
   references:
     version: 2
     RefIds:
     - rid: 6898860568132976705
       type: {class: IntVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
       data:
-        m_Value: 5
+        m_Value: 10
     - rid: 6898860568132976706
       type: {class: IntVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
       data:
-        m_Value: -1
-    - rid: 6898860568132976713
-      type: {class: LocalizedString, ns: UnityEngine.Localization, asm: Unity.Localization}
-      data:
-        m_TableReference:
-          m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
-        m_TableEntryReference:
-          m_KeyId: 350073673830400
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
-    - rid: 6898860568132976714
-      type: {class: LocalizedString, ns: UnityEngine.Localization, asm: Unity.Localization}
-      data:
-        m_TableReference:
-          m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
-        m_TableEntryReference:
-          m_KeyId: 352165071245312
-          m_Key: 
-        m_FallbackState: 0
-        m_WaitForCompletion: 0
-        m_LocalVariables: []
+        m_Value: 1

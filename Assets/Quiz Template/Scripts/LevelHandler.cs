@@ -3,11 +3,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using YG;
 
+/// <summary>
+/// Отвечает за изменение и отображение уровня и опыта игрока
+/// </summary>
 public class LevelHandler : MonoBehaviour
 {
     public Slider slider;
     public TextMeshProUGUI levelCounter;
 
+    /// <summary>
+    /// Добавляет опыт игрока.
+    /// Не отрисовывает изменения в UI. Для отрисовки смотреть <c>UpdateLevelUI</c>
+    /// </summary>
+    /// <param name="addedExp">Количество добавляемого опыта</param>
     public void AddExp(int addedExp)
     {
         YandexGame.savesData.experience += addedExp;
@@ -20,6 +28,9 @@ public class LevelHandler : MonoBehaviour
         YandexGame.SaveProgress();
     }
 
+    /// <summary>
+    /// Отрисовывает любые изменения переменных уровня и опыта 
+    /// </summary>
     public void UpdateLevelUI()
     {
         slider.maxValue = YandexGame.savesData.requiredExp;
