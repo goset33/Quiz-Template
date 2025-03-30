@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.UI;
+using YG;
 
 public class QuestionController : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class QuestionController : MonoBehaviour
 
     [Header("Locales")]
     [SerializeField] LocalizedString[] backInMenuLocales;
-    [SerializeField] LocalizedString[] showAnswerLocales;
+    [SerializeField] LocalizedString[] showAnswerLocales, lackOfLivesLocales;
 
     private void OnEnable()
     {
@@ -290,8 +291,14 @@ public class QuestionController : MonoBehaviour
         }
         else
         {
-            showRightButton.SetActive(true);
             heartContainer.TakeOneDamage();
+            if (heartContainer.HeartCount == 0)
+            {
+                gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, lackOfLivesLocales));
+                TimelessController.OnButtonPressed += WhenDeathButtonPressed;
+            }
+
+            showRightButton.SetActive(true);
             print("Incorrect!");
         }
 
@@ -306,6 +313,21 @@ public class QuestionController : MonoBehaviour
         for (int i = 0; i < answersParent.childCount; i++)
         {
             Destroy(answersParent.GetChild(i).gameObject);
+        }
+    }
+
+    private void WhenDeathButtonPressed(int buttonIndex)
+    {
+        TimelessController.OnButtonPressed -= WhenDeathButtonPressed;
+        if (buttonIndex == 0)
+        {
+            // Временная мера
+            gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
+        }
+        else if (buttonIndex == 1)
+        {
+            // Тут будет ваша реклама
+            heartContainer.HealOneHeart();
         }
     }
 

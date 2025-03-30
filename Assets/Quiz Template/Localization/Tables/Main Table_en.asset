@@ -88,11 +88,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 321015472803840
-    m_Localized: 'You scored:
-
-      {global.rightAnswers}
-
-      points!'
+    m_Localized: 'You scored: {global.rightAnswers} points!'
     m_Metadata:
       m_Items:
       - rid: 6898860568132976666
@@ -106,6 +102,18 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 18907080118849536
     m_Localized: Are you sure you want to see the right answer? It will cost 1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19176446441902080
+    m_Localized: You've run out of lives!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19176712490799104
+    m_Localized: End the game...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19176812281679872
+    m_Localized: Watch ads and continue playing
     m_Metadata:
       m_Items: []
   references:

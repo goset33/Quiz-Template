@@ -91,6 +91,22 @@ MonoBehaviour:
     m_Key: NOTIFY_WRONG_ORDER
     m_Metadata:
       m_Items: []
+  - m_Id: 19176446441902080
+    m_Key: LACK_OF_LIVES_HEADER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19176521968734208
+    m_Key: LACK_OF_LIVES_TEXT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19176712490799104
+    m_Key: END_OF_GAME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19176812281679872
+    m_Key: WATCH_AD_AND_GET_LIFE
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
