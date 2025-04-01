@@ -19,9 +19,16 @@ MonoBehaviour:
   - name: rightAnswers
     variable:
       rid: 6898860568132976706
+  - name: allAnswers
+    variable:
+      rid: 42123006799249408
   references:
     version: 2
     RefIds:
+    - rid: 42123006799249408
+      type: {class: IntVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
+      data:
+        m_Value: 1
     - rid: 6898860568132976705
       type: {class: IntVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
       data:
@@ -29,4 +36,4 @@ MonoBehaviour:
     - rid: 6898860568132976706
       type: {class: IntVariable, ns: UnityEngine.Localization.SmartFormat.PersistentVariables, asm: Unity.Localization}
       data:
-        m_Value: 1
+        m_Value: 0

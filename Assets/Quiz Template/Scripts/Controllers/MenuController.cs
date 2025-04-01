@@ -4,10 +4,13 @@ using UnityEngine.UI;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
+using System;
 
 public class MenuController : MonoBehaviour
 {
     public static GameManager gameManager;
+
+    public static event Action<int> LevelChoosed;
 
     private IntVariable buyCost;
 
@@ -53,7 +56,7 @@ public class MenuController : MonoBehaviour
             return;
         }
 
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.SolvingQuestions, levelNumber);
+        LevelChoosed?.Invoke(levelNumber);
     }
 
     /// <summary>
@@ -89,6 +92,6 @@ public class MenuController : MonoBehaviour
 
     public void BackInMenuButtonPressed()
     {
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingLevel, null);
+        gameManager.ReturnToMenu(transform);
     }
 }

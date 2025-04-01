@@ -1,8 +1,8 @@
+using DG.Tweening.Core.Easing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Localization;
 using YG;
 
 public class GameManager : MonoBehaviour
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public bool shouldShuffle; // Следует ли рандомизировать порядок вопросов
     [HideInInspector] public int chosenLevelIndex = -1;
 
+    // Идея: Сейчас переменные используются только для переключения окон. В целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
     [Header("Controllers")]
     [SerializeField] TimelessController timelessController;
     [SerializeField] ChooseController chooseController;
@@ -41,19 +42,31 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Bootstrap для всей игры. На старте запускает инициализацию меню 
     /// </summary>
-    public void Awake()
+    private void Awake()
     {
         // Место для дебаг строк
         YandexGame.savesData.level = 1;
         YandexGame.savesData.experience = 0;
-        YandexGame.savesData.requiredExp = 1;
+        YandexGame.savesData.requiredExp = 100;
         // Удалить потом обязательно
 
         ChooseController.gameManager = this;
         MenuController.gameManager = this;
         QuestionController.gameManager = this;
         ResultController.gameManager = this;
+
+        ChooseController.QuizChoosed += OnQuizChoosed;
+        MenuController.LevelChoosed += OnLevelChoosed;
+        QuestionController.QuestionsEnded += OnQuestionsSolved;
+
         chooseController.OnGameStart(quizzes);
+    }
+
+    private void OnApplicationQuit()
+    {
+        ChooseController.QuizChoosed -= OnQuizChoosed;
+        MenuController.LevelChoosed -= OnLevelChoosed;
+        QuestionController.QuestionsEnded -= OnQuestionsSolved;
     }
 
     public GameState GetGameState() { return state; }
@@ -100,44 +113,30 @@ public class GameManager : MonoBehaviour
         return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
     }
 
-    /// <summary>
-    /// Общая функция для переключения всех окон в игре.
-    /// </summary>
-    /// <param name="currentController">Контроллер, вызвавший функцию</param>
-    /// <param name="requredState">Состояние, на которое требуется переключться</param>
-    /// <param name="integer">В некоторых случаях требует число</param>
-    /// <exception>
-    /// В случае, например, отсутствия integer когда он нужен перенаправляет игрока на окно выбора теста
-    /// </exception>
-    public void ChangeActiveWindow(Transform currentController, GameState requredState, int? integer)
+    public void ReturnToMenu(Transform currentController)
     {
-        state = requredState;
         currentController.parent.gameObject.SetActive(false);
-        if (requredState == GameState.ChoosingLevel && integer.HasValue)
-        {
-            chosenQuizIndex = integer.Value;
-            menuController.transform.parent.gameObject.SetActive(true);
-            return;
-        }
-        else if (requredState == GameState.SolvingQuestions) 
-        {
-            if (integer.HasValue)
-            {
-                chosenLevelIndex = integer.Value;
-            }
-            if (chosenLevelIndex != -1)
-            {
-                questionController.transform.parent.gameObject.SetActive(true);
-                return;
-            }
-        }
-        else if (requredState == GameState.GettingResults && integer.HasValue)
-        {
-            resultController.transform.parent.gameObject.SetActive(true);
-            resultController.Init(integer.Value);
-            return;
-        }
         chooseController.transform.parent.gameObject.SetActive(true);
-        state = GameState.ChoosingQuiz;
+    }
+
+    private void OnQuizChoosed(int obj)
+    {
+        chosenQuizIndex = obj;
+        chooseController.transform.parent.gameObject.SetActive(false);
+        menuController.transform.parent.gameObject.SetActive(true);
+    }
+
+    private void OnLevelChoosed(int obj)
+    {
+        chosenLevelIndex = obj;
+        menuController.transform.parent.gameObject.SetActive(false);
+        questionController.transform.parent.gameObject.SetActive(true);
+    }
+
+    private void OnQuestionsSolved(int arg1, int arg2, bool isItGood)
+    {
+        questionController.transform.parent.gameObject.SetActive(false);
+        resultController.transform.parent.gameObject.SetActive(true);
+        resultController.Init(arg1, arg2, isItGood);
     }
 }

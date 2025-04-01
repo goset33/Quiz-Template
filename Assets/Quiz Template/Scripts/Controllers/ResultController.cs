@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.SmartFormat.Extensions;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using UnityEngine.UI;
 
@@ -8,20 +10,27 @@ public class ResultController : MonoBehaviour
 {
     public static GameManager gameManager;
 
-    private IntVariable rightAnswersLocale;
+    private IntVariable rightAnswersLocale, allAnswersLocale;
 
-    public TextMeshProUGUI resultText;
+    public TextMeshProUGUI header, resultText;
     public Transform addingObject;
+
+    public LocalizedString[] headerLocales; 
 
     private void Awake()
     {
-        var source = LocalizationSettings.StringDatabase.SmartFormatter.GetSourceExtension<UnityEngine.Localization.SmartFormat.Extensions.PersistentVariablesSource>();
+        var source = LocalizationSettings.StringDatabase.SmartFormatter.GetSourceExtension<PersistentVariablesSource>();
         rightAnswersLocale = source["global"]["rightAnswers"] as IntVariable;
+        allAnswersLocale = source["global"]["allAnswers"] as IntVariable;
     }
 
-    public void Init(int rightAnswers)
+    public void Init(int rightAnswers, int allAnswers, bool isGood)
     {
+        int index = isGood ? 0 : 1;
+        header.text = headerLocales[index].GetLocalizedString();
+
         rightAnswersLocale.Value = rightAnswers;
+        allAnswersLocale.Value = allAnswers;
         addingObject.GetComponentInChildren<Image>().sprite = gameManager.config.cashSprite;
         addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * 2}";
         GameManager.ChangeCash(rightAnswers);
@@ -41,6 +50,6 @@ public class ResultController : MonoBehaviour
 
     public void BackButtonPressed()
     {
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
+        gameManager.ReturnToMenu(transform);
     }
 }

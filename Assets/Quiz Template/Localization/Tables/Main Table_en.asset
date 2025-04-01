@@ -80,7 +80,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 320526794444800
-    m_Localized: Test results
+    m_Localized: You won!
     m_Metadata:
       m_Items: []
   - m_Id: 320656733982720
@@ -88,7 +88,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 321015472803840
-    m_Localized: 'You scored: {global.rightAnswers} points!'
+    m_Localized: You scored {global.rightAnswers} of {global.allAnswers} points!
     m_Metadata:
       m_Items:
       - rid: 6898860568132976666
@@ -101,7 +101,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 18907080118849536
-    m_Localized: Are you sure you want to see the right answer? It will cost 1
+    m_Localized: Are you sure you want to see the right answer? It will cost 1 cash
     m_Metadata:
       m_Items: []
   - m_Id: 19176446441902080
@@ -114,6 +114,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 19176812281679872
     m_Localized: Watch ads and continue playing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19541494590951424
+    m_Localized: You lost...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19176521968734208
+    m_Localized: You've run out of lives. Want to watch ad and get an extra life?
     m_Metadata:
       m_Items: []
   references:

@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class ChooseController : MonoBehaviour
 {
     public static GameManager gameManager;
+
+    public static event Action<int> QuizChoosed;
 
     public GameObject quizCardPrefab;
     public Transform cardsContainer;
@@ -23,8 +26,8 @@ public class ChooseController : MonoBehaviour
         }
     }
 
-    public void OnQuizChoosed(int index)
+    public void OnQuizChoosed(int quizIndex)
     {
-        gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingLevel, index);
+        QuizChoosed?.Invoke(quizIndex);
     }
 }

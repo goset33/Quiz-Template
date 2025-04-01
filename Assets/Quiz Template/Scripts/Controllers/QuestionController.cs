@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.UI;
-using YG;
+using Random = UnityEngine.Random;
 
 public class QuestionController : MonoBehaviour
 {
     public static GameManager gameManager;
+
+    public static event Action<int, int, bool> QuestionsEnded;
 
     public int currentQuestion;
     public int rightAnswers;
@@ -42,9 +45,7 @@ public class QuestionController : MonoBehaviour
     /// <summary>
     /// Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
     /// </summary>
-    /// <param name="container">
-    /// Контейнер с вопросами, на которые потребуется отвечать пользователю
-    /// </param>
+    /// <param name="container">Контейнер с вопросами, на которые потребуется отвечать пользователю</param>
     private void Init(CardsContainer container)
     {
         List<IQuestion> allPool = new(container.QuestionCards);
@@ -150,24 +151,6 @@ public class QuestionController : MonoBehaviour
                 button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = allAnswers[i];
 
                 if (allAnswers[i] == question.RightAnswer)
-                {
-                    rightIndex = i;
-                    print("Right index was set: " + i);
-                }
-            }
-        }
-        else if (card is PictureQuestion picQuestion)
-        {
-            List<string> wrongs = new(picQuestion.WrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
-            List<string> allAnswers = new(wrongs.Append(picQuestion.RightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
-            for (int i = 0; i < allAnswers.Count; i++)
-            {
-                GameObject button = Instantiate(answerButtonPrefab, answersParent);
-                int index = i;
-                button.GetComponent<Button>().onClick.AddListener(() => DefaultAnswer(index));
-                button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = allAnswers[i];
-
-                if (allAnswers[i] == picQuestion.RightAnswer)
                 {
                     rightIndex = i;
                     print("Right index was set: " + i);
@@ -321,8 +304,8 @@ public class QuestionController : MonoBehaviour
         TimelessController.OnButtonPressed -= WhenDeathButtonPressed;
         if (buttonIndex == 0)
         {
-            // Временная мера
-            gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
+            ClearScreen();
+            QuestionsEnded?.Invoke(rightAnswers, cards.Count, false);
         }
         else if (buttonIndex == 1)
         {
@@ -342,7 +325,7 @@ public class QuestionController : MonoBehaviour
         }
         else
         {
-            gameManager.ChangeActiveWindow(transform, GameManager.GameState.GettingResults, rightAnswers);
+            QuestionsEnded?.Invoke(rightAnswers, cards.Count, true);
         }
     }
 
@@ -401,7 +384,7 @@ public class QuestionController : MonoBehaviour
         if (pressedIndex == 1)
         {
             ClearScreen();
-            gameManager.ChangeActiveWindow(transform, GameManager.GameState.ChoosingQuiz, null);
+            gameManager.ReturnToMenu(transform);
         }
     }
 }
