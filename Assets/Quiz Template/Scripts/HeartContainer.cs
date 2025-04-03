@@ -20,13 +20,11 @@ public class HeartContainer : MonoBehaviour
     {
         if (heartNumber <= 0) return;
 
-        if (HeartCount != 0)
+        foreach (var heart in hearts)
         {
-            for (int i = 0; i < hearts.Count; i++)
-            {
-                TakeOneDamage();
-            }
+            Destroy(heart);
         }
+        hearts.Clear();
 
         for (int i = 0; i < heartNumber; i++)
         {

@@ -1,4 +1,3 @@
-using DG.Tweening.Core.Easing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +61,7 @@ public class GameManager : MonoBehaviour
         chooseController.OnGameStart(quizzes);
     }
 
-    private void OnApplicationQuit()
+    private void OnDisable()
     {
         ChooseController.QuizChoosed -= OnQuizChoosed;
         MenuController.LevelChoosed -= OnLevelChoosed;
@@ -115,6 +114,7 @@ public class GameManager : MonoBehaviour
 
     public void ReturnToMenu(Transform currentController)
     {
+        YandexGame.FullscreenShow();
         currentController.parent.gameObject.SetActive(false);
         chooseController.transform.parent.gameObject.SetActive(true);
     }
@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour
 
     private void OnQuestionsSolved(int arg1, int arg2, bool isItGood)
     {
+        YandexGame.FullscreenShow();
         questionController.transform.parent.gameObject.SetActive(false);
         resultController.transform.parent.gameObject.SetActive(true);
         resultController.Init(arg1, arg2, isItGood);

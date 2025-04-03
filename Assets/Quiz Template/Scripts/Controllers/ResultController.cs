@@ -5,6 +5,7 @@ using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.SmartFormat.Extensions;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using UnityEngine.UI;
+using YG;
 
 public class ResultController : MonoBehaviour
 {
@@ -12,10 +13,11 @@ public class ResultController : MonoBehaviour
 
     private IntVariable rightAnswersLocale, allAnswersLocale;
 
-    public TextMeshProUGUI header, resultText;
-    public Transform addingObject;
+    [SerializeField] TextMeshProUGUI header, resultText;
+    [SerializeField] Transform addingObject;
+    [SerializeField] GameObject rewardButton;
 
-    public LocalizedString[] headerLocales; 
+    public LocalizedString[] headerLocales;
 
     private void Awake()
     {
@@ -35,21 +37,28 @@ public class ResultController : MonoBehaviour
         addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * 2}";
         GameManager.ChangeCash(rightAnswers);
         gameManager.AddExperience(rightAnswers * 2);
-
-        //resultText.transform.localScale = new Vector3(7f, 7f, 7f);
-        //resultText.transform.rotation = Quaternion.Euler(0f, 0f, -10f);
-
-        //resultText.transform.DOScale(10f, .75f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
-        //resultText.transform.DOLocalRotate(new Vector3(0f, 0f, 10f), 5f).SetEase(Ease.Flash).SetLoops(-1, LoopType.Yoyo).SetDelay(0.1f);
     }
 
-    public void MultiplyReward()
-    {
+    public void RewardButtonPressed()
+    { 
+        YandexGame.RewardVideoEvent += MultiplyReward;
+        YandexGame.RewVideoShow(1);
+    }
 
+    private void MultiplyReward(int id)
+    {
+        YandexGame.RewardVideoEvent -= MultiplyReward;
+        if (id != 1) return;
+
+        int rights = rightAnswersLocale.Value;
+        GameManager.ChangeCash(rights * 2);
+        addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 4}";
+        rewardButton.SetActive(false);
     }
 
     public void BackButtonPressed()
     {
+        rewardButton.SetActive(true);
         gameManager.ReturnToMenu(transform);
     }
 }

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.UI;
+using YG;
 using Random = UnityEngine.Random;
 
 public class QuestionController : MonoBehaviour
@@ -309,15 +310,24 @@ public class QuestionController : MonoBehaviour
         }
         else if (buttonIndex == 1)
         {
-            // Тут будет ваша реклама
-            heartContainer.HealOneHeart();
+            YandexGame.RewardVideoEvent += ReviveAfterLose;
+            YandexGame.RewVideoShow(0);
         }
+    }
+
+    private void ReviveAfterLose(int id)
+    {
+        YandexGame.RewardVideoEvent -= ReviveAfterLose;
+        if (id != 0) return;
+
+        heartContainer.HealOneHeart();
     }
 
     // Вызывается при нажатии кнопки следующего вопроса
     public void NextButtonPressed()
     {
         ClearScreen();
+        YandexGame.FullscreenShow();
         if (currentQuestion != cards.Count) // Если вопрос был не последний
         {
             currentQuestion++;
