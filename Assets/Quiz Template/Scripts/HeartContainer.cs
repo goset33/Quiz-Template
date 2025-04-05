@@ -8,7 +8,7 @@ public class HeartContainer : MonoBehaviour
 {
     [SerializeField] private GameObject heartPrefab;
 
-    private List<GameObject> hearts = new();
+    private readonly List<GameObject> hearts = new();
 
     public int HeartCount => hearts.Count;
 

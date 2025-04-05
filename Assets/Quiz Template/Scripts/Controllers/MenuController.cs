@@ -15,8 +15,8 @@ public class MenuController : MonoBehaviour
     private IntVariable buyCost;
 
     [Space]
-    [SerializeField] TextMeshProUGUI starCounter;
-    [SerializeField] Transform buttonContainer;
+    [SerializeField] private TextMeshProUGUI starCounter;
+    [SerializeField] private Transform buttonContainer;
 
     [Space]
     public LocalizedString[] buyLevelLocales;

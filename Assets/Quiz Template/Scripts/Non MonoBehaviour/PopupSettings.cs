@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.Localization;
 
 public class PopupSettings
@@ -11,25 +12,41 @@ public class PopupSettings
     }
 
     public PopupSize size;
+    public GameObject objectPrefab;
     public LocalizedString title, text, button1, button2;
 
-    public PopupSettings(PopupSize _size, LocalizedString _title, LocalizedString _text, LocalizedString _button1, LocalizedString _button2)
+    public PopupSettings(PopupSize _size, GameObject prefab, LocalizedString _title, LocalizedString _text, LocalizedString _button1, LocalizedString _button2)
     {
         size = _size;
+        objectPrefab = prefab;
         title = _title;
         text = _text;
         button1 = _button1;
         button2 = _button2;
     }
 
-    public PopupSettings(PopupSize _size, LocalizedString[] strings)
+    public PopupSettings(PopupSize _size, GameObject prefab, LocalizedString[] strings)
     {
         if (strings == null || strings.Length != 4) return; 
 
         size = _size;
+        objectPrefab = prefab;
         title = strings[0];
         text = strings[1];
         button1 = strings[2];
         button2 = strings[3];
     }
+
+    public PopupSettings(PopupSize _size, LocalizedString[] strings)
+    {
+        if (strings == null || strings.Length != 4) return;
+
+        size = _size;
+        objectPrefab = null;
+        title = strings[0];
+        text = strings[1];
+        button1 = strings[2];
+        button2 = strings[3];
+    }
+
 }

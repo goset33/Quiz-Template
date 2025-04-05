@@ -32,11 +32,11 @@ public class GameManager : MonoBehaviour
 
     // »де€: —ейчас переменные используютс€ только дл€ переключени€ окон. ¬ целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
     [Header("Controllers")]
-    [SerializeField] TimelessController timelessController;
-    [SerializeField] ChooseController chooseController;
-    [SerializeField] MenuController menuController;
-    [SerializeField] QuestionController questionController;
-    [SerializeField] ResultController resultController;
+    [SerializeField] private TimelessController timelessController;
+    [SerializeField] private ChooseController chooseController;
+    [SerializeField] private MenuController menuController;
+    [SerializeField] private QuestionController questionController;
+    [SerializeField] private ResultController resultController;
 
     /// <summary>
     /// Bootstrap дл€ всей игры. Ќа старте запускает инициализацию меню 

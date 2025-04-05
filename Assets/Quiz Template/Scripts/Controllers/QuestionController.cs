@@ -17,6 +17,10 @@ public class QuestionController : MonoBehaviour
     public int currentQuestion;
     public int rightAnswers;
 
+    [SerializeField] private GameObject loseCounterPrefab;
+
+    private int reviveCount = 0;
+
     private int rightIndex;
 
     private List<GameObject> choosedSequence = new(); // Хранит кнопки в последовательности нажатия
@@ -35,8 +39,8 @@ public class QuestionController : MonoBehaviour
     [SerializeField] private GameObject answerButtonPrefab;
 
     [Header("Locales")]
-    [SerializeField] LocalizedString[] backInMenuLocales;
-    [SerializeField] LocalizedString[] showAnswerLocales, lackOfLivesLocales;
+    [SerializeField] private LocalizedString[] backInMenuLocales;
+    [SerializeField] private LocalizedString[] showAnswerLocales, lackOfLivesLocales;
 
     private void OnEnable()
     {
@@ -70,8 +74,10 @@ public class QuestionController : MonoBehaviour
         }
         cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
 
+        ClearScreen();
         heartContainer.InitializeHearts(gameManager.startHeartsCount);
 
+        reviveCount = 0;
         currentQuestion = 1;
         rightAnswers = 0;
         LoadNextQuestion(cards[currentQuestion - 1]);
@@ -278,25 +284,20 @@ public class QuestionController : MonoBehaviour
             heartContainer.TakeOneDamage();
             if (heartContainer.HeartCount == 0)
             {
-                gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, lackOfLivesLocales));
-                TimelessController.OnButtonPressed += WhenDeathButtonPressed;
+                if (reviveCount < 2)
+                {
+                    reviveCount++;
+                    gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, loseCounterPrefab, lackOfLivesLocales));
+                    TimelessController.OnButtonPressed += WhenDeathButtonPressed;
+                }
+                else
+                {
+                    QuestionsEnded?.Invoke(rightAnswers, cards.Count, false);
+                }
             }
 
             showRightButton.SetActive(true);
             print("Incorrect!");
-        }
-
-    }
-
-    // Чистит экран и обнуляет все что нужно обнулить. Вызывать после каждого вопроса
-    private void ClearScreen()
-    {
-        isAnswerShowed = false;
-        nextButton.SetActive(false);
-        showRightButton.SetActive(false);
-        for (int i = 0; i < answersParent.childCount; i++)
-        {
-            Destroy(answersParent.GetChild(i).gameObject);
         }
     }
 
@@ -305,7 +306,6 @@ public class QuestionController : MonoBehaviour
         TimelessController.OnButtonPressed -= WhenDeathButtonPressed;
         if (buttonIndex == 0)
         {
-            ClearScreen();
             QuestionsEnded?.Invoke(rightAnswers, cards.Count, false);
         }
         else if (buttonIndex == 1)
@@ -382,6 +382,18 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    /// Чистит экран и обнуляет все что нужно обнулить. Вызывать после каждого вопроса
+    private void ClearScreen()
+    {
+        isAnswerShowed = false;
+        nextButton.SetActive(false);
+        showRightButton.SetActive(false);
+        for (int i = 0; i < answersParent.childCount; i++)
+        {
+            Destroy(answersParent.GetChild(i).gameObject);
+        }
+    }
+
     public void MenuButtonPressed()
     {
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
@@ -393,7 +405,6 @@ public class QuestionController : MonoBehaviour
         TimelessController.OnButtonPressed -= BackInMenu;
         if (pressedIndex == 1)
         {
-            ClearScreen();
             gameManager.ReturnToMenu(transform);
         }
     }
