@@ -386,8 +386,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicButton: {fileID: 7668685254531583410}
   musicSprites:
-  - {fileID: 21300000, guid: b0fab24071187fa409427c385727f77a, type: 3}
-  - {fileID: 21300000, guid: 67dc219b95f2a34468fc492622aa5bce, type: 3}
+  - {fileID: -84883030, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}
+  - {fileID: 1330254848, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}
   popupWindow: {fileID: 8554962951029417998}
   notificationText: {fileID: 2434966342111519976}
 --- !u!82 &690324257067826386
@@ -1453,7 +1453,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 67dc219b95f2a34468fc492622aa5bce, type: 3}
+  m_Sprite: {fileID: 1330254848, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

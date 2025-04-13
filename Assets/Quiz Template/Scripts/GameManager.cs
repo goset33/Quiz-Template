@@ -1,4 +1,5 @@
-using System;
+п»їusing System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,13 +7,14 @@ using YG;
 
 public class GameManager : MonoBehaviour
 {
-    public string Language => YandexGame.lang;
+    public static string Language => YandexGame.lang;
     public HashSet<DoubleInt> OpenedLevels => YandexGame.savesData.openedLevels;
 
     public enum GameState
     {
+        InMainMenu,
         ChoosingQuiz,
-        ChoosingLevel,
+        ChoosingHardness,
         SolvingQuestions,
         GettingResults
     }
@@ -26,45 +28,61 @@ public class GameManager : MonoBehaviour
 
     [Header("Questions Settings")]
     public QuestionConfig questionConfig;
-    public int startHeartsCount = 3; // Сколько сердец будет у игрока на старте
-    public bool shouldShuffle; // Следует ли рандомизировать порядок вопросов
-    [HideInInspector] public int chosenLevelIndex = -1;
+    public int startHeartsCount = 3; // РЎРєРѕР»СЊРєРѕ СЃРµСЂРґРµС† Р±СѓРґРµС‚ Сѓ РёРіСЂРѕРєР° РЅР° СЃС‚Р°СЂС‚Рµ
+    public bool shouldShuffle; // РЎР»РµРґСѓРµС‚ Р»Рё СЂР°РЅРґРѕРјРёР·РёСЂРѕРІР°С‚СЊ РїРѕСЂСЏРґРѕРє РІРѕРїСЂРѕСЃРѕРІ
+    [HideInInspector] public int chosenHardnessIndex = -1;
 
-    // Идея: Сейчас переменные используются только для переключения окон. В целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
+    // РРґРµСЏ: РЎРµР№С‡Р°СЃ РїРµСЂРµРјРµРЅРЅС‹Рµ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ С‚РѕР»СЊРєРѕ РґР»СЏ РїРµСЂРµРєР»СЋС‡РµРЅРёСЏ РѕРєРѕРЅ. Р’ С†РµР»РѕРј РјРѕР¶РЅРѕ РїРµСЂРµРґР°РІР°С‚СЊ РёРІРµРЅС‚С‹ С‚РёРїР° Action<Transform, int> Рё С‚РѕРіРґР° СѓР±СЂР°С‚СЊ РІСЃРµ СЌС‚Рё Р·Р°РІРёСЃРёРјРѕСЃС‚Рё
     [Header("Controllers")]
     [SerializeField] private TimelessController timelessController;
+    //[SerializeField] private MenuController menuController;
     [SerializeField] private ChooseController chooseController;
-    [SerializeField] private MenuController menuController;
+    [SerializeField] private HardnessController hardnessController;
     [SerializeField] private QuestionController questionController;
     [SerializeField] private ResultController resultController;
 
+    private AILoader loader = new AILoader();
+
     /// <summary>
-    /// Bootstrap для всей игры. На старте запускает инициализацию меню 
+    /// Bootstrap РґР»СЏ РІСЃРµР№ РёРіСЂС‹. РќР° СЃС‚Р°СЂС‚Рµ Р·Р°РїСѓСЃРєР°РµС‚ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ РјРµРЅСЋ 
     /// </summary>
-    private void Awake()
+    private async void Awake()
     {
-        // Место для дебаг строк
+        // РњРµСЃС‚Рѕ РґР»СЏ РґРµР±Р°Рі СЃС‚СЂРѕРє
         YandexGame.savesData.level = 1;
         YandexGame.savesData.experience = 0;
         YandexGame.savesData.requiredExp = 100;
-        // Удалить потом обязательно
+        // РЈРґР°Р»РёС‚СЊ РїРѕС‚РѕРј РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ
 
         ChooseController.gameManager = this;
-        MenuController.gameManager = this;
+        HardnessController.gameManager = this;
         QuestionController.gameManager = this;
         ResultController.gameManager = this;
 
         ChooseController.QuizChoosed += OnQuizChoosed;
-        MenuController.LevelChoosed += OnLevelChoosed;
+        HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
         chooseController.OnGameStart(quizzes);
+
+        // РџС‹С‚РєРё РІ РЅРµР№СЂРѕ
+        try
+        {
+            await loader.LoadAsync();
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.LogWarning("Р—Р°РіСЂСѓР·РєР° РѕС‚РјРµРЅРµРЅР°.");
+        }
     }
 
     private void OnDisable()
     {
+        // РџС‹С‚РєРё РІ РЅРµР№СЂРѕ
+        loader.Dispose();
+
         ChooseController.QuizChoosed -= OnQuizChoosed;
-        MenuController.LevelChoosed -= OnLevelChoosed;
+        HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
     }
 
@@ -103,10 +121,10 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Проверяет в сохранениях, был ли открыт уровень
+    /// РџСЂРѕРІРµСЂСЏРµС‚ РІ СЃРѕС…СЂР°РЅРµРЅРёСЏС…, Р±С‹Р» Р»Рё РѕС‚РєСЂС‹С‚ СѓСЂРѕРІРµРЅСЊ
     /// </summary>
-    /// <param name="quizIndex">Индекс квиза</param>
-    /// <param name="levelIndex">Индекс уровня сложности</param>
+    /// <param name="quizIndex">РРЅРґРµРєСЃ РєРІРёР·Р°</param>
+    /// <param name="levelIndex">РРЅРґРµРєСЃ СѓСЂРѕРІРЅСЏ СЃР»РѕР¶РЅРѕСЃС‚Рё</param>
     public bool IsLevelWasOpened(int quizIndex, int levelIndex)
     {
         return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
@@ -116,6 +134,13 @@ public class GameManager : MonoBehaviour
     {
         YandexGame.FullscreenShow();
         currentController.parent.gameObject.SetActive(false);
+        chooseController.transform.parent.gameObject.SetActive(true); // Р—Р°РјРµРЅРёС‚СЊ РЅР° РјРµРЅСЋ
+    }
+
+    public void GetIntoGame()
+    {
+        // РЎРєСЂС‹С‚РёРµ РјРµРЅСЋ Рё Р·Р°РїСѓСЃРє РІС‹Р±РѕСЂР° С‚РµСЃС‚РѕРІ
+        //menuController.parent.gameObject.SetActive(false);
         chooseController.transform.parent.gameObject.SetActive(true);
     }
 
@@ -123,13 +148,13 @@ public class GameManager : MonoBehaviour
     {
         chosenQuizIndex = obj;
         chooseController.transform.parent.gameObject.SetActive(false);
-        menuController.transform.parent.gameObject.SetActive(true);
+        hardnessController.transform.parent.gameObject.SetActive(true);
     }
 
     private void OnLevelChoosed(int obj)
     {
-        chosenLevelIndex = obj;
-        menuController.transform.parent.gameObject.SetActive(false);
+        chosenHardnessIndex = obj;
+        hardnessController.transform.parent.gameObject.SetActive(false);
         questionController.transform.parent.gameObject.SetActive(true);
     }
 

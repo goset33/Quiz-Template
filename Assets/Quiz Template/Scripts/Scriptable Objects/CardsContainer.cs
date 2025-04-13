@@ -8,7 +8,7 @@ public class CardsContainer : ScriptableObject
 
     public IQuestion[] QuestionCards
     {
-        get { return new ExcelDataParser().ParseQuestions(filePath, sheetName).ToArray(); }
+        get { return ExcelDataParser.ParseQuestions(filePath, sheetName).ToArray(); }
     }
 
     // Ниже: поля с данными таблицы для импорта

@@ -5,6 +5,5 @@ using UnityEngine;
 public class QuizCard : ScriptableObject
 {
     public Sprite image;
-    public string quizName;
     public CardsContainer testContainer;
 }

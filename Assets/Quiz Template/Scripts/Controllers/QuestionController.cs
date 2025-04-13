@@ -60,15 +60,15 @@ public class QuestionController : MonoBehaviour
         }
 
         int amount = 0;
-        if (gameManager.chosenLevelIndex == 0)
+        if (gameManager.chosenHardnessIndex == 0)
         {
             amount = container.easyAmount;
         }
-        else if (gameManager.chosenLevelIndex == 1)
+        else if (gameManager.chosenHardnessIndex == 1)
         {
             amount = container.mediumAmount;
         }
-        else if (gameManager.chosenLevelIndex == 2)
+        else if (gameManager.chosenHardnessIndex == 2)
         {
             amount = container.hardAmount;
         }
@@ -148,7 +148,7 @@ public class QuestionController : MonoBehaviour
 
         if (card is MainTypeQuestion question)
         {
-            List<string> wrongs = new(question.WrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenLevelIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
+            List<string> wrongs = new(question.WrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenHardnessIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
             List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
             for (int i = 0; i < allAnswers.Count; i++)
             {
@@ -167,9 +167,9 @@ public class QuestionController : MonoBehaviour
         else if (card is CounterQuestion)
         {
             choosedSequence.Clear();
-            rightSequence = new GameObject[gameManager.chosenLevelIndex + 2];
+            rightSequence = new GameObject[gameManager.chosenHardnessIndex + 2];
 
-            List<string> answers = new(card.AllAnswers.Take(gameManager.chosenLevelIndex + 2));
+            List<string> answers = new(card.AllAnswers.Take(gameManager.chosenHardnessIndex + 2));
             List<string> randomizedAnswers = new(answers.OrderBy(_ => Random.value));
             for (int i = 0; i < randomizedAnswers.Count; i++)
             {
@@ -211,7 +211,7 @@ public class QuestionController : MonoBehaviour
         if (nextButton.activeSelf) return;
 
         UpdateButtonIndexes(pressedButton);
-        if (choosedSequence.Count == gameManager.chosenLevelIndex + 2)
+        if (choosedSequence.Count == gameManager.chosenHardnessIndex + 2)
         {
             int rightCounter = 0;
             for (int i = 0; i < choosedSequence.Count; i++)
@@ -222,7 +222,7 @@ public class QuestionController : MonoBehaviour
                 }
             }
 
-            bool isRight = rightCounter == gameManager.chosenLevelIndex + 2;
+            bool isRight = rightCounter == gameManager.chosenHardnessIndex + 2;
             if (isRight)
             {
                 for (int i = 0; i < answersParent.childCount; i++)

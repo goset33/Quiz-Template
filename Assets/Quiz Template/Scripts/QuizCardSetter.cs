@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,6 @@ public class QuizCardSetter : MonoBehaviour
     {
         controller = chooseController;
         GetComponent<Image>().sprite = cardContent.image;
-        GetComponentInChildren<TextMeshProUGUI>().text = cardContent.quizName;
     }
 
     public void QuizChoosed()

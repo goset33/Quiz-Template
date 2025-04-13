@@ -29,12 +29,5 @@ public class MainTypeQuestion : IQuestion
         allAnswers = answers;
     }
 
-    public MainTypeQuestion(MainTypeQuestion instance)
-    {
-        question = instance.QuestionText;
-        image = instance.Image;
-        rightAnswer = instance.RightAnswer;
-        wrongAnswers = instance.WrongAnswers;
-        allAnswers = instance.AllAnswers;
-    }
+    public MainTypeQuestion(MainTypeQuestion instance) : this(instance.QuestionText, instance.Image, instance.AllAnswers) { }
 }

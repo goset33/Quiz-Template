@@ -23,7 +23,7 @@ public class FileSelectorEditor : Editor
         {
             try
             {
-                sheetNames = new ExcelReader(script.FilePath).GetAllSheetNames();
+                sheetNames = ExcelReader.GetAllSheetNames(script.FilePath);
                 selectedSheetIndex = System.Array.IndexOf(sheetNames, script.sheetName);
                 if (selectedSheetIndex == -1)
                 {

@@ -6,20 +6,11 @@ using System.IO;
 using UnityEngine;
 
 // [TODO]: Тут нужно обрабатывать дополнительные столбцы для вопроса 4
-// А еще парсятся формулы тоже
-public class ExcelReader
+public static class ExcelReader
 {
-    private string filePath;
-
-    // Путь должен быть указан относительно папки Assets
-    public ExcelReader(string path)
+    public static string[] GetAllSheetNames(string path)
     {
-        filePath = path;
-    }
-
-    public string[] GetAllSheetNames()
-    {
-        using FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        using FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
 
         XSSFWorkbook workbook = new(file);
         List<string> sheets = new();
@@ -31,7 +22,7 @@ public class ExcelReader
     }
 
     // Название таблицы должно точно совпадать с ее реальной копией в файле, с точностью до регистра
-    public List<Dictionary<string, string>> ReadSheet(string sheetName)
+    public static List<Dictionary<string, string>> ReadSheet(string filePath, string sheetName)
     {
         List<Dictionary<string, string>> sheetData = new List<Dictionary<string, string>>();
         using FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -86,7 +77,7 @@ public class ExcelReader
     }
 
     // Метод достает из нужной клетки изображение и возвращает его массив байтов
-    private byte[] GetPictureFromCell(XSSFCell cell)
+    private static byte[] GetPictureFromCell(XSSFCell cell)
     {
         XSSFSheet sheet = cell.Sheet as XSSFSheet;
         if (sheet == null) return null;
@@ -111,7 +102,7 @@ public class ExcelReader
 
     // Костыль, проверяющий строку. Если хоть в одной клетке что-то есть то возвращает false
     // А костыль потому, что библиотека говно. Если в строке раньше что-то было то теперь она учитывается в цикле строк
-    private bool IsRowEmpty(IRow row)
+    private static bool IsRowEmpty(IRow row)
     {
         if (row == null) return true;
 

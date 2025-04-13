@@ -55,6 +55,10 @@ ExportedObj/
 # Unity3D generated file on crash reports
 sysinfo.txt
 
+# OpenRouter Api Key
+ApiKey.txt
+ApiKey.txt.meta
+
 # Builds
 *.apk
 *.aab

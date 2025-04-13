@@ -24,12 +24,10 @@ public class TimelessController : MonoBehaviour
         {
             GetComponent<AudioSource>().Stop();
             musicButton.GetComponent<Image>().sprite = musicSprites[0];
-            musicButton.transform.localScale = new Vector3(0.94f, 0.94f, 0.94f);
         }
         else
         {
             musicButton.GetComponent<Image>().sprite = musicSprites[1];
-            musicButton.transform.localScale = Vector3.one;
         }
     }
 
@@ -45,7 +43,6 @@ public class TimelessController : MonoBehaviour
 
             audioSource.Stop();
             musicButton.GetComponent<Image>().sprite = musicSprites[0];
-            musicButton.transform.localScale = new Vector3(0.94f, 0.94f, 0.94f);
         }
         else
         {
@@ -53,7 +50,6 @@ public class TimelessController : MonoBehaviour
 
             audioSource.Play();
             musicButton.GetComponent<Image>().sprite = musicSprites[1];
-            musicButton.transform.localScale = Vector3.one;
         }
         YandexGame.SaveProgress();
     }

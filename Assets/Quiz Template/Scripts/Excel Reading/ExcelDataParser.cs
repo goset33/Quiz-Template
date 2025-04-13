@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExcelDataParser
+public static class ExcelDataParser
 {
-    public List<IQuestion> ParseQuestions(List<Dictionary<string, string>> sheetData)
+    public static List<IQuestion> ParseQuestions(List<Dictionary<string, string>> sheetData)
     {
         List<IQuestion> questions = new();
         foreach (Dictionary<string, string> row in sheetData)
@@ -38,10 +38,10 @@ public class ExcelDataParser
         return questions;
     }
 
-    public List<IQuestion> ParseQuestions(string path, string sheet)
+    public static List<IQuestion> ParseQuestions(string path, string sheet)
     {
         if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(sheet)) return null;
 
-        return ParseQuestions(new ExcelReader(path).ReadSheet(sheet));
+        return ParseQuestions(ExcelReader.ReadSheet(path, sheet));
     }
 }

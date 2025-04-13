@@ -1,11 +1,11 @@
 {
-    "idSave": 1505,
+    "idSave": 1549,
     "isFirstSession": false,
     "language": "ru",
     "promptDone": false,
     "level": 1,
-    "experience": 20,
+    "experience": 0,
     "requiredExp": 100,
-    "cash": 662,
-    "isMusicPlaying": false
+    "cash": 674,
+    "isMusicPlaying": true
 }
