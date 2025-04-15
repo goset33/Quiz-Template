@@ -1,11 +1,22 @@
 {
-    "idSave": 1549,
+    "idSave": 1566,
     "isFirstSession": false,
     "language": "ru",
     "promptDone": false,
+    "realQuizzesSequence": [
+        1,
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+    ],
     "level": 1,
     "experience": 0,
     "requiredExp": 100,
     "cash": 674,
-    "isMusicPlaying": true
+    "isMusicPlaying": false
 }

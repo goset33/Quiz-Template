@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4150746042448487324
 Transform:
@@ -59,9 +59,9 @@ MonoBehaviour:
   questionConfig: {fileID: 11400000, guid: e4e6d52ed2c6b844382eeddef9d61c17, type: 2}
   startHeartsCount: 3
   shouldShuffle: 1
-  chosenLevelIndex: -1
+  chosenHardnessIndex: -1
   timelessController: {fileID: 0}
   chooseController: {fileID: 0}
-  menuController: {fileID: 0}
+  hardnessController: {fileID: 0}
   questionController: {fileID: 0}
   resultController: {fileID: 0}

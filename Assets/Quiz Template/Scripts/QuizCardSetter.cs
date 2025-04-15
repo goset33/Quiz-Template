@@ -6,23 +6,23 @@ public class QuizCardSetter : MonoBehaviour
 {
     [HideInInspector] public QuizCard cardContent;
 
-    public ChooseController controller;
+    private ChooseController controller;
 
-    public void SetContent(ChooseController chooseController)
+    public static event Action<int> QuizChoosed;
+
+    public void SetContent(ChooseController controller)
     {
-        controller = chooseController;
+        this.controller = controller;
         GetComponent<Image>().sprite = cardContent.image;
     }
 
-    public void QuizChoosed()
+    public void FavoritePressed()
     {
-        if (controller != null)
-        {
-            controller.OnQuizChoosed(transform.GetSiblingIndex());
-        }
-        else
-        {
-            throw new NullReferenceException("The content of card are not set!");
-        }
+        controller.UpdateCardPos(cardContent);
+    }
+
+    public void QuizChooseButtonPressed()
+    {
+        QuizChoosed?.Invoke(transform.GetSiblingIndex());
     }
 }

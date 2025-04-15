@@ -33,7 +33,7 @@ RectTransform:
   m_Father: {fileID: 2487278821129118277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quizCardPrefab: {fileID: 4646145699962356274, guid: fe921872d779afb4f96b39460603d2ab, type: 3}
-  cardsContainer: {fileID: 6247765623277532046}
+  cardsParent: {fileID: 6247765623277532046}
   levelHandler: {fileID: 6626896132194300348}
 --- !u!1 &4623349796831918531
 GameObject:
@@ -825,7 +825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4893413750005435582
 Transform:
   m_ObjectHideFlags: 0

@@ -124,6 +124,22 @@ MonoBehaviour:
     m_Localized: You've run out of lives. Want to watch ad and get an extra life?
     m_Metadata:
       m_Items: []
+  - m_Id: 24537733258629120
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24537657526276096
+    m_Localized: Achivements
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24537584146927616
+    m_Localized: Play
+    m_Metadata:
+      m_Items: []
+  - m_Id: 24537606087331840
+    m_Localized: Multyplayer
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

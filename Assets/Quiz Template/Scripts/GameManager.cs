@@ -1,8 +1,10 @@
-﻿using System;
+﻿using DG.Tweening.Core.Easing;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 using YG;
 
 public class GameManager : MonoBehaviour
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviour
     // Идея: Сейчас переменные используются только для переключения окон. В целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
     [Header("Controllers")]
     [SerializeField] private TimelessController timelessController;
-    //[SerializeField] private MenuController menuController;
+    [SerializeField] private MenuController menuController;
     [SerializeField] private ChooseController chooseController;
     [SerializeField] private HardnessController hardnessController;
     [SerializeField] private QuestionController questionController;
@@ -54,16 +56,25 @@ public class GameManager : MonoBehaviour
         YandexGame.savesData.requiredExp = 100;
         // Удалить потом обязательно
 
+        MenuController.gameManager = this;
         ChooseController.gameManager = this;
         HardnessController.gameManager = this;
         QuestionController.gameManager = this;
         ResultController.gameManager = this;
 
-        ChooseController.QuizChoosed += OnQuizChoosed;
+        MenuController.GameStarted += GetIntoGame;
+        QuizCardSetter.QuizChoosed += OnQuizChoosed;
         HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
-        chooseController.OnGameStart(quizzes);
+        if (YandexGame.savesData.realQuizzesSequence == null || YandexGame.savesData.realQuizzesSequence.Length > quizzes.Length)
+        {
+            YandexGame.savesData.realQuizzesSequence = new int[quizzes.Length];
+            for (int i = 0; i < quizzes.Length; i++)
+            {
+                YandexGame.savesData.realQuizzesSequence[i] = i;
+            }
+        }
 
         // Пытки в нейро
         try
@@ -81,7 +92,8 @@ public class GameManager : MonoBehaviour
         // Пытки в нейро
         loader.Dispose();
 
-        ChooseController.QuizChoosed -= OnQuizChoosed;
+        MenuController.GameStarted -= GetIntoGame;
+        QuizCardSetter.QuizChoosed -= OnQuizChoosed;
         HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
     }
@@ -130,18 +142,70 @@ public class GameManager : MonoBehaviour
         return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
     }
 
+    /// <summary>
+    /// Изменяет позицию карточки квиза в массиве, не трогая отображение
+    /// </summary>
+    /// <param name="card">Сама карточка</param>
+    public void UpdateQuizCardPosition(QuizCard card)
+    {
+        int index = GetIndexFromCard(card);
+        PasteObjectAsFirst(index, YandexGame.savesData.realQuizzesSequence);
+        YandexGame.SaveProgress();
+    }
+
+    /// <summary>
+    /// Ищет квиз в массиве квизов и возвращает его индекс
+    /// </summary>
+    /// <returns>Индекс квиза в массиве</returns>
+    private int GetIndexFromCard(QuizCard card)
+    {
+        for (int i = 0; i < quizzes.Length; i++)
+        {
+            if (quizzes[i] == card)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// Перемещает объект в начало массива, передвигая все остальные элементы на 1
+    /// </summary>
+    /// <typeparam name="T">QuizCard</typeparam>
+    /// <param name="obj">Объект</param>
+    /// <param name="array">Массив где содержится объект</param>
+    private void PasteObjectAsFirst<T>(T obj, T[] array)
+    {
+        int maxIndex = -1;
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (array[i].Equals(obj))
+            {
+                maxIndex = i;
+                break;
+            }
+        }
+
+        for (int i = maxIndex; i > 0; i--)
+        {
+            array[i] = array[i - 1];
+        }
+        array[0] = obj;
+    }
+
     public void ReturnToMenu(Transform currentController)
     {
         YandexGame.FullscreenShow();
         currentController.parent.gameObject.SetActive(false);
-        chooseController.transform.parent.gameObject.SetActive(true); // Заменить на меню
+        menuController.transform.parent.gameObject.SetActive(true);
     }
 
     public void GetIntoGame()
     {
-        // Скрытие меню и запуск выбора тестов
-        //menuController.parent.gameObject.SetActive(false);
+        menuController.transform.parent.gameObject.SetActive(false);
         chooseController.transform.parent.gameObject.SetActive(true);
+        chooseController.RedrawOrder();
     }
 
     private void OnQuizChoosed(int obj)

@@ -20,15 +20,16 @@ public class AILoader : IDisposable
     };
 
     private static string questionTemplate = @"{
-        ""model"": ""google/gemini-2.0-flash-exp:free"",
+        ""model"": ""google/learnlm-1.5-pro-experimental:free"",
         ""messages"": [
             {
                 ""role"": ""system"",
-                ""content"": ""You are a specialized assistant for generating questions for the game {0}. Follow these instructions carefully:\nGenerate exactly 5 questions. Each question must have a unique structure and content to avoid repetition.\nFor type 1 questions:\n - Include one correct answer as the first option.\n - Provide three plausible but incorrect answers.\nFor type 3 questions:\n - Answers must form a logical sequence.\n - If 1-2 last answers are removed, the remaining sequence should still make sense.\nEnsure all questions are challenging and fit the theme of the game.\nUse the language specified as {1}.\nOutput MUST strictly follow the provided JSON schema.""
+                ""content"": ""You are a specialized assistant for generating questions for the game {0}. Follow these instructions carefully:\nGenerate exactly 5 questions. Each question must have an unique content to avoid repetition.\nFor type 1 questions:\n - Include one correct answer as the first option.\n - Provide three plausible but incorrect answers.\nEnsure all questions are challenging and fit the theme of the game.\nUse the language specified as {1}.\nOutput MUST strictly follow the provided JSON schema.""
             }
         ],
         ""provider"": {
-            ""require_parameters"": true
+            ""require_parameters"": true,
+            
         },
         ""structured_outputs"": true,
         ""response_format"": {
@@ -55,12 +56,12 @@ public class AILoader : IDisposable
                                         ""maxItems"": 4,
                                         ""items"": {
                                             ""type"": ""string"",
-                                            ""description"": ""Answer options. For type 1: 1 correct answer (first), 3 incorrect answers. For type 3: a logical sequence of 4 answers.""
+                                            ""description"": ""Answer options. For type 1: 1 correct answer (first), 3 incorrect answers. For type 3: a logical sequence of 4 answers. MUST BE AND BE INSIDE QUESTION OBJECT""
                                         }
                                     },
                                     ""questionType"": {
-                                        ""type"": ""number"",
-                                        ""description"": ""Type of question. 1 = Default question (multiple-choice), 3 = Ordering question (sequence-based).""
+                                        ""type"": ""integer"",
+                                        ""description"": ""Type of question. 1 = Default question (multiple-choice), 3 = Ordering question (sequence-based). MUST BE AN INTEGER VALUE.""
                                     }
                                 }
                             }

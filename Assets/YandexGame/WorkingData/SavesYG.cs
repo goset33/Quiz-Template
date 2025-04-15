@@ -13,10 +13,13 @@ namespace YG
 
         // Ваши сохранения
         public HashSet<DoubleInt> openedLevels = new();
+        public int[] realQuizzesSequence = null;
+
         public int level = 1;
         public int experience = 0;
         public int requiredExp = 100;
         public int cash = 0;
+
         public bool isMusicPlaying = true;
 
         // Поля (сохранения) можно удалять и создавать новые. При обновлении игры сохранения ломаться не должны
@@ -26,7 +29,6 @@ namespace YG
         public SavesYG()
         {
             // Допустим, задать значения по умолчанию для отдельных элементов массива
-
         }
     }
 }
