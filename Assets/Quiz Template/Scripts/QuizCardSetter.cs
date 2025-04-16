@@ -7,6 +7,7 @@ public class QuizCardSetter : MonoBehaviour
     [HideInInspector] public QuizCard cardContent;
 
     private ChooseController controller;
+    [SerializeField] private Image favoriteSprite;
 
     public static event Action<int> QuizChoosed;
 

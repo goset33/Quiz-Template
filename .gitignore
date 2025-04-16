@@ -59,6 +59,10 @@ sysinfo.txt
 ApiKey.txt
 ApiKey.txt.meta
 
+# OpenRouter Prompt
+AI Prompt.txt
+AI Prompt.txt.meta
+
 # Builds
 *.apk
 *.aab

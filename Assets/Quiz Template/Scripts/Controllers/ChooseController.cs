@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using YG;
 
@@ -16,7 +17,7 @@ public class ChooseController : MonoBehaviour
 
     private void OnGameStart()
     {
-        foreach (QuizCard content in gameManager.quizzes)
+        foreach (QuizCard content in YandexGame.savesData.currentQuizSeqence)
         {
             QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
             card.cardContent = content;
@@ -26,23 +27,11 @@ public class ChooseController : MonoBehaviour
 
     public void RedrawOrder()
     {
-        if (cardsParent.childCount == 0)
+        for (int i = 0; i < cardsParent.childCount; i++)
         {
-            OnGameStart();
+            Destroy(cardsParent.GetChild(i).gameObject);
         }
-
-        for (int i = 0; i < gameManager.quizzes.Length; i++)
-        {
-            Transform curr = cardsParent.GetChild(i);
-            for (int j = 0; j <  gameManager.quizzes.Length; j++)
-            {
-                if (YandexGame.savesData.realQuizzesSequence[j] == i)
-                {
-                    curr.SetSiblingIndex(j);
-                    break;
-                }
-            }
-        }
+        OnGameStart();
     }
 
     public void UpdateCardPos(QuizCard card)

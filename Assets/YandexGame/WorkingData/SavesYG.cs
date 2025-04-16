@@ -13,7 +13,7 @@ namespace YG
 
         // Ваши сохранения
         public HashSet<DoubleInt> openedLevels = new();
-        public int[] realQuizzesSequence = null;
+        public List<QuizCard> currentQuizSeqence = new();
 
         public int level = 1;
         public int experience = 0;

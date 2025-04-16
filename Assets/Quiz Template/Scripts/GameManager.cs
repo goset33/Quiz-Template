@@ -1,10 +1,7 @@
-﻿using DG.Tweening.Core.Easing;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 using YG;
 
 public class GameManager : MonoBehaviour
@@ -25,7 +22,7 @@ public class GameManager : MonoBehaviour
     public GameConfig config;
 
     [Header("Choose Settings")]
-    public QuizCard[] quizzes;
+    public List<QuizCard> quizzes = new();
     [HideInInspector] public int chosenQuizIndex = -1;
 
     [Header("Questions Settings")]
@@ -42,8 +39,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private HardnessController hardnessController;
     [SerializeField] private QuestionController questionController;
     [SerializeField] private ResultController resultController;
-
-    private AILoader loader = new AILoader();
 
     /// <summary>
     /// Bootstrap для всей игры. На старте запускает инициализацию меню 
@@ -67,30 +62,19 @@ public class GameManager : MonoBehaviour
         HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
-        if (YandexGame.savesData.realQuizzesSequence == null || YandexGame.savesData.realQuizzesSequence.Length > quizzes.Length)
+        if (YandexGame.savesData.currentQuizSeqence.Count != quizzes.Count)
         {
-            YandexGame.savesData.realQuizzesSequence = new int[quizzes.Length];
-            for (int i = 0; i < quizzes.Length; i++)
-            {
-                YandexGame.savesData.realQuizzesSequence[i] = i;
-            }
+            YandexGame.savesData.currentQuizSeqence = new(quizzes);
         }
 
         // Пытки в нейро
-        try
-        {
-            await loader.LoadAsync();
-        }
-        catch (OperationCanceledException)
-        {
-            Debug.LogWarning("Загрузка отменена.");
-        }
+        await AIRequestHandler.GenerateQuestionsAsync("Minectaft", 5);
     }
 
     private void OnDisable()
     {
         // Пытки в нейро
-        loader.Dispose();
+        AIRequestHandler.Dispose();
 
         MenuController.GameStarted -= GetIntoGame;
         QuizCardSetter.QuizChoosed -= OnQuizChoosed;
@@ -148,50 +132,38 @@ public class GameManager : MonoBehaviour
     /// <param name="card">Сама карточка</param>
     public void UpdateQuizCardPosition(QuizCard card)
     {
-        int index = GetIndexFromCard(card);
-        PasteObjectAsFirst(index, YandexGame.savesData.realQuizzesSequence);
+        MoveToFirst(YandexGame.savesData.currentQuizSeqence, card);
         YandexGame.SaveProgress();
     }
 
-    /// <summary>
-    /// Ищет квиз в массиве квизов и возвращает его индекс
-    /// </summary>
-    /// <returns>Индекс квиза в массиве</returns>
-    private int GetIndexFromCard(QuizCard card)
+    private void MoveToFirst(List<QuizCard> list, QuizCard obj)
     {
-        for (int i = 0; i < quizzes.Length; i++)
-        {
-            if (quizzes[i] == card)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
+        // Находим текущую позицию объекта в списке
+        int currentIndex = list.IndexOf(obj);
 
-    /// <summary>
-    /// Перемещает объект в начало массива, передвигая все остальные элементы на 1
-    /// </summary>
-    /// <typeparam name="T">QuizCard</typeparam>
-    /// <param name="obj">Объект</param>
-    /// <param name="array">Массив где содержится объект</param>
-    private void PasteObjectAsFirst<T>(T obj, T[] array)
-    {
-        int maxIndex = -1;
-        for (int i = 0; i < array.Length; i++)
-        {
-            if (array[i].Equals(obj))
-            {
-                maxIndex = i;
-                break;
-            }
-        }
+        // Находим исходную позицию объекта в quizzes
+        int originalIndex = quizzes.IndexOf(obj);
 
-        for (int i = maxIndex; i > 0; i--)
+        // Если объект уже перемещен (текущая позиция != исходная), возвращаем его на предыдущую позицию
+        if (currentIndex != originalIndex)
         {
-            array[i] = array[i - 1];
+            print("move back");
+            for (int i = currentIndex; i < originalIndex; i++)
+            {
+                list[i] = list[i + 1];
+            }
+            list[originalIndex] = obj;
         }
-        array[0] = obj;
+        else
+        {
+            // Иначе перемещаем объект в начало списка
+            print("move fst");
+            for (int i = currentIndex; i > 0; i--)
+            {
+                list[i] = list[i - 1];
+            }
+            list[0] = obj;
+        }
     }
 
     public void ReturnToMenu(Transform currentController)

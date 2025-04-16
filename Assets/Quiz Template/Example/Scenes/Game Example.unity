@@ -245,16 +245,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1302561146624905121, guid: ffec9572ee0e3db48b3575684d933b1a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7746608662003349139, guid: ffec9572ee0e3db48b3575684d933b1a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 530499035534815935, guid: ffec9572ee0e3db48b3575684d933b1a, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffec9572ee0e3db48b3575684d933b1a, type: 3}
 --- !u!114 &385711641 stripped
 MonoBehaviour:
@@ -937,6 +928,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 446334165}
     - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: strings.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -944,6 +939,38 @@ PrefabInstance:
       propertyPath: timelessController
       value: 
       objectReference: {fileID: 1306748877}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0497230cc0725244cb5e6c5b2ae4448f, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 52ff0ee3c16126f45939b2608e385e45, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8378b730ecb65f84e8229e5d540438a8, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: e3ae2c046dda2914ba7752ebce8829d2, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 9fee76aae97f1994ca1c2d9c147f1103, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 52f55459811b64344957e333c57bbe21, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 52f55459811b64344957e333c57bbe21, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: 52f55459811b64344957e333c57bbe21, type: 2}
     - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: strings.Array.data[0].m_TableEntryReference.m_KeyId
       value: 314405329391616
