@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -62,13 +63,15 @@ public class GameManager : MonoBehaviour
         HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
-        if (YandexGame.savesData.currentQuizSeqence.Count != quizzes.Count)
+        if (YandexGame.savesData.otherCards.Count != quizzes.Count)
         {
-            YandexGame.savesData.currentQuizSeqence = new(quizzes);
+            YandexGame.savesData.otherCards = new(quizzes);
+            YandexGame.savesData.favoriteCards.Clear();
         }
 
         // Пытки в нейро
-        await AIRequestHandler.GenerateQuestionsAsync("Minectaft", 5);
+        //string ans = await AIRequestHandler.GenerateQuestionsAsync("Minectaft", 5);
+        //AIAnswerParser.ParseJsonAnswer(ans);
     }
 
     private void OnDisable()
@@ -130,40 +133,26 @@ public class GameManager : MonoBehaviour
     /// Изменяет позицию карточки квиза в массиве, не трогая отображение
     /// </summary>
     /// <param name="card">Сама карточка</param>
-    public void UpdateQuizCardPosition(QuizCard card)
+    public void SetAsFavorite(QuizCard card)
     {
-        MoveToFirst(YandexGame.savesData.currentQuizSeqence, card);
-        YandexGame.SaveProgress();
-    }
+        List<QuizCard> list = YandexGame.savesData.otherCards;
 
-    private void MoveToFirst(List<QuizCard> list, QuizCard obj)
-    {
         // Находим текущую позицию объекта в списке
-        int currentIndex = list.IndexOf(obj);
-
-        // Находим исходную позицию объекта в quizzes
-        int originalIndex = quizzes.IndexOf(obj);
-
-        // Если объект уже перемещен (текущая позиция != исходная), возвращаем его на предыдущую позицию
-        if (currentIndex != originalIndex)
+        int currentIndex = list.IndexOf(card);
+        if (currentIndex != -1)
         {
-            print("move back");
-            for (int i = currentIndex; i < originalIndex; i++)
-            {
-                list[i] = list[i + 1];
-            }
-            list[originalIndex] = obj;
+            print("to favs");
+            list[currentIndex] = null;
+            YandexGame.savesData.favoriteCards.Add(card);
         }
         else
         {
-            // Иначе перемещаем объект в начало списка
-            print("move fst");
-            for (int i = currentIndex; i > 0; i--)
-            {
-                list[i] = list[i - 1];
-            }
-            list[0] = obj;
+            print("move back");
+            int originalIndex = quizzes.IndexOf(card);
+            list[originalIndex] = card;
+            YandexGame.savesData.favoriteCards.Remove(card);
         }
+        YandexGame.SaveProgress();
     }
 
     public void ReturnToMenu(Transform currentController)

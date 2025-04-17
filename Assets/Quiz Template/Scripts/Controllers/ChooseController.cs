@@ -17,11 +17,19 @@ public class ChooseController : MonoBehaviour
 
     private void OnGameStart()
     {
-        foreach (QuizCard content in YandexGame.savesData.currentQuizSeqence)
+        foreach (QuizCard content in YandexGame.savesData.favoriteCards)
         {
             QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
             card.cardContent = content;
-            card.SetContent(this);
+            card.SetContent(this, true);
+        }
+        foreach (QuizCard content in YandexGame.savesData.otherCards)
+        {
+            if (content == null) continue;
+
+            QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
+            card.cardContent = content;
+            card.SetContent(this, false);
         }
     }
 
@@ -36,7 +44,7 @@ public class ChooseController : MonoBehaviour
 
     public void UpdateCardPos(QuizCard card)
     {
-        gameManager.UpdateQuizCardPosition(card);
+        gameManager.SetAsFavorite(card);
         RedrawOrder();
     }
 }

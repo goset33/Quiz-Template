@@ -279,3 +279,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardContent: {fileID: 0}
+  favoriteSprite: {fileID: -1657406386, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}

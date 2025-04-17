@@ -32,7 +32,7 @@ public class QuestionController : MonoBehaviour
     [Space]
     [SerializeField] private GameObject showRightButton;
     [SerializeField] private GameObject nextButton;
-    [SerializeField] private TextMeshProUGUI questionText;
+    [SerializeField] private TextMeshProUGUI questionText, counterText;
     [SerializeField] private HeartContainer heartContainer;
     [SerializeField] private Image imageField;
     [SerializeField] private RectTransform answersParent;
@@ -51,7 +51,7 @@ public class QuestionController : MonoBehaviour
     /// Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
     /// </summary>
     /// <param name="container">Контейнер с вопросами, на которые потребуется отвечать пользователю</param>
-    private void Init(CardsContainer container)
+    private async void Init(CardsContainer container)
     {
         List<IQuestion> allPool = new(container.QuestionCards);
         if (gameManager.shouldShuffle)
@@ -80,6 +80,10 @@ public class QuestionController : MonoBehaviour
         reviveCount = 0;
         currentQuestion = 1;
         rightAnswers = 0;
+
+        string json = await AIRequestHandler.GenerateQuestionsAsync("Minecraft", 5);
+        cards = AIAnswerParser.ParseJsonAnswer(json);
+
         LoadNextQuestion(cards[currentQuestion - 1]);
     }
 
@@ -144,7 +148,7 @@ public class QuestionController : MonoBehaviour
     {
         questionText.text = card.QuestionText;
         imageField.sprite = card.Image;
-        //counterText.text = $"{currentQuestion}/{cards.Count}";
+        counterText.text = $"{currentQuestion}/{cards.Count}";
 
         if (card is MainTypeQuestion question)
         {
