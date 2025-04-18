@@ -20,7 +20,7 @@ public class TimelessController : MonoBehaviour
 
     private void Awake()
     {
-        if (!YandexGame.savesData.isMusicPlaying)
+        if (!YG2.saves.isMusicPlaying)
         {
             GetComponent<AudioSource>().Stop();
             musicButton.GetComponent<Image>().sprite = musicSprites[0];
@@ -37,21 +37,21 @@ public class TimelessController : MonoBehaviour
     public void MusicButtonPressed()
     {
         AudioSource audioSource = GetComponent<AudioSource>();
-        if (audioSource.isPlaying && YandexGame.savesData.isMusicPlaying)
+        if (audioSource.isPlaying && YG2.saves.isMusicPlaying)
         {
-            YandexGame.savesData.isMusicPlaying = false;
+            YG2.saves.isMusicPlaying = false;
 
             audioSource.Stop();
             musicButton.GetComponent<Image>().sprite = musicSprites[0];
         }
         else
         {
-            YandexGame.savesData.isMusicPlaying = true;
+            YG2.saves.isMusicPlaying = true;
 
             audioSource.Play();
             musicButton.GetComponent<Image>().sprite = musicSprites[1];
         }
-        YandexGame.SaveProgress();
+        YG2.SaveProgress();
     }
 
     /// <summary>

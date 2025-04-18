@@ -40,15 +40,15 @@ public class ResultController : MonoBehaviour
     }
 
     public void RewardButtonPressed()
-    { 
-        YandexGame.RewardVideoEvent += MultiplyReward;
-        YandexGame.RewVideoShow(1);
+    {
+        YG2.onRewardAdv += MultiplyReward;
+        YG2.RewardedAdvShow("1");
     }
 
-    private void MultiplyReward(int id)
+    private void MultiplyReward(string id)
     {
-        YandexGame.RewardVideoEvent -= MultiplyReward;
-        if (id != 1) return;
+        YG2.onRewardAdv -= MultiplyReward;
+        if (id != "1") return;
 
         int rights = rightAnswersLocale.Value;
         GameManager.ChangeCash(rights * 2);

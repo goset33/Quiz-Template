@@ -5,6 +5,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using System;
+using YG;
 
 public class HardnessController : MonoBehaviour
 {
@@ -31,7 +32,7 @@ public class HardnessController : MonoBehaviour
     private void OnEnable()
     {
         starCounter.GetComponentInChildren<Image>().sprite = gameManager.config.cashSprite;
-        starCounter.text = YG.YandexGame.savesData.cash.ToString();
+        starCounter.text = YG2.saves.cash.ToString();
 
         bool isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1);
         buttonContainer.GetChild(1).GetChild(1).gameObject.SetActive(!isOpen);
@@ -79,7 +80,7 @@ public class HardnessController : MonoBehaviour
             {
                 GameManager.ChangeCash(-num);
                 gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
-                YG.YandexGame.SaveProgress();
+                YG2.SaveProgress();
             }
             else
             {

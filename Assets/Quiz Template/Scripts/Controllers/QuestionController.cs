@@ -314,15 +314,15 @@ public class QuestionController : MonoBehaviour
         }
         else if (buttonIndex == 1)
         {
-            YandexGame.RewardVideoEvent += ReviveAfterLose;
-            YandexGame.RewVideoShow(0);
+            YG2.onRewardAdv += ReviveAfterLose;
+            YG2.RewardedAdvShow("0");
         }
     }
 
-    private void ReviveAfterLose(int id)
+    private void ReviveAfterLose(string id)
     {
-        YandexGame.RewardVideoEvent -= ReviveAfterLose;
-        if (id != 0) return;
+        YG2.onRewardAdv -= ReviveAfterLose;
+        if (id != "0") return;
 
         heartContainer.HealOneHeart();
     }
@@ -331,7 +331,7 @@ public class QuestionController : MonoBehaviour
     public void NextButtonPressed()
     {
         ClearScreen();
-        YandexGame.FullscreenShow();
+        YG2.InterstitialAdvShow();
         if (currentQuestion != cards.Count) // Если вопрос был не последний
         {
             currentQuestion++;

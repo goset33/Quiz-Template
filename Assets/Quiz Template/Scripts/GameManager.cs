@@ -1,5 +1,4 @@
-﻿using Org.BouncyCastle.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,8 +6,9 @@ using YG;
 
 public class GameManager : MonoBehaviour
 {
-    public static string Language => YandexGame.lang;
-    public HashSet<DoubleInt> OpenedLevels => YandexGame.savesData.openedLevels;
+    public static string Language => YG2.lang;
+
+    public HashSet<DoubleInt> OpenedLevels => YG2.saves.openedLevels;
 
     public enum GameState
     {
@@ -44,12 +44,12 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Bootstrap для всей игры. На старте запускает инициализацию меню 
     /// </summary>
-    private async void Awake()
+    private void Awake()
     {
         // Место для дебаг строк
-        YandexGame.savesData.level = 1;
-        YandexGame.savesData.experience = 0;
-        YandexGame.savesData.requiredExp = 100;
+        YG2.saves.level = 1;
+        YG2.saves.experience = 0;
+        YG2.saves.requiredExp = 100;
         // Удалить потом обязательно
 
         MenuController.gameManager = this;
@@ -63,10 +63,10 @@ public class GameManager : MonoBehaviour
         HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
-        if (YandexGame.savesData.otherCards.Count != quizzes.Count)
+        if (YG2.saves.otherCards.Count != quizzes.Count)
         {
-            YandexGame.savesData.otherCards = new(quizzes);
-            YandexGame.savesData.favoriteCards.Clear();
+            YG2.saves.otherCards = new(quizzes);
+            YG2.saves.favoriteCards.Clear();
         }
 
         // Пытки в нейро
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
 
     public static bool HaveEnoughCash(int cost)
     {
-        if (cost < 0 && YandexGame.savesData.cash < Math.Abs(cost))
+        if (cost < 0 && YG2.saves.cash < Math.Abs(cost))
         {
             return false;
         }
@@ -100,8 +100,8 @@ public class GameManager : MonoBehaviour
     {
         if (!HaveEnoughCash(cost)) return;
 
-        YandexGame.savesData.cash += cost;
-        YandexGame.SaveProgress();
+        YG2.saves.cash += cost;
+        YG2.SaveProgress();
     }
 
     public void AddExperience(int addedExp)
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
     /// <param name="card">Сама карточка</param>
     public void SetAsFavorite(QuizCard card)
     {
-        List<QuizCard> list = YandexGame.savesData.otherCards;
+        List<QuizCard> list = YG2.saves.otherCards;
 
         // Находим текущую позицию объекта в списке
         int currentIndex = list.IndexOf(card);
@@ -143,21 +143,21 @@ public class GameManager : MonoBehaviour
         {
             print("to favs");
             list[currentIndex] = null;
-            YandexGame.savesData.favoriteCards.Add(card);
+            YG2.saves.favoriteCards.Add(card);
         }
         else
         {
             print("move back");
             int originalIndex = quizzes.IndexOf(card);
             list[originalIndex] = card;
-            YandexGame.savesData.favoriteCards.Remove(card);
+            YG2.saves.favoriteCards.Remove(card);
         }
-        YandexGame.SaveProgress();
+        YG2.SaveProgress();
     }
 
     public void ReturnToMenu(Transform currentController)
     {
-        YandexGame.FullscreenShow();
+        YG2.InterstitialAdvShow();
         currentController.parent.gameObject.SetActive(false);
         menuController.transform.parent.gameObject.SetActive(true);
     }
@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour
 
     private void OnQuestionsSolved(int arg1, int arg2, bool isItGood)
     {
-        YandexGame.FullscreenShow();
+        YG2.InterstitialAdvShow();
         questionController.transform.parent.gameObject.SetActive(false);
         resultController.transform.parent.gameObject.SetActive(true);
         resultController.Init(arg1, arg2, isItGood);

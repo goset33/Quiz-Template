@@ -1,0 +1,34 @@
+{
+    "intExample": 5,
+    "strExample": "Hello!",
+    "boolExample": [
+        false,
+        false,
+        false,
+        false
+    ],
+    "idSave": 7,
+    "favoriteCards": [],
+    "otherCards": [
+        {
+            "instanceID": 22534
+        },
+        {
+            "instanceID": 22536
+        },
+        {
+            "instanceID": 22714
+        },
+        {
+            "instanceID": 22736
+        },
+        {
+            "instanceID": 22718
+        }
+    ],
+    "level": 1,
+    "experience": 10,
+    "requiredExp": 100,
+    "cash": 10,
+    "isMusicPlaying": true
+}

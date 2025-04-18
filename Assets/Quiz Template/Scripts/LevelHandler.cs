@@ -18,14 +18,14 @@ public class LevelHandler : MonoBehaviour
     /// <param name="addedExp">Количество добавляемого опыта</param>
     public void AddExp(int addedExp)
     {
-        YandexGame.savesData.experience += addedExp;
-        if (YandexGame.savesData.experience >= YandexGame.savesData.requiredExp)
+        YG2.saves.experience += addedExp;
+        if (YG2.saves.experience >= YG2.saves.requiredExp)
         {
-            YandexGame.savesData.level++;
-            YandexGame.savesData.experience -= YandexGame.savesData.requiredExp;
-            YandexGame.savesData.requiredExp = YandexGame.savesData.level * 50 + 50;
+            YG2.saves.level++;
+            YG2.saves.experience -= YG2.saves.requiredExp;
+            YG2.saves.requiredExp = YG2.saves.level * 50 + 50;
         }
-        YandexGame.SaveProgress();
+        YG2.SaveProgress();
     }
 
     /// <summary>
@@ -33,8 +33,8 @@ public class LevelHandler : MonoBehaviour
     /// </summary>
     public void UpdateLevelUI()
     {
-        slider.maxValue = YandexGame.savesData.requiredExp;
-        slider.value = YandexGame.savesData.experience;
-        levelCounter.text = YandexGame.savesData.level.ToString();
+        slider.maxValue = YG2.saves.requiredExp;
+        slider.value = YG2.saves.experience;
+        levelCounter.text = YG2.saves.level.ToString();
     }
 }

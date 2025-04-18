@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using YG;
 
@@ -17,13 +16,13 @@ public class ChooseController : MonoBehaviour
 
     private void OnGameStart()
     {
-        foreach (QuizCard content in YandexGame.savesData.favoriteCards)
+        foreach (QuizCard content in YG2.saves.favoriteCards)
         {
             QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
             card.cardContent = content;
             card.SetContent(this, true);
         }
-        foreach (QuizCard content in YandexGame.savesData.otherCards)
+        foreach (QuizCard content in YG2.saves.otherCards)
         {
             if (content == null) continue;
 

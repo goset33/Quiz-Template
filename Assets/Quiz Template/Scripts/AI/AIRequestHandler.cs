@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -29,11 +28,12 @@ public static class AIRequestHandler
     /// <returns>Ответ нейросети</returns>
     public static async Task<string> GenerateQuestionsAsync(string gameName, int questionCount)
     {
-        TextAsset keyFile = (TextAsset) AssetDatabase.LoadAssetAtPath("Assets/ApiKey.txt", typeof(TextAsset));
+        TextAsset keyFile = Resources.Load<TextAsset>("ApiKey");
         string apiKey = keyFile.text;
 
-        TextAsset promptFile = (TextAsset) AssetDatabase.LoadAssetAtPath("Assets/AI Prompt.txt", typeof(TextAsset));
+        TextAsset promptFile = Resources.Load<TextAsset>("AI Prompt");
         Debug.Log(promptFile.text);
+
         string prompt = promptFile.text.Replace("{0}", gameName).Replace("{1}", questionCount.ToString()).Replace("{2}", GameManager.Language);
         HttpRequestMessage request = new HttpRequestMessage
         {
