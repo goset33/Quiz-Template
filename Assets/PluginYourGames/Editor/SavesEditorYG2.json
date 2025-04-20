@@ -7,27 +7,34 @@
         false,
         false
     ],
-    "idSave": 7,
-    "favoriteCards": [],
+    "idSave": 20,
+    "favoriteCards": [
+        {
+            "instanceID": 22136
+        }
+    ],
     "otherCards": [
         {
-            "instanceID": 22534
+            "instanceID": 22072
         },
         {
-            "instanceID": 22536
+            "instanceID": 0
         },
         {
-            "instanceID": 22714
+            "instanceID": 22092
         },
         {
-            "instanceID": 22736
+            "instanceID": 22124
         },
         {
-            "instanceID": 22718
+            "instanceID": 22096
+        },
+        {
+            "instanceID": 22120
         }
     ],
     "level": 1,
-    "experience": 10,
+    "experience": 0,
     "requiredExp": 100,
     "cash": 10,
     "isMusicPlaying": true

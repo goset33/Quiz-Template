@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25d6b1e707c9fd4a92d80b101e3fadc, type: 3}
   m_Name: Quiz 4
   m_EditorClassIdentifier: 
-  name: 
+  names:
+  - 4
   image: {fileID: -1763696740, guid: 6e2c9713091bd02409c2dcf7e05a88bc, type: 3}
   testContainer: {fileID: 11400000, guid: 000a1f57e42733c4086232c652008230, type: 2}

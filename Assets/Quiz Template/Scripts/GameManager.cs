@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using YG;
 
 public class GameManager : MonoBehaviour
@@ -52,6 +53,18 @@ public class GameManager : MonoBehaviour
         YG2.saves.requiredExp = 100;
         // Удалить потом обязательно
 
+        // Настройка локализации
+        if (Language == "ru")
+        {
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[0];
+        }
+        else
+        {
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[1];
+        }
+
+
+        // Присвоение контроллерам и подписки на ивенты
         MenuController.gameManager = this;
         ChooseController.gameManager = this;
         HardnessController.gameManager = this;
@@ -63,6 +76,7 @@ public class GameManager : MonoBehaviour
         HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
+        // Настройка квизов в окне выбора квизов
         if (YG2.saves.otherCards.Count != quizzes.Count)
         {
             YG2.saves.otherCards = new(quizzes);
@@ -76,7 +90,6 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // Пытки в нейро
         AIRequestHandler.Dispose();
 
         MenuController.GameStarted -= GetIntoGame;
@@ -141,13 +154,11 @@ public class GameManager : MonoBehaviour
         int currentIndex = list.IndexOf(card);
         if (currentIndex != -1)
         {
-            print("to favs");
             list[currentIndex] = null;
             YG2.saves.favoriteCards.Add(card);
         }
         else
         {
-            print("move back");
             int originalIndex = quizzes.IndexOf(card);
             list[originalIndex] = card;
             YG2.saves.favoriteCards.Remove(card);
@@ -155,6 +166,7 @@ public class GameManager : MonoBehaviour
         YG2.SaveProgress();
     }
 
+    // Функции переходов между экранами
     public void ReturnToMenu(Transform currentController)
     {
         YG2.InterstitialAdvShow();
@@ -166,7 +178,7 @@ public class GameManager : MonoBehaviour
     {
         menuController.transform.parent.gameObject.SetActive(false);
         chooseController.transform.parent.gameObject.SetActive(true);
-        chooseController.RedrawOrder();
+        chooseController.RedrawOrder(null);
     }
 
     private void OnQuizChoosed(int obj)

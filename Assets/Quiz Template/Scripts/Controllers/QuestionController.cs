@@ -11,23 +11,19 @@ using Random = UnityEngine.Random;
 public class QuestionController : MonoBehaviour
 {
     public static GameManager gameManager;
-
     public static event Action<int, int, bool> QuestionsEnded;
 
-    public int currentQuestion;
-    public int rightAnswers;
-
-    [SerializeField] private GameObject loseCounterPrefab;
-
-    private int reviveCount = 0;
-
     private int rightIndex;
-
     private List<GameObject> choosedSequence = new(); // Хранит кнопки в последовательности нажатия
     private GameObject[] rightSequence = new GameObject[0]; // Хранит кнопки в правильной последовательности
 
+    private int reviveCount = 0;
     private bool isAnswerShowed = false;
     private List<IQuestion> cards = new();
+
+    public int currentQuestion;
+    public int rightAnswers;
+    [SerializeField] private GameObject loseCounterPrefab;
 
     [Space]
     [SerializeField] private GameObject showRightButton;
@@ -143,7 +139,10 @@ public class QuestionController : MonoBehaviour
         return questions;
     }
 
-    // Переносит данные из класса вопроса в интерфейс
+    /// <summary>
+    /// Переносит данные из класса вопроса в интерфейс
+    /// </summary>
+    /// <param name="card">Карточка вопроса</param>
     private void LoadNextQuestion(IQuestion card)
     {
         questionText.text = card.QuestionText;
@@ -272,7 +271,10 @@ public class QuestionController : MonoBehaviour
         }
     }
 
-    // Общие действия когда игрок дает ответ на вопрос
+    /// <summary>
+    /// Общие действия когда игрок дает ответ на вопрос
+    /// </summary>
+    /// <param name="isRight">Был ли ответ верным</param>
     private void Answered(bool isRight)
     {
         nextButton.SetActive(true);
@@ -327,7 +329,9 @@ public class QuestionController : MonoBehaviour
         heartContainer.HealOneHeart();
     }
 
-    // Вызывается при нажатии кнопки следующего вопроса
+    /// <summary>
+    /// Вызывается при нажатии кнопки следующего вопроса
+    /// </summary>
     public void NextButtonPressed()
     {
         ClearScreen();
@@ -343,7 +347,9 @@ public class QuestionController : MonoBehaviour
         }
     }
 
-    // Вызывается при нажатии кнопки показа правильного варианта ответа
+    /// <summary>
+    /// Вызывается при нажатии кнопки показа правильного варианта ответа
+    /// </summary>
     public void ShowRightAnswerButtonPressed()
     {
         if (isAnswerShowed) return;
@@ -352,6 +358,10 @@ public class QuestionController : MonoBehaviour
         TimelessController.OnButtonPressed += ShowRightAnswer;
     }
 
+    /// <summary>
+    /// Показывает правильный ответ
+    /// </summary>
+    /// <param name="buttonIndex">0 = нет, 1 = да</param>
     private void ShowRightAnswer(int buttonIndex)
     {
         TimelessController.OnButtonPressed -= ShowRightAnswer;
@@ -386,7 +396,9 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    /// <summary>
     /// Чистит экран и обнуляет все что нужно обнулить. Вызывать после каждого вопроса
+    /// </summary>
     private void ClearScreen()
     {
         isAnswerShowed = false;

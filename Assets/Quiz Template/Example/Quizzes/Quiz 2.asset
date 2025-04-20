@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25d6b1e707c9fd4a92d80b101e3fadc, type: 3}
   m_Name: Quiz 2
   m_EditorClassIdentifier: 
+  names:
+  - 2
   image: {fileID: 1600375270, guid: c76c304adbf541243a0d83466b471c2a, type: 3}
-  quizName: "\u041C\u0430\u0441\u0441\u0438\u0432\u043D\u044B\u0439 \u0442\u0435\u0441\u0442"
   testContainer: {fileID: 11400000, guid: 8d6730277aca0024abd75d8fcb66e8d0, type: 2}
