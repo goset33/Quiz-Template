@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace YG
 {
     public partial class SavesYG
     {
-        // ���� ����������
-        public HashSet<DoubleInt> openedLevels = new();
+        // Ваши сохранения
+        public Dictionary<string, int> levelsHardness = new(); // Сериализуется 😎
         public List<QuizCard> favoriteCards = new(), otherCards = new();
 
         public int level = 1;

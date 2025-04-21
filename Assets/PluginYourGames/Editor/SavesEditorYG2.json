@@ -1,41 +1,143 @@
 {
-    "intExample": 5,
-    "strExample": "Hello!",
-    "boolExample": [
-        false,
-        false,
-        false,
-        false
-    ],
-    "idSave": 20,
-    "favoriteCards": [
-        {
-            "instanceID": 22136
-        }
-    ],
-    "otherCards": [
-        {
-            "instanceID": 22072
-        },
-        {
-            "instanceID": 0
-        },
-        {
-            "instanceID": 22092
-        },
-        {
-            "instanceID": 22124
-        },
-        {
-            "instanceID": 22096
-        },
-        {
-            "instanceID": 22120
-        }
-    ],
-    "level": 1,
-    "experience": 0,
-    "requiredExp": 100,
-    "cash": 10,
-    "isMusicPlaying": true
+  "intExample": 5,
+  "strExample": "Hello!",
+  "boolExample": [
+    false,
+    false,
+    false,
+    false
+  ],
+  "idSave": 355,
+  "levelsHardness": {
+    "Minecraft": 1
+  },
+  "favoriteCards": [],
+  "otherCards": [
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Minecraft",
+        "Майнкрафт",
+        "Майнкруфт"
+      ],
+      "name": "Minecraft",
+      "hideFlags": 0
+    },
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Terraria",
+        "Террария",
+        "Терария",
+        "Тиррария",
+        "Терка"
+      ],
+      "name": "Terraria",
+      "hideFlags": 0
+    },
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Brawl Stars",
+        "Бравл Старс",
+        "бс",
+        "bs"
+      ],
+      "name": "Brawl Stars",
+      "hideFlags": 0
+    },
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Clash Royale",
+        "Клеш Рояль",
+        "Клэш Рояль"
+      ],
+      "name": "Clash Royale",
+      "hideFlags": 0
+    },
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Counter Strike 2",
+        "Каунтер Страйк",
+        "Коунтер Страйк",
+        "Counter Strike: Global Offensive",
+        "cs2",
+        "кс2",
+        "ксго",
+        "кс:го",
+        "cs:go",
+        "csgo"
+      ],
+      "name": "CS2",
+      "hideFlags": 0
+    },
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Valorant",
+        "Валорант",
+        "Валарант"
+      ],
+      "name": "Valorant",
+      "hideFlags": 0
+    },
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Genshin Impact",
+        "Геншин Импакт"
+      ],
+      "name": "Genshin Impact",
+      "hideFlags": 0
+    },
+    {
+      "questionsAmount": [
+        25,
+        30,
+        40
+      ],
+      "names": [
+        "Honkai Star Rail",
+        "Хонкай Стар Рейл",
+        "Хонкай Стар Рэйл"
+      ],
+      "name": "Honkai Star Rail",
+      "hideFlags": 0
+    }
+  ],
+  "level": 1,
+  "experience": 2,
+  "requiredExp": 100,
+  "cash": 530,
+  "isMusicPlaying": false
 }

@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
+// Временно выкинуто в мусор
+[Obsolete("Содержит реализацию для парсинга вопросов из таблицы, что неактуально")]
 [CreateAssetMenu(fileName = "New Question Container", menuName = "Quiz Objects/Question Container", order = 51)]
-public class CardsContainer : ScriptableObject
+public class QuestionContainer : ScriptableObject
 {
     // Количество вопросов в каждой сложности. Если 0 то все
     public int easyAmount, mediumAmount, hardAmount = 0;

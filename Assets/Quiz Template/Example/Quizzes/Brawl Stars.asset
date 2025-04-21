@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b25d6b1e707c9fd4a92d80b101e3fadc, type: 3}
-  m_Name: Quiz 5
+  m_Name: Brawl Stars
   m_EditorClassIdentifier: 
+  questionsAmount: 190000001e00000028000000
   names:
-  - 5
-  - 6
-  image: {fileID: -354203573, guid: 3e538961cdad4b04ca403992a80320a4, type: 3}
-  testContainer: {fileID: 11400000, guid: 000a1f57e42733c4086232c652008230, type: 2}
+  - Brawl Stars
+  - "\u0411\u0440\u0430\u0432\u043B \u0421\u0442\u0430\u0440\u0441"
+  - "\u0431\u0441"
+  - bs
+  image: {fileID: 21300000, guid: c60960be098fd5143ad568c7bb2694d6, type: 3}

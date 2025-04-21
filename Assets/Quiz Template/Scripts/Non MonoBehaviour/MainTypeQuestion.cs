@@ -29,5 +29,12 @@ public class MainTypeQuestion : IQuestion
         allAnswers = answers;
     }
 
-    public MainTypeQuestion(MainTypeQuestion instance) : this(instance.QuestionText, instance.Image, instance.AllAnswers) { }
+    public MainTypeQuestion(string questionString, Sprite sprite, string rightAnswer, string[] WrongAnswers)
+        : this(questionString, sprite, new[] { rightAnswer }.Concat(WrongAnswers).ToArray())
+    {
+    }
+
+    public MainTypeQuestion(MainTypeQuestion instance) : this(instance.QuestionText, instance.Image, instance.AllAnswers) 
+    { 
+    }
 }

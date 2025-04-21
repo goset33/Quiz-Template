@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(CardsContainer))]
+[CustomEditor(typeof(QuestionContainer))]
 public class FileSelectorEditor : Editor
 {
     private string[] sheetNames;
@@ -11,7 +11,7 @@ public class FileSelectorEditor : Editor
     {
         DrawDefaultInspector();
         EditorGUILayout.Space();
-        CardsContainer script = (CardsContainer) target;
+        QuestionContainer script = (QuestionContainer) target;
 
         // Поле для отображения выбранного файла
         EditorGUI.BeginDisabledGroup(true);

@@ -9,8 +9,6 @@ public class GameManager : MonoBehaviour
 {
     public static string Language => YG2.lang;
 
-    public HashSet<DoubleInt> OpenedLevels => YG2.saves.openedLevels;
-
     public enum GameState
     {
         InMainMenu,
@@ -25,13 +23,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Choose Settings")]
     public List<QuizCard> quizzes = new();
-    [HideInInspector] public int chosenQuizIndex = -1;
+    [HideInInspector] public QuizCard chosenQuiz = null;
 
     [Header("Questions Settings")]
     public QuestionConfig questionConfig;
     public int startHeartsCount = 3; // Сколько сердец будет у игрока на старте
     public bool shouldShuffle; // Следует ли рандомизировать порядок вопросов
-    [HideInInspector] public int chosenHardnessIndex = -1;
 
     // Идея: Сейчас переменные используются только для переключения окон. В целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
     [Header("Controllers")]
@@ -63,7 +60,6 @@ public class GameManager : MonoBehaviour
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[1];
         }
 
-
         // Присвоение контроллерам и подписки на ивенты
         MenuController.gameManager = this;
         ChooseController.gameManager = this;
@@ -73,7 +69,7 @@ public class GameManager : MonoBehaviour
 
         MenuController.GameStarted += GetIntoGame;
         QuizCardSetter.QuizChoosed += OnQuizChoosed;
-        HardnessController.LevelChoosed += OnLevelChoosed;
+        //HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
         // Настройка квизов в окне выбора квизов
@@ -94,7 +90,7 @@ public class GameManager : MonoBehaviour
 
         MenuController.GameStarted -= GetIntoGame;
         QuizCardSetter.QuizChoosed -= OnQuizChoosed;
-        HardnessController.LevelChoosed -= OnLevelChoosed;
+        //HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
     }
 
@@ -137,9 +133,32 @@ public class GameManager : MonoBehaviour
     /// </summary>
     /// <param name="quizIndex">Индекс квиза</param>
     /// <param name="levelIndex">Индекс уровня сложности</param>
-    public bool IsLevelWasOpened(int quizIndex, int levelIndex)
+    //public bool IsLevelWasOpened(int quizIndex, int levelIndex)
+    //{
+    //    return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
+    //}
+
+    public static int GetQuizHardness(QuizCard quizCard)
     {
-        return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
+        if (YG2.saves.levelsHardness.ContainsKey(quizCard.names[0]))
+        {
+            return YG2.saves.levelsHardness[quizCard.names[0]];
+        }
+        return 0;
+    }
+
+    public static void IncrementQuizHardness(QuizCard quizCard)
+    {
+        int curr = GetQuizHardness(quizCard);
+        if (curr == 0)
+        {
+            YG2.saves.levelsHardness.Add(quizCard.names[0], curr + 1);
+        }
+        else if (curr != 2)
+        {
+            YG2.saves.levelsHardness[quizCard.names[0]]++;
+        }
+        YG2.SaveProgress();
     }
 
     /// <summary>
@@ -181,19 +200,21 @@ public class GameManager : MonoBehaviour
         chooseController.RedrawOrder(null);
     }
 
-    private void OnQuizChoosed(int obj)
+    private void OnQuizChoosed(QuizCard obj)
     {
-        chosenQuizIndex = obj;
+        chosenQuiz = obj;
         chooseController.transform.parent.gameObject.SetActive(false);
-        hardnessController.transform.parent.gameObject.SetActive(true);
+        questionController.transform.parent.gameObject.SetActive(true);
+
+        //hardnessController.transform.parent.gameObject.SetActive(true);
     }
 
-    private void OnLevelChoosed(int obj)
-    {
-        chosenHardnessIndex = obj;
-        hardnessController.transform.parent.gameObject.SetActive(false);
-        questionController.transform.parent.gameObject.SetActive(true);
-    }
+    //private void OnLevelChoosed(int obj)
+    //{
+    //    chosenHardnessIndex = obj;
+    //    hardnessController.transform.parent.gameObject.SetActive(false);
+    //    questionController.transform.parent.gameObject.SetActive(true);
+    //}
 
     private void OnQuestionsSolved(int arg1, int arg2, bool isItGood)
     {

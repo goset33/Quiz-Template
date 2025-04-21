@@ -14,7 +14,7 @@ public static class AIAnswerParser
 
         foreach (var questionData in jsonObject.Questions)
         {
-            questions.Add(new MainTypeQuestion(questionData.Question, null, questionData.Answers));
+            questions.Add(new MainTypeQuestion(questionData.Question, null, questionData.RightAnswer, questionData.WrongAnswers));
         }
 
         return questions;
@@ -28,6 +28,7 @@ public static class AIAnswerParser
     private class QuestionData
     {
         public string Question { get; set; } // Текст вопроса
-        public string[] Answers { get; set; } // 4 варианта ответа (1 правильный, 3 неправильных)
+        public string RightAnswer { get; set; } // 1 правильный вариант ответа
+        public string[] WrongAnswers { get; set; } // 3 неправильных варианта ответа
     }
 }

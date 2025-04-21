@@ -7,10 +7,10 @@ using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using System;
 using YG;
 
+[Obsolete]
 public class HardnessController : MonoBehaviour
 {
     public static GameManager gameManager;
-
     public static event Action<int> LevelChoosed;
 
     private IntVariable buyCost;
@@ -34,11 +34,11 @@ public class HardnessController : MonoBehaviour
         starCounter.GetComponentInChildren<Image>().sprite = gameManager.config.cashSprite;
         starCounter.text = YG2.saves.cash.ToString();
 
-        bool isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1);
-        buttonContainer.GetChild(1).GetChild(1).gameObject.SetActive(!isOpen);
+        //bool isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuiz, 1);
+        //buttonContainer.GetChild(1).GetChild(1).gameObject.SetActive(!isOpen);
 
-        isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 2);
-        buttonContainer.GetChild(2).GetChild(1).gameObject.SetActive(!isOpen);
+        //isOpen = gameManager.IsLevelWasOpened(gameManager.chosenQuiz, 2);
+        //buttonContainer.GetChild(2).GetChild(1).gameObject.SetActive(!isOpen);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class HardnessController : MonoBehaviour
     /// <param name="levelNumber">Номер уровня сложности начиная с 0</param>
     public void LevelButtonPressed(int levelNumber)
     {
-        if (!gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, levelNumber) && levelNumber != 0)
+        //if (!gameManager.IsLevelWasOpened(gameManager.chosenQuiz, levelNumber) && levelNumber != 0)
         {
             int price = levelNumber == 1 ? gameManager.config.mediumPrice : gameManager.config.hardPrice;
             buyCost.Value = price;
@@ -70,7 +70,7 @@ public class HardnessController : MonoBehaviour
         {
             int num = buyCost.Value;
             int index = num == gameManager.config.mediumPrice ? 1 : 2;
-            if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuizIndex, 1))
+            //if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuiz, 1))
             {
                 gameManager.InvokeNotification(1);
                 return;
@@ -79,7 +79,7 @@ public class HardnessController : MonoBehaviour
             if (GameManager.HaveEnoughCash(-num))
             {
                 GameManager.ChangeCash(-num);
-                gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuizIndex, index));
+                //gameManager.OpenedLevels.Add(new DoubleInt(gameManager.chosenQuiz, index));
                 YG2.SaveProgress();
             }
             else

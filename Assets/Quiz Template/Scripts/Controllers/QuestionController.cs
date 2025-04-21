@@ -17,7 +17,8 @@ public class QuestionController : MonoBehaviour
     private List<GameObject> choosedSequence = new(); // Хранит кнопки в последовательности нажатия
     private GameObject[] rightSequence = new GameObject[0]; // Хранит кнопки в правильной последовательности
 
-    private int reviveCount = 0;
+    private int hardness;
+    private int reviveCount = 2;
     private bool isAnswerShowed = false;
     private List<IQuestion> cards = new();
 
@@ -40,35 +41,35 @@ public class QuestionController : MonoBehaviour
 
     private void OnEnable()
     {
-        Init(gameManager.quizzes[gameManager.chosenQuizIndex].testContainer);
+        Init(gameManager.chosenQuiz);
     }
 
     /// <summary>
     /// Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
     /// </summary>
-    /// <param name="container">Контейнер с вопросами, на которые потребуется отвечать пользователю</param>
-    private async void Init(CardsContainer container)
+    /// <param name="quizCard">Сам экземпляр квиза</param>
+    private async void Init(QuizCard quizCard)
     {
-        List<IQuestion> allPool = new(container.QuestionCards);
-        if (gameManager.shouldShuffle)
-        {
-            allPool = MixQuestions(allPool);
-        }
+        //List<IQuestion> allPool = new(container.QuestionCards);
+        //if (gameManager.shouldShuffle)
+        //{
+        //    allPool = MixQuestions(allPool);
+        //}
 
-        int amount = 0;
-        if (gameManager.chosenHardnessIndex == 0)
-        {
-            amount = container.easyAmount;
-        }
-        else if (gameManager.chosenHardnessIndex == 1)
-        {
-            amount = container.mediumAmount;
-        }
-        else if (gameManager.chosenHardnessIndex == 2)
-        {
-            amount = container.hardAmount;
-        }
-        cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
+        //int amount = 0;
+        //if (gameManager.chosenHardnessIndex == 0)
+        //{
+        //    amount = container.easyAmount;
+        //}
+        //else if (gameManager.chosenHardnessIndex == 1)
+        //{
+        //    amount = container.mediumAmount;
+        //}
+        //else if (gameManager.chosenHardnessIndex == 2)
+        //{
+        //    amount = container.hardAmount;
+        //}
+        //cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
 
         ClearScreen();
         heartContainer.InitializeHearts(gameManager.startHeartsCount);
@@ -77,9 +78,11 @@ public class QuestionController : MonoBehaviour
         currentQuestion = 1;
         rightAnswers = 0;
 
-        string json = await AIRequestHandler.GenerateQuestionsAsync("Minecraft", 5);
+        hardness = GameManager.GetQuizHardness(quizCard);
+        string json = await AIRequestHandler.GenerateQuestionsAsync(quizCard.names[0], quizCard.questionsAmount[hardness]);
         cards = AIAnswerParser.ParseJsonAnswer(json);
-
+        cards = MixQuestions(cards);
+        
         LoadNextQuestion(cards[currentQuestion - 1]);
     }
 
@@ -151,7 +154,7 @@ public class QuestionController : MonoBehaviour
 
         if (card is MainTypeQuestion question)
         {
-            List<string> wrongs = new(question.WrongAnswers.OrderBy(_ => Random.value).Take(gameManager.chosenHardnessIndex + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
+            List<string> wrongs = new(question.WrongAnswers.OrderBy(_ => Random.value).Take(hardness + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
             List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
             for (int i = 0; i < allAnswers.Count; i++)
             {
@@ -170,9 +173,9 @@ public class QuestionController : MonoBehaviour
         else if (card is CounterQuestion)
         {
             choosedSequence.Clear();
-            rightSequence = new GameObject[gameManager.chosenHardnessIndex + 2];
+            rightSequence = new GameObject[hardness + 2];
 
-            List<string> answers = new(card.AllAnswers.Take(gameManager.chosenHardnessIndex + 2));
+            List<string> answers = new(card.AllAnswers.Take(hardness + 2));
             List<string> randomizedAnswers = new(answers.OrderBy(_ => Random.value));
             for (int i = 0; i < randomizedAnswers.Count; i++)
             {
@@ -214,7 +217,7 @@ public class QuestionController : MonoBehaviour
         if (nextButton.activeSelf) return;
 
         UpdateButtonIndexes(pressedButton);
-        if (choosedSequence.Count == gameManager.chosenHardnessIndex + 2)
+        if (choosedSequence.Count == hardness + 2)
         {
             int rightCounter = 0;
             for (int i = 0; i < choosedSequence.Count; i++)
@@ -225,7 +228,7 @@ public class QuestionController : MonoBehaviour
                 }
             }
 
-            bool isRight = rightCounter == gameManager.chosenHardnessIndex + 2;
+            bool isRight = rightCounter == hardness + 2;
             if (isRight)
             {
                 for (int i = 0; i < answersParent.childCount; i++)
@@ -336,6 +339,11 @@ public class QuestionController : MonoBehaviour
     {
         ClearScreen();
         YG2.InterstitialAdvShow();
+
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab)) currentQuestion = cards.Count;
+#endif
+
         if (currentQuestion != cards.Count) // Если вопрос был не последний
         {
             currentQuestion++;
@@ -343,6 +351,7 @@ public class QuestionController : MonoBehaviour
         }
         else
         {
+            GameManager.IncrementQuizHardness(gameManager.chosenQuiz);
             QuestionsEnded?.Invoke(rightAnswers, cards.Count, true);
         }
     }
