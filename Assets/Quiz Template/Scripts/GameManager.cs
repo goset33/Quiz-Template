@@ -73,9 +73,9 @@ public class GameManager : MonoBehaviour
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
         // Настройка квизов в окне выбора квизов
-        if (YG2.saves.otherCards.Count != quizzes.Count)
+        if (YG2.saves.otherCards == null || YG2.saves.otherCards.Length != quizzes.Count)
         {
-            YG2.saves.otherCards = new(quizzes);
+            YG2.saves.otherCards = quizzes.ConvertToNames();
             YG2.saves.favoriteCards.Clear();
         }
 
@@ -167,20 +167,19 @@ public class GameManager : MonoBehaviour
     /// <param name="card">Сама карточка</param>
     public void SetAsFavorite(QuizCard card)
     {
-        List<QuizCard> list = YG2.saves.otherCards;
+        string name = card.GetName();
 
-        // Находим текущую позицию объекта в списке
-        int currentIndex = list.IndexOf(card);
+        int currentIndex = Array.IndexOf(YG2.saves.otherCards, name);
         if (currentIndex != -1)
         {
-            list[currentIndex] = null;
-            YG2.saves.favoriteCards.Add(card);
+            YG2.saves.otherCards[currentIndex] = null;
+            YG2.saves.favoriteCards.Add(name);
         }
         else
         {
             int originalIndex = quizzes.IndexOf(card);
-            list[originalIndex] = card;
-            YG2.saves.favoriteCards.Remove(card);
+            YG2.saves.otherCards[originalIndex] = name;
+            YG2.saves.favoriteCards.Remove(name);
         }
         YG2.SaveProgress();
     }

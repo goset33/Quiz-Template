@@ -16,4 +16,9 @@ public class QuizCard : ScriptableObject
 
 
     //public QuestionContainer testContainer;
+
+    public string GetName()
+    {
+        return names[0];
+    }
 }

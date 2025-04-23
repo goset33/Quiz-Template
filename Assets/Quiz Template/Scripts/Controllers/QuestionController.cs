@@ -24,6 +24,7 @@ public class QuestionController : MonoBehaviour
 
     public int currentQuestion;
     public int rightAnswers;
+    public bool isWinning = true;
     [SerializeField] private GameObject loseCounterPrefab;
 
     [Space]
@@ -83,7 +84,10 @@ public class QuestionController : MonoBehaviour
         cards = AIAnswerParser.ParseJsonAnswer(json);
         cards = MixQuestions(cards);
         
-        LoadNextQuestion(cards[currentQuestion - 1]);
+        if (!string.IsNullOrEmpty(json))
+        {
+            LoadNextQuestion(cards[currentQuestion - 1]);
+        }
     }
 
     /// <summary>
@@ -93,6 +97,8 @@ public class QuestionController : MonoBehaviour
     /// <returns>Рандомизированный список</returns>
     private List<IQuestion> MixQuestions(List<IQuestion> inputQuestions)
     {
+        if (!gameManager.shouldShuffle) return inputQuestions;
+
         List<IQuestion> questions = new(inputQuestions);
         int n = questions.Count;
 
@@ -301,7 +307,8 @@ public class QuestionController : MonoBehaviour
                 }
                 else
                 {
-                    QuestionsEnded?.Invoke(rightAnswers, cards.Count, false);
+                    isWinning = false;
+                    currentQuestion = cards.Count;
                 }
             }
 
@@ -315,7 +322,8 @@ public class QuestionController : MonoBehaviour
         TimelessController.OnButtonPressed -= WhenDeathButtonPressed;
         if (buttonIndex == 0)
         {
-            QuestionsEnded?.Invoke(rightAnswers, cards.Count, false);
+            isWinning = false;
+            Finish();
         }
         else if (buttonIndex == 1)
         {
@@ -351,8 +359,7 @@ public class QuestionController : MonoBehaviour
         }
         else
         {
-            GameManager.IncrementQuizHardness(gameManager.chosenQuiz);
-            QuestionsEnded?.Invoke(rightAnswers, cards.Count, true);
+            Finish();
         }
     }
 
@@ -417,6 +424,13 @@ public class QuestionController : MonoBehaviour
         {
             Destroy(answersParent.GetChild(i).gameObject);
         }
+    }
+
+    private void Finish()
+    {
+        if (isWinning) GameManager.IncrementQuizHardness(gameManager.chosenQuiz);
+
+        QuestionsEnded?.Invoke(rightAnswers, cards.Count, isWinning);
     }
 
     public void MenuButtonPressed()

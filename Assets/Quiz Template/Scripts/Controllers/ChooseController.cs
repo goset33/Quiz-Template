@@ -43,7 +43,8 @@ public class ChooseController : MonoBehaviour
         }
         else
         {
-            order = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
+            string[] arr = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
+            order = arr.ConvertToCards(gameManager.quizzes);
         }
 
         OnGameStart(order);
@@ -57,14 +58,15 @@ public class ChooseController : MonoBehaviour
 
             QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
             card.cardContent = content;
-            bool isFav = YG2.saves.favoriteCards.Contains(content);
+            bool isFav = YG2.saves.favoriteCards.ContainsThatQuizCard(content);
             card.SetContent(this, isFav);
         }
     }
 
     private QuizCard[] SearchQuizzesByName(string name)
     {
-        QuizCard[] allCards = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
+        string[] arr = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
+        QuizCard[] allCards = arr.ConvertToCards(gameManager.quizzes);
         List<QuizCard> result = new();
 
         foreach (QuizCard card in allCards)

@@ -29,11 +29,15 @@ public static class AIRequestHandler
     public static async Task<string> GenerateQuestionsAsync(string gameName, int questionCount)
     {
         TextAsset keyFile = Resources.Load<TextAsset>("ApiKey");
-        string apiKey = keyFile.text;
+        TextAsset promptFile = Resources.Load<TextAsset>("Prompt");
 
-        TextAsset promptFile = Resources.Load<TextAsset>("AI Prompt");
+        if (keyFile == null || promptFile == null)
+        {
+            throw new NullReferenceException("В корне любой папки Resources должны быть файлы ApiKey.txt и Prompt.txt");
+        }
         Debug.Log(promptFile.text);
 
+        string apiKey = keyFile.text;
         string prompt = promptFile.text.Replace("{0}", gameName).Replace("{1}", questionCount.ToString()).Replace("{2}", GameManager.Language);
         HttpRequestMessage request = new HttpRequestMessage
         {

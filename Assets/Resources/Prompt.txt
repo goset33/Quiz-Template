@@ -1,0 +1,56 @@
+{
+    "model": "google/learnlm-1.5-pro-experimental:free",
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a specialized assistant for generating questions for the game {0}. Follow these instructions carefully:\nGenerate exactly {1} questions. Each question must have an unique content to avoid repetition.\n - Include only one fully correct answer.\n - Provide three plausible but incorrect answers.\nMake sure all questions are challenging, will make the player think, and fit the theme of the game.\nUse the language specified as {2}"
+        }
+    ],
+    "provider": {
+        "require_parameters": true
+    },
+    "temperature": 2.0,
+    "structured_outputs": true,
+    "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+            "name": "Questions",
+            "strict": true,
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "questions": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "description": "One question card. Must contain a question and exactly 4 answer options. When making up a question, you MUST rely on authoritative and official information. NEVER make up a question on your own",
+                            "properties": {
+                                "question": {
+                                    "type": "string",
+                                    "description": "A challenging, unique, interesting question on a given topic. The difficulty level must be very high, every question is a must to make even a game fanatic think about the answer"
+                                },
+                                "rightAnswer": {
+                                    "type": "string",
+                                    "description": "Only one exactly right answer on the question."
+                                },
+                                "wrongAnswers": {
+                                    "type": "array",
+                                    "minItems": 3,
+                                    "maxItems": 3,
+                                    "items": {
+                                        "type": "string",
+                                        "description": "Wrong answer options. 3 plausible but completely incorrect answers. MUST BE AND BE INSIDE QUESTION OBJECT"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "questions"
+                ],
+                "additionalProperties": false
+            }
+        }
+    }
+}
