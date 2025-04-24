@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
+/// <summary>
+/// Расширения для массивов и объектов, для конвертации сохранений из строки в карточку квиза
+/// </summary>
 public static class QuizCardExtentions
 {
     public static string[] ConvertToNames(this IList<QuizCard> array)

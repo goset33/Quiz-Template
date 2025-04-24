@@ -49,28 +49,31 @@ public class QuestionController : MonoBehaviour
     /// Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
     /// </summary>
     /// <param name="quizCard">Сам экземпляр квиза</param>
-    private async void Init(QuizCard quizCard)
+    private void Init(QuizCard quizCard)
     {
-        //List<IQuestion> allPool = new(container.QuestionCards);
-        //if (gameManager.shouldShuffle)
-        //{
-        //    allPool = MixQuestions(allPool);
-        //}
+        hardness = GameManager.GetQuizHardness(quizCard);
 
-        //int amount = 0;
-        //if (gameManager.chosenHardnessIndex == 0)
-        //{
-        //    amount = container.easyAmount;
-        //}
-        //else if (gameManager.chosenHardnessIndex == 1)
-        //{
-        //    amount = container.mediumAmount;
-        //}
-        //else if (gameManager.chosenHardnessIndex == 2)
-        //{
-        //    amount = container.hardAmount;
-        //}
-        //cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
+        QuestionContainer container = quizCard.testContainer;
+        List<IQuestion> allPool = new(container.QuestionCards);
+        if (gameManager.shouldShuffle)
+        {
+            allPool = MixQuestions(allPool);
+        }
+
+        int amount = 0;
+        if (hardness == 0)
+        {
+            amount = container.easyAmount;
+        }
+        else if (hardness == 1)
+        {
+            amount = container.mediumAmount;
+        }
+        else if (hardness == 2)
+        {
+            amount = container.hardAmount;
+        }
+        cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
 
         ClearScreen();
         heartContainer.InitializeHearts(gameManager.startHeartsCount);
@@ -78,16 +81,14 @@ public class QuestionController : MonoBehaviour
         reviveCount = 0;
         currentQuestion = 1;
         rightAnswers = 0;
+        isWinning = true;
 
-        hardness = GameManager.GetQuizHardness(quizCard);
-        string json = await AIRequestHandler.GenerateQuestionsAsync(quizCard.names[0], quizCard.questionsAmount[hardness]);
-        cards = AIAnswerParser.ParseJsonAnswer(json);
-        cards = MixQuestions(cards);
-        
-        if (!string.IsNullOrEmpty(json))
-        {
-            LoadNextQuestion(cards[currentQuestion - 1]);
-        }
+        // Для нейронки
+        //string json = await AIRequestHandler.GenerateQuestionsAsync(quizCard.names[0], quizCard.questionsAmount[hardness]);
+        //cards = AIAnswerParser.ParseJsonAnswer(json);
+        //cards = MixQuestions(cards);
+
+        LoadNextQuestion(cards[currentQuestion - 1]);
     }
 
     /// <summary>

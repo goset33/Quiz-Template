@@ -78,10 +78,6 @@ public class GameManager : MonoBehaviour
             YG2.saves.otherCards = quizzes.ConvertToNames();
             YG2.saves.favoriteCards.Clear();
         }
-
-        // Пытки в нейро
-        //string ans = await AIRequestHandler.GenerateQuestionsAsync("Minectaft", 5);
-        //AIAnswerParser.ParseJsonAnswer(ans);
     }
 
     private void OnDisable()
@@ -127,16 +123,6 @@ public class GameManager : MonoBehaviour
     {
         timelessController.CreateNotification(config.notifyLocales[notifyIndex]);
     }
-
-    /// <summary>
-    /// Проверяет в сохранениях, был ли открыт уровень
-    /// </summary>
-    /// <param name="quizIndex">Индекс квиза</param>
-    /// <param name="levelIndex">Индекс уровня сложности</param>
-    //public bool IsLevelWasOpened(int quizIndex, int levelIndex)
-    //{
-    //    return OpenedLevels.Any(obj => obj.first == quizIndex && obj.second == levelIndex);
-    //}
 
     public static int GetQuizHardness(QuizCard quizCard)
     {

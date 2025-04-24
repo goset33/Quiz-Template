@@ -7,7 +7,8 @@ using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using System;
 using YG;
 
-[Obsolete]
+// Пакет UISoftMask технически тоже больше не нужен
+[Obsolete("Раньше использовался для выбора уровня сложности. Неактуален.")]
 public class HardnessController : MonoBehaviour
 {
     public static GameManager gameManager;
