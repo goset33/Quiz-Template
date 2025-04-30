@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using YG;
 
 public class GameManager : MonoBehaviour
@@ -51,14 +52,7 @@ public class GameManager : MonoBehaviour
         // Удалить потом обязательно
 
         // Настройка локализации
-        if (Language == "ru")
-        {
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[0];
-        }
-        else
-        {
-            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[1];
-        }
+        LocalizationSettings.InitializationOperation.Completed += LoadLocale;
 
         // Присвоение контроллерам и подписки на ивенты
         MenuController.gameManager = this;
@@ -77,6 +71,19 @@ public class GameManager : MonoBehaviour
         {
             YG2.saves.otherCards = quizzes.ConvertToNames();
             YG2.saves.favoriteCards.Clear();
+        }
+    }
+
+    private void LoadLocale(AsyncOperationHandle<LocalizationSettings> handle)
+    {
+        LocalizationSettings.InitializationOperation.Completed -= LoadLocale;
+        if (Language == "ru")
+        {
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[0];
+        }
+        else
+        {
+            LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[1];
         }
     }
 
