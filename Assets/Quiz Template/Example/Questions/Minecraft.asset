@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62cfd1312c517d4f8cb4b7dd80671d1, type: 3}
   m_Name: Minecraft
   m_EditorClassIdentifier: 
-  _addressableKey: MegaQuiz.xlsx
-  _sheetName: 
+  fileName: "\u041A\u0432\u0438\u0437 \u043F\u043E \u0438\u0433\u0440\u0430\u043C.xlsx"
+  sheetName: "\u041C\u0430\u0439\u043D\u043A\u0440\u0430\u0444\u0442"

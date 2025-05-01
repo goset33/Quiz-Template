@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -40,39 +41,35 @@ public class QuestionController : MonoBehaviour
     [SerializeField] private LocalizedString[] backInMenuLocales;
     [SerializeField] private LocalizedString[] showAnswerLocales, lackOfLivesLocales;
 
-    private void OnEnable()
+    private async void OnEnable()
     {
-        Init(gameManager.chosenQuiz);
+        await Init(gameManager.chosenQuiz);
     }
 
     /// <summary>
     /// Инициализация контроллера. Вызывается автоматически при включении объекта со скриптом
     /// </summary>
     /// <param name="quizCard">Сам экземпляр квиза</param>
-    private void Init(QuizCard quizCard)
+    private async Task Init(QuizCard quizCard)
     {
         hardness = GameManager.GetQuizHardness(quizCard);
 
         QuestionContainer container = quizCard.testContainer;
-        List<IQuestion> allPool = new(container.QuestionCards);
+        if (container == null)
+        {
+            gameManager.InvokeNotification(2);
+            gameManager.ReturnToMenu(transform);
+            return;
+        }
+
+        await container.LoadQuestionsAsync();
+        List<IQuestion> allPool = new(container.Questions);
         if (gameManager.shouldShuffle)
         {
             allPool = MixQuestions(allPool);
         }
 
-        int amount = 0;
-        if (hardness == 0)
-        {
-            amount = container.easyAmount;
-        }
-        else if (hardness == 1)
-        {
-            amount = container.mediumAmount;
-        }
-        else if (hardness == 2)
-        {
-            amount = container.hardAmount;
-        }
+        int amount = quizCard.questionsAmount[hardness];
         cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
 
         ClearScreen();

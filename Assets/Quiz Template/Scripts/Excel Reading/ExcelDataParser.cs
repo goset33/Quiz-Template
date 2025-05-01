@@ -38,10 +38,10 @@ public static class ExcelDataParser
         return questions;
     }
 
-    public static List<IQuestion> ParseQuestions(string path, string sheet)
+    public static List<IQuestion> ParseQuestions(byte[] file, string sheet)
     {
-        if (string.IsNullOrEmpty(path) || string.IsNullOrEmpty(sheet)) return null;
+        if (file == null || file.Length == 0 || string.IsNullOrEmpty(sheet)) return null;
 
-        return ParseQuestions(ExcelReader.ReadSheet(path, sheet));
+        return ParseQuestions(ExcelReader.ReadSheet(file, sheet));
     }
 }

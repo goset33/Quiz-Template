@@ -1,72 +1,87 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(QuestionContainer))]
 public class FileSelectorEditor : Editor
 {
-    private string[] sheetNames;
+    private string[] sheetNames = null;
     private int selectedSheetIndex = 0;
+    private bool isLoading = false;
+
+    private string lastLoadedFileName = string.Empty;
+
+    private QuestionContainer script;
 
     public override void OnInspectorGUI()
     {
+        script = (QuestionContainer)target;
         DrawDefaultInspector();
-        EditorGUILayout.Space();
-        QuestionContainer script = (QuestionContainer) target;
 
-        // Поле для отображения выбранного файла
-        EditorGUI.BeginDisabledGroup(true);
-        EditorGUILayout.TextField("Выбранная таблица", script.FileName);
-        EditorGUI.EndDisabledGroup();
-
-        // Загрузка имен листов
-        if (!string.IsNullOrEmpty(script.FilePath) && sheetNames == null)
-        {
-            try
-            {
-                sheetNames = ExcelReader.GetAllSheetNames(script.FilePath);
-                selectedSheetIndex = System.Array.IndexOf(sheetNames, script.sheetName);
-                if (selectedSheetIndex == -1)
-                {
-                    selectedSheetIndex = 0;
-                }
-            }
-            catch
-            {
-                Debug.LogError("Не удалось загрузить имена листов из файла.");
-                sheetNames = null;
-            }
-        }
-
-        // Создание выпадающего списка для выбора листа
-        if (sheetNames != null && sheetNames.Length > 0)
+        // Показываем текущий выбранный лист 
+        if (sheetNames != null && sheetNames.Length > 0 && lastLoadedFileName.Equals(script.fileName))
         {
             selectedSheetIndex = EditorGUILayout.Popup("Выбранный лист", selectedSheetIndex, sheetNames);
             script.sheetName = sheetNames[selectedSheetIndex];
+            EditorUtility.SetDirty(script);
         }
         else
         {
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField("Выбранный лист", "");
+            EditorGUILayout.TextField("Выбранный лист", script.sheetName);
             EditorGUI.EndDisabledGroup();
         }
 
-        if (GUILayout.Button("Выбрать .xlsx файл"))
-        {
-            string filePath = EditorUtility.OpenFilePanel("Выберите .xlsx файл", "", "xlsx");
-            if (!string.IsNullOrEmpty(filePath))
-            {
-                sheetNames = null;
-                selectedSheetIndex = 0;
+        EditorGUILayout.Space();
 
-                string relativePath = filePath.Replace(Application.dataPath, "Assets");
-                script.FilePath = relativePath;
-                EditorUtility.SetDirty(script);
+        // Кнопка появляется только если нужно перезагрузить листы
+        bool shouldShowButton = sheetNames == null || !script.fileName.Equals(lastLoadedFileName);
+
+        if (shouldShowButton && GUILayout.Button("Загрузить имена листов"))
+        {
+            LoadSheetsAsync(script);
+        }
+
+        if (isLoading)
+        {
+            EditorGUILayout.LabelField("Загрузка листов...");
+        }
+    }
+
+    private async void LoadSheetsAsync(QuestionContainer script)
+    {
+        if (isLoading || string.IsNullOrEmpty(script.fileName)) return;
+
+        isLoading = true;
+        Repaint();
+
+        byte[] data = await script.GetFileAsync();
+        if (data != null && data.Length > 0)
+        {
+            try
+            {
+                sheetNames = ExcelReader.GetAllSheetNames(data);
+                lastLoadedFileName = script.fileName;
+
+                if (sheetNames != null && sheetNames.Length > 0)
+                {
+                    selectedSheetIndex = System.Array.IndexOf(sheetNames, script.sheetName);
+                    if (selectedSheetIndex < 0) selectedSheetIndex = 0;
+                    EditorUtility.SetDirty(script);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"Ошибка чтения листов: {ex.Message}");
+                sheetNames = null;
             }
         }
-
-        if (!string.IsNullOrEmpty(script.FilePath))
+        else
         {
-            EditorGUILayout.LabelField($"Путь до файла: {script.FilePath}");
+            Debug.LogError("Не удалось загрузить файл для получения списка листов.");
+            sheetNames = null;
         }
+
+        isLoading = false;
+        Repaint();
     }
 }

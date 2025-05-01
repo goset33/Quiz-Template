@@ -45,7 +45,7 @@ MonoBehaviour:
     autoGRA: 1
     logInEditor: 1
     archivingBuild: 1
-    syncInitSDK: 0
+    syncInitSDK: 1
     loadSceneIfSDKLate: 0
     loadSceneIndex: 0
     simulationLoadScene: 0
@@ -68,8 +68,8 @@ MonoBehaviour:
     progressBarSettigs:
       round: 1
       roundAngle: 10
-      width: 30
-      height: 24
+      width: 25
+      height: 25
       color1: {r: 0.25, g: 0.6392, b: 1, a: 1}
       color2: {r: 1, g: 0.831, b: 0.149, a: 0.7}
     fixedAspectRatio: 1

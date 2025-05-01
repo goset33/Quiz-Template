@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62cfd1312c517d4f8cb4b7dd80671d1, type: 3}
   m_Name: Test 1
   m_EditorClassIdentifier: 
-  shouldCutCardPool: 0
-  numberOfQuestions: 0
+  fileName: MegaQuiz.xlsx
   sheetName: "\u041B\u0438\u0441\u04421"
-  filePath: Assets/Quiz Template/Example/Sheets/MegaQuiz.xlsx

@@ -1,27 +1,37 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Question Container", menuName = "Quiz Objects/Question Container", order = 51)]
 public class QuestionContainer : ScriptableObject
 {
-    // Количество вопросов в каждой сложности. Если 0 то все
-    public int easyAmount, mediumAmount, hardAmount = 0;
-
-    public IQuestion[] QuestionCards
-    {
-        get { return ExcelDataParser.ParseQuestions(filePath, sheetName).ToArray(); }
-    }
-
-    // Ниже: поля с данными таблицы для импорта
+    public string fileName;
     [HideInInspector] public string sheetName;
-    [HideInInspector] public string FileName
-    { 
-        get { return filePath.Substring(filePath.LastIndexOf("/") + 1); }
-        set { FileName = value; }
-    }
-    [HideInInspector] public string filePath = "";
-    public string FilePath
+
+    private IQuestion[] cachedQuestions;
+    public IQuestion[] Questions => cachedQuestions;
+
+    /// <summary>
+    /// Асинхронный метод загрузки вопросов в переменную cachedQuestions
+    /// Необходимо вызывать перед использованием Questions, так как иначе там будет null
+    /// </summary>
+    public async Task LoadQuestionsAsync()
     {
-        get { return filePath; }
-        set { filePath = value; }
+        if (cachedQuestions != null) return;
+
+        byte[] fileData = await ExcelLoader.LoadFileAsync(fileName);
+
+        if (fileData == null)
+        {
+            Debug.LogError($"Не удалось загрузить файл {fileName}");
+            return;
+        }
+
+        var questions = ExcelDataParser.ParseQuestions(fileData, sheetName).ToArray();
+        cachedQuestions = questions;
+    }
+
+    public async Task<byte[]> GetFileAsync()
+    {
+        return await ExcelLoader.LoadFileAsync(fileName);
     }
 }
