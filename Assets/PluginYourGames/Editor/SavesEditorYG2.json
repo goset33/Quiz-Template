@@ -7,9 +7,9 @@
     false,
     false
   ],
-  "idSave": 509,
+  "idSave": 539,
   "levelsHardness": {
-    "Minecraft": 1,
+    "Minecraft": 2,
     "Brawl Stars": 2
   },
   "favoriteCards": [],
@@ -23,9 +23,6 @@
     "Genshin Impact",
     "Honkai Star Rail"
   ],
-  "level": 1,
-  "experience": 0,
-  "requiredExp": 100,
-  "cash": 701,
+  "cash": 745,
   "isMusicPlaying": false
 }

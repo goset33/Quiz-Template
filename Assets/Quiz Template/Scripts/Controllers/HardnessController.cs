@@ -7,7 +7,7 @@ using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using System;
 using YG;
 
-// Пакет UISoftMask технически тоже больше не нужен
+// Ассет UISoftMask технически тоже больше не нужен
 [Obsolete("Раньше использовался для выбора уровня сложности. Неактуален.")]
 public class HardnessController : MonoBehaviour
 {
@@ -50,8 +50,8 @@ public class HardnessController : MonoBehaviour
     {
         //if (!gameManager.IsLevelWasOpened(gameManager.chosenQuiz, levelNumber) && levelNumber != 0)
         {
-            int price = levelNumber == 1 ? gameManager.config.mediumPrice : gameManager.config.hardPrice;
-            buyCost.Value = price;
+            //int price = levelNumber == 1 ? gameManager.config.mediumPrice : gameManager.config.hardPrice;
+            //buyCost.Value = price;
 
             gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, buyLevelLocales));
             TimelessController.OnButtonPressed += BuyButtonPressed;
@@ -70,7 +70,7 @@ public class HardnessController : MonoBehaviour
         if (buttonIndex == 1)
         {
             int num = buyCost.Value;
-            int index = num == gameManager.config.mediumPrice ? 1 : 2;
+            //int index = num == gameManager.config.mediumPrice ? 1 : 2;
             //if (index == 2 && !gameManager.IsLevelWasOpened(gameManager.chosenQuiz, 1))
             {
                 gameManager.InvokeNotification(1);

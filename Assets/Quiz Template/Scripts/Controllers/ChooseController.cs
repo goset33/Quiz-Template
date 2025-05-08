@@ -12,23 +12,41 @@ public class ChooseController : MonoBehaviour
     [SerializeField] private GameObject quizCardPrefab;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Transform cardsParent;
-    public LevelHandler levelHandler;
+    //public LevelHandler levelHandler;
 
     private void OnEnable()
     {
-        inputField.onValueChanged.AddListener(RedrawOrder);
+        //inputField.onValueChanged.AddListener(RedrawOrder);
+        //levelHandler.UpdateLevelUI();
 
-        levelHandler.UpdateLevelUI();
+        OnGameStart();
     }
 
-    private void OnDisable()
+    private void OnGameStart()
     {
-        inputField.onValueChanged.RemoveListener(RedrawOrder);
+        if (cardsParent.childCount != 0) return;
+
+        foreach (QuizCard content in gameManager.quizzes)
+        {
+            if (content == null) continue;
+
+            QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
+            //bool isFav = YG2.saves.favoriteCards.ContainsThatQuizCard(content);
+            card.SetContent(content, this);
+        }
     }
+
+    // Все что ниже - устарело
+
+    //private void OnDisable()
+    //{
+    //    inputField.onValueChanged.RemoveListener(RedrawOrder);
+    //}
 
     /// <summary>
-    /// Заново отрисовывает порядок квизов
+    /// Заново отрисовывает порядок квизов. Нужен только если существует поиск и избранные
     /// </summary>
+    [Obsolete]
     public void RedrawOrder(string _)
     {
         for (int i = 0; i < cardsParent.childCount; i++)
@@ -47,22 +65,10 @@ public class ChooseController : MonoBehaviour
             order = arr.ConvertToCards(gameManager.quizzes);
         }
 
-        OnGameStart(order);
+        OnGameStart();
     }
 
-    private void OnGameStart(QuizCard[] order)
-    {
-        foreach (QuizCard content in order)
-        {
-            if (content == null) continue;
-
-            QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
-            card.cardContent = content;
-            bool isFav = YG2.saves.favoriteCards.ContainsThatQuizCard(content);
-            card.SetContent(this, isFav);
-        }
-    }
-
+    [Obsolete]
     private QuizCard[] SearchQuizzesByName(string name)
     {
         string[] arr = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
@@ -79,6 +85,7 @@ public class ChooseController : MonoBehaviour
         return result.ToArray();
     }
 
+    [Obsolete]
     public void UpdateCardPos(QuizCard card)
     {
         gameManager.SetAsFavorite(card);

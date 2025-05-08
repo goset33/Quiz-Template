@@ -33,7 +33,7 @@ public class QuestionController : MonoBehaviour
     [SerializeField] private GameObject nextButton;
     [SerializeField] private TextMeshProUGUI questionText, counterText;
     [SerializeField] private HeartContainer heartContainer;
-    [SerializeField] private Image imageField;
+    //[SerializeField] private Image imageField;
     [SerializeField] private RectTransform answersParent;
     [SerializeField] private GameObject answerButtonPrefab;
 
@@ -153,7 +153,7 @@ public class QuestionController : MonoBehaviour
     private void LoadNextQuestion(IQuestion card)
     {
         questionText.text = card.QuestionText;
-        imageField.sprite = card.Image;
+        //imageField.sprite = card.Image;
         counterText.text = $"{currentQuestion}/{cards.Count}";
 
         if (card is MainTypeQuestion question)
@@ -271,6 +271,13 @@ public class QuestionController : MonoBehaviour
                 choosedSequence.Remove(changingButton);
             }
         }
+        else
+        {
+            foreach (GameObject obj in choosedSequence)
+            {
+                obj.transform.GetChild(1).gameObject.SetActive(true);
+            }
+        }
 
         for (int i = 0; i < choosedSequence.Count; i++)
         {
@@ -284,12 +291,11 @@ public class QuestionController : MonoBehaviour
     /// <param name="isRight">Был ли ответ верным</param>
     private void Answered(bool isRight)
     {
-        nextButton.SetActive(true);
-        
         if (isRight)
         {
             rightAnswers++;
             GameManager.ChangeCash(1);
+            NextButtonPressed();
             print("Right!");
         }
         else
@@ -311,6 +317,7 @@ public class QuestionController : MonoBehaviour
             }
 
             showRightButton.SetActive(true);
+            nextButton.SetActive(true);
             print("Incorrect!");
         }
     }
@@ -364,50 +371,61 @@ public class QuestionController : MonoBehaviour
     /// <summary>
     /// Вызывается при нажатии кнопки показа правильного варианта ответа
     /// </summary>
-    public void ShowRightAnswerButtonPressed()
+    public void BuyRightAnswerButtonPressed()
     {
         if (isAnswerShowed) return;
 
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales));
-        TimelessController.OnButtonPressed += ShowRightAnswer;
+        TimelessController.OnButtonPressed += BuyRightAnswer;
     }
 
     /// <summary>
-    /// Показывает правильный ответ
+    /// Показывает правильный ответ за валюту
     /// </summary>
     /// <param name="buttonIndex">0 = нет, 1 = да</param>
-    private void ShowRightAnswer(int buttonIndex)
+    private void BuyRightAnswer(int buttonIndex)
     {
-        TimelessController.OnButtonPressed -= ShowRightAnswer;
+        TimelessController.OnButtonPressed -= BuyRightAnswer;
         if (buttonIndex != 1) return;
 
         if (GameManager.HaveEnoughCash(-1))
         {
-            isAnswerShowed = true;
             GameManager.ChangeCash(-1);
-            if (cards[currentQuestion - 1] is MainTypeQuestion)
-            {
-                Image rightButton = answersParent.GetChild(rightIndex).GetComponent<Image>();
-                rightButton.sprite = gameManager.questionConfig.rightAnswerSprite;
-                rightButton.color = gameManager.questionConfig.rightButtonColor;
-            }
-            else if (cards[currentQuestion - 1] is CounterQuestion)
-            {
-                choosedSequence = rightSequence.ToList();
-
-                for (int i = 0; i < choosedSequence.Count; i++)
-                {
-                    Image button = answersParent.GetChild(i).GetComponent<Image>();
-                    button.sprite = gameManager.questionConfig.rightAnswerSprite;
-                    button.color = gameManager.questionConfig.rightButtonColor;
-                }
-                UpdateButtonIndexes(null);
-            }
+            ShowRightAnswer();
         }
         else
         {
             gameManager.InvokeNotification(0);
         }
+    }
+
+    private void ShowRightAnswer()
+    {
+        isAnswerShowed = true;
+        if (cards[currentQuestion - 1] is MainTypeQuestion)
+        {
+            Image rightButton = answersParent.GetChild(rightIndex).GetComponent<Image>();
+            rightButton.sprite = gameManager.questionConfig.rightAnswerSprite;
+            rightButton.color = gameManager.questionConfig.rightButtonColor;
+        }
+        else if (cards[currentQuestion - 1] is CounterQuestion)
+        {
+            choosedSequence = rightSequence.ToList();
+
+            for (int i = 0; i < choosedSequence.Count; i++)
+            {
+
+                Image button = answersParent.GetChild(i).GetComponent<Image>();
+                button.sprite = gameManager.questionConfig.rightAnswerSprite;
+                button.color = gameManager.questionConfig.rightButtonColor;
+            }
+            UpdateButtonIndexes(null);
+        }
+    }
+
+    public void GetHint()
+    {
+        YG2.RewardedAdvShow("2", ShowRightAnswer);
     }
 
     /// <summary>
@@ -424,6 +442,9 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Вызывает конец теста
+    /// </summary>
     private void Finish()
     {
         if (isWinning) GameManager.IncrementQuizHardness(gameManager.chosenQuiz);
@@ -434,15 +455,11 @@ public class QuestionController : MonoBehaviour
     public void MenuButtonPressed()
     {
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
-        TimelessController.OnButtonPressed += BackInMenu;
-    }
-
-    public void BackInMenu(int pressedIndex)
-    {
-        TimelessController.OnButtonPressed -= BackInMenu;
-        if (pressedIndex == 1)
-        {
-            gameManager.ReturnToMenu(transform);
-        }
+        TimelessController.OnButtonPressed += (pressedIndex) => { 
+            if (pressedIndex == 1) 
+            {
+                gameManager.ReturnToMenu(transform);
+            } 
+        };
     }
 }

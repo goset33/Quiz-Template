@@ -41,15 +41,11 @@ public class ResultController : MonoBehaviour
 
     public void RewardButtonPressed()
     {
-        YG2.onRewardAdv += MultiplyReward;
-        YG2.RewardedAdvShow("1");
+        YG2.RewardedAdvShow("1", MultiplyReward);
     }
 
-    private void MultiplyReward(string id)
+    private void MultiplyReward()
     {
-        YG2.onRewardAdv -= MultiplyReward;
-        if (id != "1") return;
-
         int rights = rightAnswersLocale.Value;
         GameManager.ChangeCash(rights * 2);
         addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 4}";

@@ -46,9 +46,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         // Место для дебаг строк
-        YG2.saves.level = 1;
-        YG2.saves.experience = 0;
-        YG2.saves.requiredExp = 100;
+
         // Удалить потом обязательно
 
         // Настройка локализации
@@ -57,7 +55,7 @@ public class GameManager : MonoBehaviour
         // Присвоение контроллерам и подписки на ивенты
         MenuController.gameManager = this;
         ChooseController.gameManager = this;
-        HardnessController.gameManager = this;
+        //HardnessController.gameManager = this;
         QuestionController.gameManager = this;
         ResultController.gameManager = this;
 
@@ -118,7 +116,7 @@ public class GameManager : MonoBehaviour
 
     public void AddExperience(int addedExp)
     {
-        chooseController.levelHandler.AddExp(addedExp);
+        
     }
 
     public void InvokePopup(PopupSettings settings)
@@ -147,7 +145,7 @@ public class GameManager : MonoBehaviour
         {
             YG2.saves.levelsHardness.Add(quizCard.names[0], curr + 1);
         }
-        else if (curr != 2)
+        else if (curr != 3)
         {
             YG2.saves.levelsHardness[quizCard.names[0]]++;
         }
@@ -158,6 +156,7 @@ public class GameManager : MonoBehaviour
     /// Изменяет позицию карточки квиза в массиве, не трогая отображение
     /// </summary>
     /// <param name="card">Сама карточка</param>
+    [Obsolete]
     public void SetAsFavorite(QuizCard card)
     {
         string name = card.GetName();
@@ -189,7 +188,6 @@ public class GameManager : MonoBehaviour
     {
         menuController.transform.parent.gameObject.SetActive(false);
         chooseController.transform.parent.gameObject.SetActive(true);
-        chooseController.RedrawOrder(null);
     }
 
     private void OnQuizChoosed(QuizCard obj)
@@ -197,8 +195,6 @@ public class GameManager : MonoBehaviour
         chosenQuiz = obj;
         chooseController.transform.parent.gameObject.SetActive(false);
         questionController.transform.parent.gameObject.SetActive(true);
-
-        //hardnessController.transform.parent.gameObject.SetActive(true);
     }
 
     //private void OnLevelChoosed(int obj)
