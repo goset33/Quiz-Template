@@ -19,6 +19,7 @@ public class QuestionController : MonoBehaviour
     private GameObject[] rightSequence = new GameObject[0]; // Хранит кнопки в правильной последовательности
 
     private int hardness;
+    private int[] questionsHardness = null;
     private int reviveCount = 2;
     private bool isAnswerShowed = false;
     private List<IQuestion> cards = new();
@@ -52,7 +53,10 @@ public class QuestionController : MonoBehaviour
     /// <param name="quizCard">Сам экземпляр квиза</param>
     private async Task Init(QuizCard quizCard)
     {
-        hardness = GameManager.GetQuizHardness(quizCard);
+        hardness = gameManager.GetQuizHardness();
+        int[] difficulties = gameManager.config.questionsHardness[hardness + 1];
+        difficulties.MultiplyArray(Mathf.RoundToInt(quizCard.questionsAmount[hardness] / 10f));
+        questionsHardness = difficulties.SelectMany((x, i) => Enumerable.Repeat(i, x)).OrderBy(_ => Random.value).ToArray();
 
         QuestionContainer container = quizCard.testContainer;
         if (container == null)
@@ -73,7 +77,7 @@ public class QuestionController : MonoBehaviour
         cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
 
         ClearScreen();
-        heartContainer.InitializeHearts(gameManager.startHeartsCount);
+        heartContainer.InitializeHearts(gameManager.config.harndessHeartCount[hardness]);
 
         reviveCount = 0;
         currentQuestion = 1;
@@ -158,8 +162,8 @@ public class QuestionController : MonoBehaviour
 
         if (card is MainTypeQuestion question)
         {
-            List<string> wrongs = new(question.WrongAnswers.OrderBy(_ => Random.value).Take(hardness + 1)); // Рандомные неправильные ответы, отрезанные по сложности уровня
-            List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Рандомные варианты ответов
+            var wrongs = question.WrongAnswers.OrderBy(_ => Random.value).Take(Mathf.Min(questionsHardness[currentQuestion - 1] + 1, 3)).ToList(); // Неправильные ответы рандомно
+            List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Все рандомные варианты ответов
             for (int i = 0; i < allAnswers.Count; i++)
             {
                 GameObject button = Instantiate(answerButtonPrefab, answersParent);
@@ -170,7 +174,7 @@ public class QuestionController : MonoBehaviour
                 if (allAnswers[i] == question.RightAnswer)
                 {
                     rightIndex = i;
-                    print("Right index was set: " + i);
+                    print("Right index: " + i);
                 }
             }
         }
@@ -179,8 +183,8 @@ public class QuestionController : MonoBehaviour
             choosedSequence.Clear();
             rightSequence = new GameObject[hardness + 2];
 
-            List<string> answers = new(card.AllAnswers.Take(hardness + 2));
-            List<string> randomizedAnswers = new(answers.OrderBy(_ => Random.value));
+            List<string> answers = new(card.AllAnswers.Take(Mathf.Min(questionsHardness[currentQuestion - 1] + 2, 4)));
+            List<string> randomizedAnswers = answers.OrderBy(_ => Random.value).ToList();
             for (int i = 0; i < randomizedAnswers.Count; i++)
             {
                 GameObject button = Instantiate(answerButtonPrefab, answersParent);
@@ -294,6 +298,7 @@ public class QuestionController : MonoBehaviour
         if (isRight)
         {
             rightAnswers++;
+            gameManager.AddExperience(1);
             GameManager.ChangeCash(1);
             NextButtonPressed();
             print("Right!");
@@ -332,17 +337,8 @@ public class QuestionController : MonoBehaviour
         }
         else if (buttonIndex == 1)
         {
-            YG2.onRewardAdv += ReviveAfterLose;
-            YG2.RewardedAdvShow("0");
+            YG2.RewardedAdvShow("0", () => heartContainer.HealOneHeart());
         }
-    }
-
-    private void ReviveAfterLose(string id)
-    {
-        YG2.onRewardAdv -= ReviveAfterLose;
-        if (id != "0") return;
-
-        heartContainer.HealOneHeart();
     }
 
     /// <summary>
@@ -354,7 +350,11 @@ public class QuestionController : MonoBehaviour
         YG2.InterstitialAdvShow();
 
 #if UNITY_EDITOR
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab)) currentQuestion = cards.Count;
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab))
+        {
+            currentQuestion = cards.Count;
+            gameManager.AddExperience(currentQuestion);
+        }
 #endif
 
         if (currentQuestion != cards.Count) // Если вопрос был не последний
@@ -369,8 +369,9 @@ public class QuestionController : MonoBehaviour
     }
 
     /// <summary>
-    /// Вызывается при нажатии кнопки показа правильного варианта ответа
+    /// Показывает правильный ответ за валюту
     /// </summary>
+    /// <param name="buttonIndex">0 = нет, 1 = да</param>
     public void BuyRightAnswerButtonPressed()
     {
         if (isAnswerShowed) return;
@@ -379,14 +380,10 @@ public class QuestionController : MonoBehaviour
         TimelessController.OnButtonPressed += BuyRightAnswer;
     }
 
-    /// <summary>
-    /// Показывает правильный ответ за валюту
-    /// </summary>
-    /// <param name="buttonIndex">0 = нет, 1 = да</param>
-    private void BuyRightAnswer(int buttonIndex)
+    private void BuyRightAnswer(int pressedIndex)
     {
         TimelessController.OnButtonPressed -= BuyRightAnswer;
-        if (buttonIndex != 1) return;
+        if (pressedIndex != 1) return;
 
         if (GameManager.HaveEnoughCash(-1))
         {
@@ -447,7 +444,7 @@ public class QuestionController : MonoBehaviour
     /// </summary>
     private void Finish()
     {
-        if (isWinning) GameManager.IncrementQuizHardness(gameManager.chosenQuiz);
+        //if (isWinning) gameManager.IncrementQuizHardness();
 
         QuestionsEnded?.Invoke(rightAnswers, cards.Count, isWinning);
     }
@@ -455,11 +452,15 @@ public class QuestionController : MonoBehaviour
     public void MenuButtonPressed()
     {
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
-        TimelessController.OnButtonPressed += (pressedIndex) => { 
-            if (pressedIndex == 1) 
-            {
-                gameManager.ReturnToMenu(transform);
-            } 
-        };
+        TimelessController.OnButtonPressed += BackToMenu;
+    }
+
+    private void BackToMenu(int pressedIndex)
+    {
+        TimelessController.OnButtonPressed -= BackToMenu;
+        if (pressedIndex == 1)
+        {
+            gameManager.ReturnToMenu(transform);
+        }
     }
 }

@@ -8,9 +8,9 @@ public class QuizCard : ScriptableObject
     public int[] questionsAmount = new int[4];
 
     public string[] names = new string[1]; // Первое указанное имя будет использоваться в промпте
-    public int maxExp = 30 * 3;
-    public int exp = 0; 
     public Sprite image;
+
+    public const int MIN_EXP = 30; // Начальное значение для 1-го уровня
 
     public QuestionContainer testContainer;
 

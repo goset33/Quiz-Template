@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Example Game Config
   m_EditorClassIdentifier: 
   cashSprite: {fileID: 21300000, guid: 492e2e7ddeed5f048a9a0a78fd942b93, type: 3}
-  mediumPrice: 5
-  hardPrice: 10
+  expSprite: {fileID: -292921124, guid: 71258609f5e6feb4595243c1cb1e6359, type: 3}
+  harndessHeartCount: 03000000020000000100000001000000
   notifyLocales:
   - m_TableReference:
       m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1

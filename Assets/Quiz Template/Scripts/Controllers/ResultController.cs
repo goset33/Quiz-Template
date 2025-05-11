@@ -36,7 +36,6 @@ public class ResultController : MonoBehaviour
         addingObject.GetComponentInChildren<Image>().sprite = gameManager.config.cashSprite;
         addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * 2}";
         GameManager.ChangeCash(rightAnswers);
-        gameManager.AddExperience(rightAnswers * 2);
     }
 
     public void RewardButtonPressed()

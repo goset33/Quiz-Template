@@ -7,11 +7,57 @@
     false,
     false
   ],
-  "idSave": 539,
-  "levelsHardness": {
-    "Minecraft": 2,
-    "Brawl Stars": 2
-  },
+  "idSave": 811,
+  "quizCards": [
+    {
+      "cardId": "Minecraft",
+      "level": 2,
+      "maxExp": 60,
+      "exp": 40
+    },
+    {
+      "cardId": "Terraria",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 5
+    },
+    {
+      "cardId": "Brawl Stars",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 0
+    },
+    {
+      "cardId": "Clash Royale",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 0
+    },
+    {
+      "cardId": "Counter Strike 2",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 0
+    },
+    {
+      "cardId": "Valorant",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 0
+    },
+    {
+      "cardId": "Genshin Impact",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 0
+    },
+    {
+      "cardId": "Honkai Star Rail",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 0
+    }
+  ],
   "favoriteCards": [],
   "otherCards": [
     "Minecraft",
@@ -23,6 +69,6 @@
     "Genshin Impact",
     "Honkai Star Rail"
   ],
-  "cash": 745,
+  "cash": 1060,
   "isMusicPlaying": false
 }

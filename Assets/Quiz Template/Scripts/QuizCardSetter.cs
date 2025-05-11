@@ -1,6 +1,8 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using YG;
 
 public class QuizCardSetter : MonoBehaviour
 {
@@ -10,22 +12,30 @@ public class QuizCardSetter : MonoBehaviour
     //[SerializeField] private Sprite favoriteSprite;
     //[SerializeField] private Sprite[] hardnessSprites = new Sprite[3];
 
+    private QuizCardSaveData saveData;
     private Image imageComponent;
     private Slider sliderComponent;
+    private TextMeshProUGUI levelComponent;
 
     public static event Action<QuizCard> QuizChoosed;
 
     private void OnEnable()
     {
-        if (imageComponent != null) return;
-        
-        imageComponent = GetComponent<Image>();
-        sliderComponent = GetComponentInChildren<Slider>(true);
+        if (imageComponent == null)
+        {
+            imageComponent = GetComponent<Image>();
+            sliderComponent = GetComponentInChildren<Slider>(true);
+            levelComponent = sliderComponent.GetComponentInChildren<TextMeshProUGUI>(true);
+            return;
+        }
+
+        UpdateContent();
     }
 
     public void SetContent(QuizCard card, ChooseController controller)
     {
         cardContent = card;
+        saveData = YG2.saves.quizCards.GetSaveDataByQuizCard(cardContent);
         this.controller = controller;
         imageComponent.sprite = cardContent.image;
 
@@ -35,10 +45,11 @@ public class QuizCardSetter : MonoBehaviour
         //transform.GetChild(1).GetComponent<Image>().sprite = hardnessSprites[index];
     }
 
-    public void UpdateContent()
+    private void UpdateContent()
     {
-        sliderComponent.maxValue = cardContent.maxExp;
-        sliderComponent.value = cardContent.exp;
+        levelComponent.text = saveData.level.ToString();
+        sliderComponent.maxValue = saveData.maxExp;
+        sliderComponent.value = saveData.exp;
     }
 
     public void QuizChooseButtonPressed()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -24,11 +23,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Choose Settings")]
     public List<QuizCard> quizzes = new();
+    public Dictionary<string, QuizCardSaveData> quizCardProgress = new();
     [HideInInspector] public QuizCard chosenQuiz = null;
 
     [Header("Questions Settings")]
     public QuestionConfig questionConfig;
-    public int startHeartsCount = 3; // Сколько сердец будет у игрока на старте
     public bool shouldShuffle; // Следует ли рандомизировать порядок вопросов
 
     // Идея: Сейчас переменные используются только для переключения окон. В целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
@@ -46,7 +45,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         // Место для дебаг строк
-
         // Удалить потом обязательно
 
         // Настройка локализации
@@ -64,11 +62,59 @@ public class GameManager : MonoBehaviour
         //HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
+        YG2.onGetSDKData += InitializeAndLoadPlayerProgress;
+
         // Настройка квизов в окне выбора квизов
         if (YG2.saves.otherCards == null || YG2.saves.otherCards.Length != quizzes.Count)
         {
             YG2.saves.otherCards = quizzes.ConvertToNames();
             YG2.saves.favoriteCards.Clear();
+        }
+    }
+
+    public void InitializeAndLoadPlayerProgress()
+    {
+        YG2.onGetSDKData -= InitializeAndLoadPlayerProgress;
+
+        quizCardProgress.Clear();
+        YG2.saves.quizCards ??= new List<QuizCardSaveData>();
+
+        // Подтягивание данных из YG2.saves.quizCards в quizCardProgress
+        foreach (QuizCardSaveData savedData in YG2.saves.quizCards)
+        {
+            if (savedData == null || string.IsNullOrEmpty(savedData.cardId)) continue;
+
+            if (!quizCardProgress.ContainsKey(savedData.cardId))
+            {
+                quizCardProgress.Add(savedData.cardId, savedData);
+            }
+            else
+            {
+                Debug.LogWarning($"Duplicate cardId '{savedData.cardId}' found in YG2.saves.quizCards. Using the first encountered instance for runtime");
+                // Нужно бы как-то удалять повторения из YG2.saves.quizCards, они там не должны повторяться
+            }
+        }
+
+        // Создание новых экземпляров данных в YG2.saves.quizCards по quizzes
+        bool newProgressDataCreated = false;
+        foreach (QuizCard quizTemplate in quizzes)
+        {
+            if (quizTemplate == null) continue;
+
+            string cardId = quizTemplate.GetName();
+            if (!quizCardProgress.ContainsKey(cardId))
+            {
+                QuizCardSaveData newSave = new QuizCardSaveData(cardId);
+                quizCardProgress.Add(cardId, newSave);
+
+                newProgressDataCreated = true;
+            }
+        }
+
+        // Пересохранение списка YG2.saves.quizCards, если он был модифицирован
+        if (newProgressDataCreated)
+        {
+            SaveQuizCardProgress();
         }
     }
 
@@ -93,15 +139,33 @@ public class GameManager : MonoBehaviour
         QuizCardSetter.QuizChoosed -= OnQuizChoosed;
         //HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
+
+        if (LocalizationSettings.Instance != null)
+        {
+            LocalizationSettings.InitializationOperation.Completed -= LoadLocale;
+        }
+    }
+
+    /// <summary>
+    /// Сохраняет конкретно YG2.saves.quizCards в соответствии с quizCardProgress
+    /// </summary>
+    private void SaveQuizCardProgress()
+    {
+        YG2.saves.quizCards.Clear();
+        foreach (QuizCardSaveData saveData in quizCardProgress.Values)
+        {
+            YG2.saves.quizCards.Add(saveData);
+        }
+        YG2.SaveProgress();
     }
 
     public GameState GetGameState() { return state; }
 
     public static bool HaveEnoughCash(int cost)
     {
-        if (cost < 0 && YG2.saves.cash < Math.Abs(cost))
+        if (cost < 0)
         {
-            return false;
+            return YG2.saves.cash >= Math.Abs(cost);
         }
         return true;
     }
@@ -114,9 +178,13 @@ public class GameManager : MonoBehaviour
         YG2.SaveProgress();
     }
 
-    public void AddExperience(int addedExp)
+    public void AddExperience(int amount)
     {
-        
+        QuizCardSaveData data = quizCardProgress[chosenQuiz.GetName()];
+        bool leveledUp = data.AddExperience(amount);
+        Debug.Log($"Card '{chosenQuiz.GetName()}': EXP {data.exp}/{data.maxExp}, Level {data.level}. Leveled up: {leveledUp}");
+
+        SaveQuizCardProgress();
     }
 
     public void InvokePopup(PopupSettings settings)
@@ -129,27 +197,10 @@ public class GameManager : MonoBehaviour
         timelessController.CreateNotification(config.notifyLocales[notifyIndex]);
     }
 
-    public static int GetQuizHardness(QuizCard quizCard)
+    public int GetQuizHardness()
     {
-        if (YG2.saves.levelsHardness.ContainsKey(quizCard.names[0]))
-        {
-            return YG2.saves.levelsHardness[quizCard.names[0]];
-        }
-        return 0;
-    }
-
-    public static void IncrementQuizHardness(QuizCard quizCard)
-    {
-        int curr = GetQuizHardness(quizCard);
-        if (curr == 0)
-        {
-            YG2.saves.levelsHardness.Add(quizCard.names[0], curr + 1);
-        }
-        else if (curr != 3)
-        {
-            YG2.saves.levelsHardness[quizCard.names[0]]++;
-        }
-        YG2.SaveProgress();
+        QuizCardSaveData data = quizCardProgress[chosenQuiz.GetName()];
+        return data.level - 1;
     }
 
     /// <summary>
@@ -177,6 +228,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Функции переходов между экранами
+
     public void ReturnToMenu(Transform currentController)
     {
         YG2.InterstitialAdvShow();

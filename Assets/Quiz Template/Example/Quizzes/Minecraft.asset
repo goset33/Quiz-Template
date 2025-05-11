@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25d6b1e707c9fd4a92d80b101e3fadc, type: 3}
   m_Name: Minecraft
   m_EditorClassIdentifier: 
+  questionsAmount: 0a0000000a0000000a0000000a000000
   names:
   - Minecraft
   - "\u041C\u0430\u0439\u043D\u043A\u0440\u0430\u0444\u0442"

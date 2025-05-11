@@ -61,4 +61,25 @@ public static class QuizCardExtentions
         string s = card.GetName();
         return array.Any(item => item == s);
     }
+
+    public static QuizCardSaveData GetSaveDataByQuizCard(this IList<QuizCardSaveData> array, QuizCard quizCard)
+    {
+        string id = quizCard.GetName();
+        foreach (QuizCardSaveData data in array)
+        {
+            if (data.cardId == id)
+            {
+                return data;
+            }
+        }
+        return null;
+    }
+
+    public static void MultiplyArray(this IList<int> array, int multiplier)
+    {
+        for (int i = 0; i < array.Count; i++)
+        {
+            array[i] *= multiplier;
+        }
+    }
 }

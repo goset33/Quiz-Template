@@ -5,7 +5,7 @@ namespace YG
     public partial class SavesYG
     {
         // Ваши сохранения
-        public Dictionary<string, int> levelsHardness = new();
+        public List<QuizCardSaveData> quizCards = new();
         public List<string> favoriteCards = new();
         public string[] otherCards = null;
 

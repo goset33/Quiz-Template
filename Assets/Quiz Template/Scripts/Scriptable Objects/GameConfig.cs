@@ -8,6 +8,14 @@ public class GameConfig : ScriptableObject
 
     [Space]
     public int[] harndessHeartCount = { 3, 2, 1, 1 };
+    public int[][] questionsHardness = new int[][]
+    {
+        new[] { 4, 3, 2, 1 }, // FTUE 
+        new[] { 6, 3, 1, 0 }, // Новичок
+        new[] { 2, 5, 2, 1 }, // Умняша 
+        new[] { 0, 3, 5, 2 }, // Академик 
+        new[] { 0, 0, 0, 10 } // Гуру
+    };
 
     [Space]
     public LocalizedString[] notifyLocales;
