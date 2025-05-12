@@ -393,6 +393,7 @@ MonoBehaviour:
   questionText: {fileID: 2843670370213985679}
   counterText: {fileID: 5391434067683992723}
   heartContainer: {fileID: 20925123130031726}
+  timerHandler: {fileID: 0}
   answersParent: {fileID: 5241021024917934959}
   answerButtonPrefab: {fileID: 3577943234161667049, guid: f4c91fe548d7a5140863b70a398faddc, type: 3}
   backInMenuLocales:
@@ -831,7 +832,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -110, y: 320}
+  m_AnchoredPosition: {x: -310, y: 110}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1047705625100353303
@@ -1056,7 +1057,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7942550072468986000
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1148,8 +1149,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00048828125, y: -351.2693}
-  m_SizeDelta: {x: -80.001, y: 262.0087}
+  m_AnchoredPosition: {x: 0.00048828125, y: -615}
+  m_SizeDelta: {x: -80.001, y: 363.50635}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1784653039124650059
 CanvasRenderer:
@@ -1414,7 +1415,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -540, y: -100}
+  m_AnchoredPosition: {x: -540, y: 125}
   m_SizeDelta: {x: 222.22, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6789556886753995728

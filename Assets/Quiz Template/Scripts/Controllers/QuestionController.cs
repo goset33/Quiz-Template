@@ -13,6 +13,7 @@ public class QuestionController : MonoBehaviour
 {
     public static GameManager gameManager;
     public static event Action<int, int, bool> QuestionsEnded;
+    public static event Action NextQuestionLoaded, WrongAnswer;
 
     private int rightIndex;
     private List<GameObject> choosedSequence = new(); // Хранит кнопки в последовательности нажатия
@@ -34,6 +35,7 @@ public class QuestionController : MonoBehaviour
     [SerializeField] private GameObject nextButton;
     [SerializeField] private TextMeshProUGUI questionText, counterText;
     [SerializeField] private HeartContainer heartContainer;
+    [SerializeField] private TimerHandler timerHandler;
     //[SerializeField] private Image imageField;
     [SerializeField] private RectTransform answersParent;
     [SerializeField] private GameObject answerButtonPrefab;
@@ -78,6 +80,7 @@ public class QuestionController : MonoBehaviour
 
         ClearScreen();
         heartContainer.InitializeHearts(gameManager.config.harndessHeartCount[hardness]);
+        timerHandler.InitializeTime(gameManager.config.questionTimer, hardness != 4); // Сомнительно, да и нерабочее на данный момент. 
 
         reviveCount = 0;
         currentQuestion = 1;
@@ -197,6 +200,8 @@ public class QuestionController : MonoBehaviour
         {
 
         }
+
+        NextQuestionLoaded?.Invoke();
     }
 
     // Обработка нажатия кнопки при вопросе типов 1, 2
@@ -305,6 +310,7 @@ public class QuestionController : MonoBehaviour
         }
         else
         {
+            WrongAnswer?.Invoke();
             heartContainer.TakeOneDamage();
             if (heartContainer.HeartCount == 0)
             {
