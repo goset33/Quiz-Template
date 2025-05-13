@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 
-// Таймер не тестировался
 public class TimerHandler : MonoBehaviour
 {
-    public static float time = 0f; // Время в секундах
-    public static float maxTime = 0f;
+    private float time = 0f; // Время в секундах
+    private float maxTime = 0f;
 
     public static bool isRunning = false;
+    public static event Action OnTimeEnd;
 
     private TextMeshProUGUI textComponent;
 
@@ -42,12 +43,15 @@ public class TimerHandler : MonoBehaviour
     {
         if (isRunning) return;
 
+        maxTime = 0f;
         time = _maxTime;
         isRunning = true;
         if (!isGlobal)
         {
             maxTime = _maxTime;
         }
+
+        textComponent.text = ConvertSecondsToClock(time);
 
         if (routine != null)
         {
@@ -72,6 +76,28 @@ public class TimerHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Восстанавливает время на таймере
+    /// </summary>
+    /// <param name="addingTime">Время, которое нужно восстановить</param>
+    public void RestoreSomeTime(float addingTime)
+    {
+        if (maxTime == 0f)
+        {
+            InitializeTime(addingTime, true);
+        }
+        else
+        {
+            time = addingTime;
+            isRunning = true;
+            textComponent.text = ConvertSecondsToClock(time);
+            routine = StartCoroutine(TimerCoroutine());
+        }
+    }
+
+    /// <summary>
+    /// Основная корутина таймера
+    /// </summary>
     IEnumerator TimerCoroutine()
     {
         while (time > 0 && isRunning)
@@ -83,6 +109,7 @@ public class TimerHandler : MonoBehaviour
 
         if (time <= 0f)
         {
+            OnTimeEnd?.Invoke();
             isRunning = false;
             StopTime();
         }
@@ -90,20 +117,27 @@ public class TimerHandler : MonoBehaviour
 
     public void OnWrongAnswer()
     {
-        if (maxTime == 0f) return;
-
         StopCoroutine(routine);
         routine = null;
     }
 
     public void WhenNextQuestion()
     {
-        if (maxTime == 0f) return;
+        if (maxTime != 0f)
+        {
+            time = maxTime;
+            isRunning = true;
+        }
 
-        time = maxTime;
+        textComponent.text = ConvertSecondsToClock(time);
         routine ??= StartCoroutine(TimerCoroutine());
     }
 
+    /// <summary>
+    /// Конвертирует время в секундах в часы формата "00:00"
+    /// </summary>
+    /// <param name="seconds">Время в секундах</param>
+    /// <returns>Время формата "00:00"</returns>
     private string ConvertSecondsToClock(float seconds)
     {
         int totalSeconds = Mathf.Max(0, Mathf.RoundToInt(seconds));

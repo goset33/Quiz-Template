@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Choose Settings")]
     public List<QuizCard> quizzes = new();
-    public Dictionary<string, QuizCardSaveData> quizCardProgress = new();
+    public Dictionary<string, QuizCardSaveData> quizCardLevelProgress = new();
     [HideInInspector] public QuizCard chosenQuiz = null;
 
     [Header("Questions Settings")]
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
         //HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
-        YG2.onGetSDKData += InitializeAndLoadPlayerProgress;
+        YG2.onGetSDKData += InitializeAndLoadLevelProgress;
 
         // Настройка квизов в окне выбора квизов
         if (YG2.saves.otherCards == null || YG2.saves.otherCards.Length != quizzes.Count)
@@ -72,11 +72,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void InitializeAndLoadPlayerProgress()
+    /// <summary>
+    /// Инициализирует словарь quizCardLevelProgress. Вызывается после инициализации GameReadyAPI
+    /// </summary>
+    public void InitializeAndLoadLevelProgress()
     {
-        YG2.onGetSDKData -= InitializeAndLoadPlayerProgress;
+        YG2.onGetSDKData -= InitializeAndLoadLevelProgress;
 
-        quizCardProgress.Clear();
+        quizCardLevelProgress.Clear();
         YG2.saves.quizCards ??= new List<QuizCardSaveData>();
 
         // Подтягивание данных из YG2.saves.quizCards в quizCardProgress
@@ -84,14 +87,13 @@ public class GameManager : MonoBehaviour
         {
             if (savedData == null || string.IsNullOrEmpty(savedData.cardId)) continue;
 
-            if (!quizCardProgress.ContainsKey(savedData.cardId))
+            if (!quizCardLevelProgress.ContainsKey(savedData.cardId))
             {
-                quizCardProgress.Add(savedData.cardId, savedData);
+                quizCardLevelProgress.Add(savedData.cardId, savedData);
             }
             else
             {
-                Debug.LogWarning($"Duplicate cardId '{savedData.cardId}' found in YG2.saves.quizCards. Using the first encountered instance for runtime");
-                // Нужно бы как-то удалять повторения из YG2.saves.quizCards, они там не должны повторяться
+                Debug.LogWarning($"Найден дупликат cardId '{savedData.cardId}' в YG2.saves.quizCards");
             }
         }
 
@@ -102,10 +104,10 @@ public class GameManager : MonoBehaviour
             if (quizTemplate == null) continue;
 
             string cardId = quizTemplate.GetName();
-            if (!quizCardProgress.ContainsKey(cardId))
+            if (!quizCardLevelProgress.ContainsKey(cardId))
             {
                 QuizCardSaveData newSave = new QuizCardSaveData(cardId);
-                quizCardProgress.Add(cardId, newSave);
+                quizCardLevelProgress.Add(cardId, newSave);
 
                 newProgressDataCreated = true;
             }
@@ -118,6 +120,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Загружает локаль сразу после инициализации пакета Localization
+    /// </summary>
     private void LoadLocale(AsyncOperationHandle<LocalizationSettings> handle)
     {
         LocalizationSettings.InitializationOperation.Completed -= LoadLocale;
@@ -140,6 +145,7 @@ public class GameManager : MonoBehaviour
         //HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
 
+        YG2.onGetSDKData -= InitializeAndLoadLevelProgress;
         if (LocalizationSettings.Instance != null)
         {
             LocalizationSettings.InitializationOperation.Completed -= LoadLocale;
@@ -152,7 +158,7 @@ public class GameManager : MonoBehaviour
     private void SaveQuizCardProgress()
     {
         YG2.saves.quizCards.Clear();
-        foreach (QuizCardSaveData saveData in quizCardProgress.Values)
+        foreach (QuizCardSaveData saveData in quizCardLevelProgress.Values)
         {
             YG2.saves.quizCards.Add(saveData);
         }
@@ -180,7 +186,7 @@ public class GameManager : MonoBehaviour
 
     public void AddExperience(int amount)
     {
-        QuizCardSaveData data = quizCardProgress[chosenQuiz.GetName()];
+        QuizCardSaveData data = quizCardLevelProgress[chosenQuiz.GetName()];
         bool leveledUp = data.AddExperience(amount);
         Debug.Log($"Card '{chosenQuiz.GetName()}': EXP {data.exp}/{data.maxExp}, Level {data.level}. Leveled up: {leveledUp}");
 
@@ -199,8 +205,10 @@ public class GameManager : MonoBehaviour
 
     public int GetQuizHardness()
     {
-        QuizCardSaveData data = quizCardProgress[chosenQuiz.GetName()];
-        return data.level - 1;
+        if (YG2.saves.isFirstQuiz) return 0;
+
+        QuizCardSaveData data = quizCardLevelProgress[chosenQuiz.GetName()];
+        return data.level;
     }
 
     /// <summary>
@@ -227,7 +235,7 @@ public class GameManager : MonoBehaviour
         YG2.SaveProgress();
     }
 
-    // Функции переходов между экранами
+    // --- Функции переходов между экранами ---
 
     public void ReturnToMenu(Transform currentController)
     {

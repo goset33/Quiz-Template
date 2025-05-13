@@ -8,7 +8,7 @@ public class GameConfig : ScriptableObject
 
     [Space]
     public int[] harndessHeartCount = { 3, 2, 1, 1 };
-    public float questionTimer = 180f; // В секундах
+    public float questionTimer = 180f, questionExtraTime = 50f; // В секундах
     public int[][] questionsHardness = new int[][]
     {
         new[] { 4, 3, 2, 1 }, // FTUE 

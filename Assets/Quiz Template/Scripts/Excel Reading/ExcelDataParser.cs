@@ -1,7 +1,8 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Класс парсит данные, полученные из ExcelReader.ReadSheet в адекватный формат списка из IQuestion
+/// </summary>
 public static class ExcelDataParser
 {
     public static List<IQuestion> ParseQuestions(List<Dictionary<string, string>> sheetData)
@@ -9,30 +10,32 @@ public static class ExcelDataParser
         List<IQuestion> questions = new();
         foreach (Dictionary<string, string> row in sheetData)
         {
-            Texture2D texture = new Texture2D(1, 1);
-            texture.LoadImage(Convert.FromBase64String(row["Изображение"]));
+            //Texture2D texture = new Texture2D(1, 1);
+            //texture.LoadImage(Convert.FromBase64String(row["Изображение"]));
 
-            int type = int.Parse(row["Тип вопроса"]);
-            string[] allAnswers = new string[4] { row["Правильный ответ"], row["Неправильный ответ 1"], row["Неправильный ответ 2"], row["Неправильный ответ 3"] };
-            Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
+            //int type = int.Parse(row["Тип вопроса"]);
+            //Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
 
-            IQuestion card = null;
-            if (type == 1)
-            {
-                card = new MainTypeQuestion(row["Вопрос"], image, allAnswers);
-            }
-            else if (type == 2)
-            {
-                card = new PictureQuestion(row["Вопрос"], image, allAnswers);
-            }
-            else if (type == 3)
-            {
-                card = new CounterQuestion(row["Вопрос"], image, allAnswers);
-            }
-            else if (type == 4)
-            {
-                card = new ConnectQuestion(row["Вопрос"], image, allAnswers);
-            }
+            string[] allAnswers = new string[4] { row["Правильный ответ"], row["Ответ 2"], row["Ответ 3"], row["Ответ 4"] };
+            IQuestion card = new MainTypeQuestion(row["Вопрос"], null, allAnswers);
+
+            //IQuestion card = null;
+            //if (type == 1)
+            //{
+            //    card = new MainTypeQuestion(row["Вопрос"], image, allAnswers);
+            //}
+            //else if (type == 2)
+            //{
+            //    card = new PictureQuestion(row["Вопрос"], image, allAnswers);
+            //}
+            //else if (type == 3)
+            //{
+            //    card = new CounterQuestion(row["Вопрос"], image, allAnswers);
+            //}
+            //else if (type == 4)
+            //{
+            //    card = new ConnectQuestion(row["Вопрос"], image, allAnswers);
+            //}
             questions.Add(card);
         }
         return questions;

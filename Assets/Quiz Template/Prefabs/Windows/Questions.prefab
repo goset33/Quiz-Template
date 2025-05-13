@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 3998462654190106986}
   - component: {fileID: 927583657910233717}
   - component: {fileID: 4735426048934874195}
+  - component: {fileID: 6857792030665483916}
   m_Layer: 5
   m_Name: Timer
   m_TagString: Untagged
@@ -266,6 +267,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6857792030665483916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1625678558653828965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c94295a745a7c294f97f092e2cc69b38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2544485276046410951
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +406,7 @@ MonoBehaviour:
   questionText: {fileID: 2843670370213985679}
   counterText: {fileID: 5391434067683992723}
   heartContainer: {fileID: 20925123130031726}
-  timerHandler: {fileID: 0}
+  timerHandler: {fileID: 6857792030665483916}
   answersParent: {fileID: 5241021024917934959}
   answerButtonPrefab: {fileID: 3577943234161667049, guid: f4c91fe548d7a5140863b70a398faddc, type: 3}
   backInMenuLocales:
@@ -475,6 +488,39 @@ MonoBehaviour:
       m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
     m_TableEntryReference:
       m_KeyId: 19176521968734208
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
+    m_TableEntryReference:
+      m_KeyId: 19176712490799104
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
+    m_TableEntryReference:
+      m_KeyId: 19176812281679872
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  outOfTimeLocales:
+  - m_TableReference:
+      m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
+    m_TableEntryReference:
+      m_KeyId: 35095455586668544
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
+    m_TableEntryReference:
+      m_KeyId: 35095514336284672
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -1416,7 +1462,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -540, y: 125}
-  m_SizeDelta: {x: 222.22, y: 0}
+  m_SizeDelta: {x: 222.22, y: 170}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6789556886753995728
 MonoBehaviour:
@@ -1435,7 +1481,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 10
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 1
   m_CellSize: {x: 120, y: 30}
@@ -1455,4 +1501,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
-  m_VerticalFit: 2
+  m_VerticalFit: 0

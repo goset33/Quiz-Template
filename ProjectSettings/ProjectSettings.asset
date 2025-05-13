@@ -140,7 +140,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: Alpha Test
+  bundleVersion: Alpha 0.1.0
   preloadedAssets:
   - {fileID: 11400000, guid: 7e00ddd297c463142ad8097fc46f2e2a, type: 2}
   - {fileID: 11400000, guid: 9339f42219e451449be878924744b55e, type: 2}
@@ -785,7 +785,7 @@ PlayerSettings:
     QNX: 1
     Stadia: 1
     VisionOS: 1
-    WebGL: 3
+    WebGL: 4
     Windows Store Apps: 1
     XboxOne: 1
     iPhone: 1

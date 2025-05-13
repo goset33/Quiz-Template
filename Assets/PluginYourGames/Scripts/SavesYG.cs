@@ -11,6 +11,7 @@ namespace YG
 
         public int cash = 0;
 
+        public bool isFirstQuiz = true;
         public bool isMusicPlaying = true;
     }
 }

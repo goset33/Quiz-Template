@@ -144,6 +144,15 @@ MonoBehaviour:
     m_Localized: Quiz does not exist.
     m_Metadata:
       m_Items: []
+  - m_Id: 35095455586668544
+    m_Localized: Time is up...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35095514336284672
+    m_Localized: You're out of time on the timer. Do you want to watch an ad and
+      get extra time?
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

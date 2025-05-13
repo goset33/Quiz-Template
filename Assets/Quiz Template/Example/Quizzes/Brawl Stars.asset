@@ -19,4 +19,4 @@ MonoBehaviour:
   - "\u0431\u0441"
   - bs
   image: {fileID: 21300000, guid: c60960be098fd5143ad568c7bb2694d6, type: 3}
-  testContainer: {fileID: 0}
+  testContainer: {fileID: 11400000, guid: e63405f1c2439a347b58e44144849b7a, type: 2}

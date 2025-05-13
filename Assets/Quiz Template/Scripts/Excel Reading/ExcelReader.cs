@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// Класс занимается маппингом данных из таблицы XLSX
+/// </summary>
 public static class ExcelReader
 {
     public static string[] GetAllSheetNames(byte[] data)
@@ -21,7 +24,10 @@ public static class ExcelReader
         }
     }
 
-    // Название таблицы должно точно совпадать с ее реальной копией в файле, с точностью до регистра
+    /// <summary>
+    /// Метод парсит таблицу в список колонок
+    /// Каждая колонка является словарем формата "имя столбца - значение"
+    /// </summary>
     public static List<Dictionary<string, string>> ReadSheet(byte[] data, string sheetName)
     {
         List<Dictionary<string, string>> sheetData = new List<Dictionary<string, string>>();
@@ -47,19 +53,19 @@ public static class ExcelReader
                     {
                         rowData[header] = string.Empty;
                     }
-                    else if (header == "Изображение" && cell is XSSFCell xssfCell)
-                    {
-                        byte[] pictureData = GetPictureFromCell(xssfCell);
-                        if (pictureData != null)
-                        {
-                            rowData[header] = Convert.ToBase64String(pictureData);
-                        }
-                        else
-                        {
-                            rowData[header] = string.Empty;
-                            Debug.LogWarning("Изображение не найдено!");
-                        }
-                    }
+                    //else if (header == "Изображение" && cell is XSSFCell xssfCell)
+                    //{
+                    //    byte[] pictureData = GetPictureFromCell(xssfCell);
+                    //    if (pictureData != null)
+                    //    {
+                    //        rowData[header] = Convert.ToBase64String(pictureData);
+                    //    }
+                    //    else
+                    //    {
+                    //        rowData[header] = string.Empty;
+                    //        Debug.LogWarning("Изображение не найдено!");
+                    //    }
+                    //}
                     else
                     {
                         try
@@ -78,7 +84,11 @@ public static class ExcelReader
         return sheetData;
     }
 
-    // Метод достает из нужной клетки изображение и возвращает его массив байтов
+    /// <summary>
+    /// Метод достает из нужной клетки изображение и возвращает его массив байтов
+    /// </summary>
+    /// <param name="cell">Клетка</param>
+    /// <returns>Массив байтов изображения</returns>
     private static byte[] GetPictureFromCell(XSSFCell cell)
     {
         XSSFSheet sheet = cell.Sheet as XSSFSheet;
