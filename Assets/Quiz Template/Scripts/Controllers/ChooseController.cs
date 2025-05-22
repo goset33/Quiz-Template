@@ -36,6 +36,11 @@ public class ChooseController : MonoBehaviour
         }
     }
 
+    public void BackInMenu()
+    {
+        gameManager.ReturnToMenu(transform);
+    }
+
     // Все что ниже - устарело
 
     //private void OnDisable()

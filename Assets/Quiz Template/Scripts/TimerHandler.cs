@@ -77,6 +77,31 @@ public class TimerHandler : MonoBehaviour
     }
 
     /// <summary>
+    /// Ставит и снимает время с паузы
+    /// </summary>
+    public void PauseTime()
+    {
+        isRunning = !isRunning;
+        if (!isRunning)
+        {
+            if (routine != null)
+            {
+                StopCoroutine(routine);
+                routine = null;
+            }
+        }
+        else if (time != 0f)
+        {
+            if (routine != null)
+            {
+                StopCoroutine(routine);
+            }
+
+            routine = StartCoroutine(TimerCoroutine());
+        }
+    }
+
+    /// <summary>
     /// Восстанавливает время на таймере
     /// </summary>
     /// <param name="addingTime">Время, которое нужно восстановить</param>
@@ -100,7 +125,7 @@ public class TimerHandler : MonoBehaviour
     /// </summary>
     IEnumerator TimerCoroutine()
     {
-        while (time > 0 && isRunning)
+        while (time > 0f && isRunning)
         {
             yield return waitFor;
             time -= 1f;

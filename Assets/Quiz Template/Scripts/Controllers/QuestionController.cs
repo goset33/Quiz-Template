@@ -21,7 +21,7 @@ public class QuestionController : MonoBehaviour
     private List<GameObject> choosedSequence = new(); // ’ранит кнопки в последовательности нажати€
     private GameObject[] rightSequence = new GameObject[0]; // ’ранит кнопки в правильной последовательности
 
-    private int hardness;
+    private int hardness; // 0 - FTUE, дальше как обычно
     private int[] questionsHardness = null; // ћассив, равный количеству вопросов и показывающий уровень сложности каждого вопроса
     private int reviveCount = 2;
     private bool isAnswerShowed = false;
@@ -44,7 +44,7 @@ public class QuestionController : MonoBehaviour
 
     [Header("Locales")]
     [SerializeField] private LocalizedString[] backInMenuLocales;
-    [SerializeField] private LocalizedString[] showAnswerLocales, lackOfLivesLocales, outOfTimeLocales;
+    [SerializeField] private LocalizedString[] showAnswerLocales, lackOfLivesLocales, outOfTimeLocales, getHintLocales;
 
     private async void OnEnable()
     {
@@ -233,16 +233,12 @@ public class QuestionController : MonoBehaviour
 
         Image pressedButtonImage = answersParent.GetChild(index).GetComponent<Image>();
         bool isRight = index == rightIndex;
-        if (isRight)
-        {
-            pressedButtonImage.sprite = gameManager.questionConfig.rightAnswerSprite;
-            pressedButtonImage.color = gameManager.questionConfig.rightButtonColor;
-        }
-        else
-        {
-            pressedButtonImage.sprite = gameManager.questionConfig.wrongAnswerSprite;
-            pressedButtonImage.color = gameManager.questionConfig.wrongButtonColor;
-        }
+        var sprite = isRight ? gameManager.questionConfig.rightAnswerSprite : gameManager.questionConfig.wrongAnswerSprite;
+        var color = isRight ? gameManager.questionConfig.rightButtonColor : gameManager.questionConfig.wrongButtonColor;
+
+        if (sprite != null) pressedButtonImage.sprite = sprite;
+        pressedButtonImage.color = color;
+
         Answered(isRight);
     }
 
@@ -469,9 +465,23 @@ public class QuestionController : MonoBehaviour
         }
     }
 
-    public void GetHint()
+    public void GetHintPressed()
     {
-        YG2.RewardedAdvShow("2", ShowRightAnswer);
+        if (hardness == 4) return;
+
+        timerHandler.PauseTime();
+        gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, getHintLocales));
+        TimelessController.OnButtonPressed += GetHint;
+    }
+
+    private void GetHint(int pressedIndex)
+    {
+        TimelessController.OnButtonPressed -= GetHint;
+        timerHandler.PauseTime();
+        if (pressedIndex == 1)
+        {
+            YG2.RewardedAdvShow("2", ShowRightAnswer);
+        }
     }
 
     /// <summary>
@@ -500,6 +510,7 @@ public class QuestionController : MonoBehaviour
 
     public void MenuButtonPressed()
     {
+        timerHandler.PauseTime();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
         TimelessController.OnButtonPressed += BackToMenu;
     }
@@ -507,6 +518,7 @@ public class QuestionController : MonoBehaviour
     private void BackToMenu(int pressedIndex)
     {
         TimelessController.OnButtonPressed -= BackToMenu;
+        timerHandler.PauseTime();
         if (pressedIndex == 1)
         {
             gameManager.ReturnToMenu(transform);

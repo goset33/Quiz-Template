@@ -139,6 +139,10 @@ MonoBehaviour:
     m_Key: OUT_OF_TIME_TEXT
     m_Metadata:
       m_Items: []
+  - m_Id: 38393992596508672
+    m_Key: GET_HINT_TEXT
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

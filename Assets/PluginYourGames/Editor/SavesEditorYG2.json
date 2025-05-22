@@ -7,13 +7,13 @@
     false,
     false
   ],
-  "idSave": 50,
+  "idSave": 108,
   "quizCards": [
     {
       "cardId": "Minecraft",
-      "level": 2,
-      "maxExp": 60,
-      "exp": 11
+      "level": 4,
+      "maxExp": 120,
+      "exp": 120
     },
     {
       "cardId": "Minecraft v2",
@@ -76,7 +76,7 @@
     "Genshin Impact",
     "Honkai Star Rail"
   ],
-  "cash": 40,
+  "cash": 70,
   "isFirstQuiz": false,
   "isMusicPlaying": false
 }
