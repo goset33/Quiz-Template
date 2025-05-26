@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     // Идея: Сейчас переменные используются только для переключения окон. В целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
     [Header("Controllers")]
+    [SerializeField] private LoadController loadController;
     [SerializeField] private TimelessController timelessController;
     [SerializeField] private MenuController menuController;
     [SerializeField] private ChooseController chooseController;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
         MenuController.GameStarted += GetIntoGame;
         QuizCardSetter.QuizChoosed += OnQuizChoosed;
         //HardnessController.LevelChoosed += OnLevelChoosed;
+        QuestionController.AllReady += OnQuestionsLoaded;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
         YG2.onGetSDKData += InitializeAndLoadLevelProgress;
@@ -134,6 +136,8 @@ public class GameManager : MonoBehaviour
         {
             LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[1];
         }
+
+        loadController.EndLoad();
     }
 
     private void OnDisable()
@@ -143,6 +147,7 @@ public class GameManager : MonoBehaviour
         MenuController.GameStarted -= GetIntoGame;
         QuizCardSetter.QuizChoosed -= OnQuizChoosed;
         //HardnessController.LevelChoosed -= OnLevelChoosed;
+        QuestionController.AllReady -= OnQuestionsLoaded;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
 
         YG2.onGetSDKData -= InitializeAndLoadLevelProgress;
@@ -235,6 +240,11 @@ public class GameManager : MonoBehaviour
         YG2.SaveProgress();
     }
 
+    private void OnQuestionsLoaded()
+    {
+        loadController.EndLoad();
+    }
+
     // --- Функции переходов между экранами ---
 
     public void ReturnToMenu(Transform currentController)
@@ -253,8 +263,10 @@ public class GameManager : MonoBehaviour
     private void OnQuizChoosed(QuizCard obj)
     {
         chosenQuiz = obj;
-        chooseController.transform.parent.gameObject.SetActive(false);
-        questionController.transform.parent.gameObject.SetActive(true);
+        loadController.StartLoad(() => {
+            chooseController.transform.parent.gameObject.SetActive(false);
+            questionController.transform.parent.gameObject.SetActive(true);
+        });
     }
 
     //private void OnLevelChoosed(int obj)

@@ -418,6 +418,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &546684712 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+  m_PrefabInstance: {fileID: 1204606688197532896}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1064075431
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,6 +513,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96cff68d3c124604eb7e3808efb29e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1565484896 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 646849024967607483, guid: d4569614114129241a5d73eac6af032e, type: 3}
+  m_PrefabInstance: {fileID: 1204606688197532896}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21bc02d81be203b4f85b4617620cad28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &1204606688197532896
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 536.68854
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 981.3546
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13.071655
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6566915092755082275, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6715787820826534746, guid: d4569614114129241a5d73eac6af032e, type: 3}
+      propertyPath: m_Name
+      value: Load Screen
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d4569614114129241a5d73eac6af032e, type: 3}
 --- !u!1001 &2944852322419329620
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -839,6 +912,14 @@ PrefabInstance:
       value: Game Manager
       objectReference: {fileID: 0}
     - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: loadWindow
+      value: 
+      objectReference: {fileID: 546684712}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: loadController
+      value: 
+      objectReference: {fileID: 1565484896}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: menuController
       value: 
       objectReference: {fileID: 1167432317}
@@ -914,6 +995,7 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1064075434}
   - {fileID: 9203003413255269356}
+  - {fileID: 1204606688197532896}
   - {fileID: 4401157391292245614}
   - {fileID: 2944852322419329620}
   - {fileID: 4014841469000195462}

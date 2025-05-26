@@ -15,7 +15,7 @@ public class QuestionController : MonoBehaviour
 {
     public static GameManager gameManager;
     public static event Action<int, int, bool> QuestionsEnded;
-    public static event Action NextQuestionLoaded, WrongAnswer;
+    public static event Action AllReady, NextQuestionLoaded, WrongAnswer;
 
     private int rightIndex;
     private List<GameObject> choosedSequence = new(); // Хранит кнопки в последовательности нажатия
@@ -115,6 +115,7 @@ public class QuestionController : MonoBehaviour
         //cards = MixQuestions(cards);
 
         LoadNextQuestion(cards[currentQuestion - 1]);
+        AllReady?.Invoke();
     }
 
     /// <summary>

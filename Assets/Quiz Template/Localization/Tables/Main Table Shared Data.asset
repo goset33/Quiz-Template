@@ -143,6 +143,10 @@ MonoBehaviour:
     m_Key: GET_HINT_TEXT
     m_Metadata:
       m_Items: []
+  - m_Id: 39024527610040320
+    m_Key: LOAD_SCREEN_TEXT
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
