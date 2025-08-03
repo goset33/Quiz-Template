@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96cff68d3c124604eb7e3808efb29e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicButton: {fileID: 7668685254531583410}
+  musicButton: {fileID: 6310990668771924657}
   musicSprites:
   - {fileID: -84883030, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}
   - {fileID: 1330254848, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}
@@ -401,7 +401,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6fcc687f440516b499d9e64b42b14a62, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1

@@ -9,7 +9,7 @@ using YG;
 public class TimelessController : MonoBehaviour
 {
     [Header("Music Settings")]
-    [SerializeField] private GameObject musicButton;
+    [SerializeField] private Button musicButton;
     [SerializeField] private Sprite[] musicSprites = new Sprite[2];
 
     [Space]
@@ -18,17 +18,13 @@ public class TimelessController : MonoBehaviour
 
     public static event Action<int> OnButtonPressed;
 
+    private AudioSource audioSource;
+    private Image buttonImage;
+
     private void Awake()
     {
-        if (!YG2.saves.isMusicPlaying)
-        {
-            GetComponent<AudioSource>().Stop();
-            musicButton.GetComponent<Image>().sprite = musicSprites[0];
-        }
-        else
-        {
-            musicButton.GetComponent<Image>().sprite = musicSprites[1];
-        }
+        audioSource = GetComponent<AudioSource>();
+        buttonImage = musicButton.GetComponent<Image>();
     }
 
     /// <summary>
@@ -36,22 +32,31 @@ public class TimelessController : MonoBehaviour
     /// </summary>
     public void MusicButtonPressed()
     {
-        AudioSource audioSource = GetComponent<AudioSource>();
-        if (audioSource.isPlaying && YG2.saves.isMusicPlaying)
-        {
-            YG2.saves.isMusicPlaying = false;
+        YG2.saves.isMusicPlaying = !YG2.saves.isMusicPlaying;
+        UpdateMusicState();
+    }
 
-            audioSource.Stop();
-            musicButton.GetComponent<Image>().sprite = musicSprites[0];
+    /// <summary>
+    /// Обновляет состояние проигрывания музыки в соответствии с сохранением
+    /// </summary>
+    public void UpdateMusicState()
+    {
+        if (audioSource == null || buttonImage == null) return;
+
+        bool shouldPlay = YG2.saves.isMusicPlaying;
+
+        if (shouldPlay)
+        {
+            if (!audioSource.isPlaying)
+                audioSource.Play();
+            buttonImage.sprite = musicSprites[1]; // включено
         }
         else
         {
-            YG2.saves.isMusicPlaying = true;
-
-            audioSource.Play();
-            musicButton.GetComponent<Image>().sprite = musicSprites[1];
+            if (audioSource.isPlaying)
+                audioSource.Stop();
+            buttonImage.sprite = musicSprites[0]; // выключено
         }
-        YG2.SaveProgress();
     }
 
     /// <summary>
@@ -84,12 +89,18 @@ public class TimelessController : MonoBehaviour
         OnButtonPressed?.Invoke(index);
     }
 
+    /// <summary>
+    /// Создает всплывающий текст-уведомление
+    /// </summary>
+    /// <param name="localizedString">Локализованная строка текста, который будет показан</param>
     public void CreateNotification(LocalizedString localizedString)
     {
         DOTween.Kill(0);
+
         notificationText.GetComponent<TextMeshProUGUI>().text = localizedString.GetLocalizedString();
         notificationText.position = new Vector2(Screen.width / 2f, Screen.height / 2.5f);
         notificationText.GetComponent<TextMeshProUGUI>().color = Color.white;
+
         DOTween.Sequence()
             .Append(notificationText.DOAnchorPosY(notificationText.position.y + 1f, 2f))
             .Join(notificationText.GetComponent<TextMeshProUGUI>().DOFade(0f, 2f))

@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 
+[Serializable]
 public class DoubleInt
 {
     public int first;
@@ -40,17 +40,22 @@ public class DoubleInt
         return HashCode.Combine(first, second);
     }
 
-    public float GetAsFloat()
-    {
-        return first + (second / Mathf.Pow(10f, second.ToString().Length));
-    }
-
-    public string GetAsString(string separator) 
+    public string ToString(string separator)
     {
         return $"{first}{separator}{second}";
     }
 
-    public (int, int) GetAsTuple()
+    public float ToFloat()
+    {
+        return (float) ToDouble();
+    }
+
+    public double ToDouble()
+    {
+        return first + (second / Math.Pow(10f, second.ToString().Length));
+    }
+
+    public (int, int) ToTuple()
     {
         return new Tuple<int, int>(first, second).ToValueTuple();
     }

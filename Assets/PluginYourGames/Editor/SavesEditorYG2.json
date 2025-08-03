@@ -7,7 +7,7 @@
     false,
     false
   ],
-  "idSave": 108,
+  "idSave": 112,
   "quizCards": [
     {
       "cardId": "Minecraft",
@@ -19,7 +19,7 @@
       "cardId": "Minecraft v2",
       "level": 1,
       "maxExp": 30,
-      "exp": 0
+      "exp": 10
     },
     {
       "cardId": "Terraria",
@@ -78,5 +78,5 @@
   ],
   "cash": 70,
   "isFirstQuiz": false,
-  "isMusicPlaying": false
+  "isMusicPlaying": true
 }

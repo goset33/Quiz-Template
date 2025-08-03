@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         // Место для дебаг строк
+
         // Удалить потом обязательно
 
         // Настройка локализации
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
         YG2.onGetSDKData += InitializeAndLoadLevelProgress;
+        YG2.onGetSDKData += timelessController.UpdateMusicState;
 
         // Настройка квизов в окне выбора квизов
         if (YG2.saves.otherCards == null || YG2.saves.otherCards.Length != quizzes.Count)

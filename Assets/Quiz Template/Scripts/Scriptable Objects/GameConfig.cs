@@ -7,7 +7,7 @@ public class GameConfig : ScriptableObject
     public Sprite cashSprite, expSprite;
 
     [Space]
-    public int[] harndessHeartCount = { 3, 2, 1, 1 };
+    public int[] harndessHeartCount = { 3, 2, 1, 1 }; //  оличество стартовых сердец дл€ каждого из уровней сложности
     public float questionTimer = 180f, questionExtraTime = 50f; // ¬ секундах
     public int[][] questionsHardness = new int[][]
     {

@@ -12,7 +12,7 @@ public class MenuController : MonoBehaviour
         GameStarted?.Invoke();
     }
 
-    public void OnlineButtonPressed()
+    public void SettingsButtonPressed()
     {
 
     }
@@ -22,7 +22,7 @@ public class MenuController : MonoBehaviour
 
     }
 
-    public void SettingsButtonPressed()
+    public void LeaderboardButtonPressed()
     {
 
     }

@@ -41,7 +41,7 @@ public class ChooseController : MonoBehaviour
         gameManager.ReturnToMenu(transform);
     }
 
-    // Все что ниже - устарело
+    // --- Все что ниже - устарело ---
 
     //private void OnDisable()
     //{
