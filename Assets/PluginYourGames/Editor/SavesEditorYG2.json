@@ -7,7 +7,7 @@
     false,
     false
   ],
-  "idSave": 112,
+  "idSave": 145,
   "quizCards": [
     {
       "cardId": "Minecraft",
@@ -19,7 +19,7 @@
       "cardId": "Minecraft v2",
       "level": 1,
       "maxExp": 30,
-      "exp": 10
+      "exp": 17
     },
     {
       "cardId": "Terraria",
@@ -76,7 +76,7 @@
     "Genshin Impact",
     "Honkai Star Rail"
   ],
-  "cash": 70,
+  "cash": 83,
   "isFirstQuiz": false,
-  "isMusicPlaying": true
+  "isMusicPlaying": false
 }

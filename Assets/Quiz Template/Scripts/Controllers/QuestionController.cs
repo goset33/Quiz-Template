@@ -19,21 +19,24 @@ public class QuestionController : MonoBehaviour
     private List<GameObject> choosedSequence = new(); // Хранит кнопки в последовательности нажатия
     private GameObject[] rightSequence = new GameObject[0]; // Хранит кнопки в правильной последовательности
 
-    private int hardness; // 0 - FTUE, дальше как обычно
+    private int quizHardness; // 0 - FTUE, дальше как обычно
     private int[] questionsHardness = null; // Массив, равный количеству вопросов и показывающий уровень сложности каждого вопроса
+    private int QuestionDiffucult => questionsHardness[currentQuestion - 1];
+
+    private readonly Color[] difficultColors = new Color[4] { Color.green, Color.yellow, Color.red, new(105f, 0f, 198f) };
     private int reviveCount = 2;
     private bool isAnswerShowed = false;
     private List<IQuestion> cards = new();
 
-    public int currentQuestion;
+    public int currentQuestion; // Хранит текущий номер вопроса НАЧИНАЯ С 1. (В коде требуется отнимать 1)
     public int rightAnswers;
     public bool isWinning = true;
     [SerializeField] private GameObject loseCounterPrefab;
 
     [Space]
     [SerializeField] private GameObject showRightButton;
-    [SerializeField] private GameObject nextButton;
-    [SerializeField] private TextMeshProUGUI questionText, counterText;
+    [SerializeField] private GameObject nextButton, hintCross;
+    [SerializeField] private TextMeshProUGUI difficultText, questionText, counterText;
     [SerializeField] private HeartContainer heartContainer;
     [SerializeField] private TimerHandler timerHandler;
     //[SerializeField] private Image imageField;
@@ -41,18 +44,20 @@ public class QuestionController : MonoBehaviour
     [SerializeField] private GameObject answerButtonPrefab;
 
     [Header("Locales")]
-    [SerializeField] private LocalizedString[] backInMenuLocales;
-    [SerializeField] private LocalizedString[] showAnswerLocales, lackOfLivesLocales, outOfTimeLocales, getHintLocales;
+    [SerializeField] private LocalizedString[] difficultiesLocales;
+    [SerializeField] private LocalizedString[] backInMenuLocales, showAnswerLocales, lackOfLivesLocales, outOfTimeLocales, getHintLocales;
 
     private async void OnEnable()
     {
         TimerHandler.OnTimeEnd += OnTimeEnd;
+        YG2.onErrorRewardedAdv += OnAdError;
         await Init(gameManager.chosenQuiz);
     }
 
     private void OnDisable()
     {
         TimerHandler.OnTimeEnd -= OnTimeEnd;
+        YG2.onErrorRewardedAdv -= OnAdError;
     }
 
     /// <summary>
@@ -61,9 +66,9 @@ public class QuestionController : MonoBehaviour
     /// <param name="quizCard">Сам экземпляр квиза</param>
     private async Task Init(QuizCard quizCard)
     {
-        hardness = gameManager.GetQuizHardness();
+        quizHardness = gameManager.GetQuizHardness();
 
-        if (hardness == 0) YG2.saves.isFirstQuiz = false;
+        if (quizHardness == 0) YG2.saves.isFirstQuiz = false;
 
         QuestionContainer container = quizCard.testContainer;
         if (container == null)
@@ -80,21 +85,21 @@ public class QuestionController : MonoBehaviour
             allPool = MixQuestions(allPool);
         }
 
-        int lookupIndex = (hardness != 0) ? (hardness - 1) : hardness;
+        int lookupIndex = (quizHardness != 0) ? (quizHardness - 1) : quizHardness;
 
         int amount = quizCard.questionsAmount[lookupIndex];
         cards = amount == 0 ? allPool : new List<IQuestion>(allPool.Take(amount));
 
-        int[] difficulties = gameManager.config.questionsHardness[hardness];
+        int[] difficulties = gameManager.config.questionsHardness[quizHardness];
         difficulties.MultiplyArray(Mathf.RoundToInt(quizCard.questionsAmount[lookupIndex] / 10f));
         questionsHardness = difficulties.SelectMany((x, i) => Enumerable.Repeat(i, x)).OrderBy(_ => Random.value).Take(cards.Count).ToArray();
 
-        timerHandler.gameObject.SetActive(hardness > 1);
-        if (hardness > 1)
+        timerHandler.gameObject.SetActive(quizHardness > 1);
+        if (quizHardness > 1)
         {
             float T = gameManager.config.questionTimer;
-            float time = hardness == 2 ? T : (hardness == 3 ? T / 2f : T / 10f);
-            bool isGlobal = hardness < 4;
+            float time = quizHardness == 2 ? T : (quizHardness == 3 ? T / 2f : T / 10f);
+            bool isGlobal = quizHardness < 4;
 
             timerHandler.InitializeTime(time, isGlobal);
         }
@@ -180,13 +185,25 @@ public class QuestionController : MonoBehaviour
     /// <param name="card">Карточка вопроса</param>
     private void LoadNextQuestion(IQuestion card)
     {
+        if (!isWinning)
+        {
+            Finish();
+            return;
+        }
+
+        difficultText.text = difficultiesLocales[QuestionDiffucult].GetLocalizedString();
+        difficultText.color = difficultColors[QuestionDiffucult];
         questionText.text = card.QuestionText;
         //imageField.sprite = card.Image;
         counterText.text = $"{currentQuestion}/{cards.Count}";
+        if (QuestionDiffucult == 3)
+        {
+            hintCross.SetActive(true);
+        }
 
         if (card is MainTypeQuestion question)
         {
-            var wrongs = question.WrongAnswers.OrderBy(_ => Random.value).Take(Mathf.Min(questionsHardness[currentQuestion - 1] + 1, 3)).ToList(); // Неправильные ответы рандомно
+            var wrongs = question.WrongAnswers.OrderBy(_ => Random.value).Take(Mathf.Min(QuestionDiffucult + 1, 3)).ToList(); // Неправильные ответы рандомно
             List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Все рандомные варианты ответов
             for (int i = 0; i < allAnswers.Count; i++)
             {
@@ -205,9 +222,9 @@ public class QuestionController : MonoBehaviour
         else if (card is CounterQuestion)
         {
             choosedSequence.Clear();
-            rightSequence = new GameObject[hardness + 2];
+            rightSequence = new GameObject[quizHardness + 2];
 
-            List<string> answers = new(card.AllAnswers.Take(Mathf.Min(questionsHardness[currentQuestion - 1] + 2, 4)));
+            List<string> answers = new(card.AllAnswers.Take(Mathf.Min(QuestionDiffucult + 2, 4)));
             List<string> randomizedAnswers = answers.OrderBy(_ => Random.value).ToList();
             for (int i = 0; i < randomizedAnswers.Count; i++)
             {
@@ -366,8 +383,16 @@ public class QuestionController : MonoBehaviour
 
     private void OnTimeEnd()
     {
-        gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, loseCounterPrefab, outOfTimeLocales));
-        TimelessController.OnButtonPressed += TimeEndButtonPressed;
+        if (reviveCount < 2)
+        {
+            reviveCount++;
+            gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, loseCounterPrefab, outOfTimeLocales));
+            TimelessController.OnButtonPressed += TimeEndButtonPressed;
+        }
+        else
+        {
+            isWinning = false;
+        }
     }
 
     private void TimeEndButtonPressed(int buttonIndex)
@@ -380,7 +405,7 @@ public class QuestionController : MonoBehaviour
         else if (buttonIndex == 1)
         {
             float T = gameManager.config.questionExtraTime;
-            float time = hardness == 2 ? T : (hardness == 3 ? T / 2f : T / 10f);
+            float time = quizHardness == 2 ? T : (quizHardness == 3 ? T / 2f : T / 10f);
             YG2.RewardedAdvShow("3", () => timerHandler.RestoreSomeTime(time));
         }
     }
@@ -466,7 +491,7 @@ public class QuestionController : MonoBehaviour
 
     public void GetHintPressed()
     {
-        if (hardness == 4) return;
+        if (QuestionDiffucult == 3 || isAnswerShowed) return;
 
         timerHandler.PauseTime();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, getHintLocales));
@@ -491,6 +516,7 @@ public class QuestionController : MonoBehaviour
         isAnswerShowed = false;
         nextButton.SetActive(false);
         showRightButton.SetActive(false);
+        hintCross.SetActive(false);
         for (int i = 0; i < answersParent.childCount; i++)
         {
             Destroy(answersParent.GetChild(i).gameObject);
@@ -505,6 +531,15 @@ public class QuestionController : MonoBehaviour
         //if (isWinning) gameManager.IncrementQuizHardness();
 
         QuestionsEnded?.Invoke(rightAnswers, cards.Count, isWinning);
+    }
+
+    private void OnAdError(string id)
+    {
+        if (id == "0" || id == "3")
+        {
+            reviveCount--;
+            isWinning = false;
+        }
     }
 
     public void MenuButtonPressed()

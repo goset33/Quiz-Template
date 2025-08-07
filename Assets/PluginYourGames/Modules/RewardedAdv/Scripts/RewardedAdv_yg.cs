@@ -9,7 +9,7 @@ namespace YG
         public static Action onOpenRewardedAdv;
         public static Action onCloseRewardedAdv;
         public static Action<string> onRewardAdv;
-        public static Action onErrorRewardedAdv;
+        public static Action<string> onErrorRewardedAdv;
 
 #if UNITY_EDITOR
         [InitYG]
@@ -141,7 +141,7 @@ namespace YG.Insides
         public static void ErrorRewardedAdv()
         {
             rewardCallback = null;
-            YG2.onErrorRewardedAdv?.Invoke();
+            YG2.onErrorRewardedAdv?.Invoke(currentRewardID);
             YG2.onErrorAnyAdv?.Invoke();
         }
     }

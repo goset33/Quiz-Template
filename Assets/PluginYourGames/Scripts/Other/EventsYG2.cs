@@ -176,7 +176,7 @@ namespace YG
         private void OnOpenRewardedAdv() => Execute(EventYG2Type.OpenRewardedAdv);
         private void OnCloseRewaededAdv() => Execute(EventYG2Type.CloseRewaededAdv);
         private void OnRewardAdv(string id) => Execute(EventYG2Type.RewardAdv);
-        private void OnErrorRewardedAdv() => Execute(EventYG2Type.ErrorRewardedAdv);
+        private void OnErrorRewardedAdv(string id) => Execute(EventYG2Type.ErrorRewardedAdv);
 #endif
 #if StickyAdv_yg
         public void _StickyAdActivity(bool activity) => YG2.StickyAdActivity(activity);

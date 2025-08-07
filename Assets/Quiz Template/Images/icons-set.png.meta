@@ -186,13 +186,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: heart-empty
+      name: cross
       rect:
         serializedVersion: 2
-        x: 0
-        y: 60
-        width: 450
-        height: 452
+        x: 102
+        y: 252
+        width: 240
+        height: 240
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -239,8 +239,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       circle: -1432347809
+      cross: 1726322859
       heart: -1657406386
-      heart-empty: -417139573
       icons-set_2: 235536961
       icons-set_5: -375865959
       icons-set_7: 193116089

@@ -35,7 +35,7 @@ MonoBehaviour:
   Storage:
     saveLocal: 0
     saveCloud: 1
-    saveCloudInterval: 2
+    saveCloudInterval: 5
     flush: 0
   Basic:
     platform: {fileID: 11400000, guid: c2a303d33a9fd394bae4c4b88b9a1c44, type: 2}
