@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b25d6b1e707c9fd4a92d80b101e3fadc, type: 3}
   m_Name: Brawl Stars
   m_EditorClassIdentifier: 
-  questionsAmount: 190000001e0000002800000000000000
+  questionsAmount: 0a0000000a0000000a0000000a000000
   names:
   - Brawl Stars
   - "\u0411\u0440\u0430\u0432\u043B \u0421\u0442\u0430\u0440\u0441"
+  - "\u0411\u0430\u0431\u043B \u041A\u0432\u0430\u0441"
   - "\u0431\u0441"
   - bs
-  image: {fileID: 21300000, guid: c60960be098fd5143ad568c7bb2694d6, type: 3}
+  image: {fileID: 21300000, guid: 89af33dff0990be49938e4c9b66699ce, type: 3}
   testContainer: {fileID: 11400000, guid: e63405f1c2439a347b58e44144849b7a, type: 2}

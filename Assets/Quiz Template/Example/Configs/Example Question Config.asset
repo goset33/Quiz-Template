@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427b70f3829b75c409efa5343fa793cd, type: 3}
   m_Name: Example Question Config
   m_EditorClassIdentifier: 
-  wrongAnswerSprite: {fileID: 1280288063, guid: eaf96e44a9d39284bb2f4c6ce32e3ce4, type: 3}
-  wrongButtonColor: {r: 1, g: 0.4509804, b: 0.4509804, a: 1}
-  rightAnswerSprite: {fileID: 1097208736, guid: eaf96e44a9d39284bb2f4c6ce32e3ce4, type: 3}
-  rightButtonColor: {r: 0.34117648, g: 1, b: 0.10980392, a: 1}
+  wrongAnswerSprite: {fileID: 0}
+  wrongButtonColor: {r: 0.9529412, g: 0.32156864, b: 0.38431373, a: 1}
+  rightAnswerSprite: {fileID: 0}
+  rightButtonColor: {r: 0, g: 1, b: 0.11764706, a: 1}

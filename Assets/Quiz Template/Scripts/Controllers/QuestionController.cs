@@ -142,40 +142,6 @@ public class QuestionController : MonoBehaviour
             questions[j] = temp;
         }
 
-        // Поиск что нужно заменить и замена
-        for (int i = 0; i < n; i++)
-        {
-            IQuestion current = questions[i];
-            IQuestion prev = i > 0 ? questions[i - 1] : null;
-            IQuestion next = i < n - 1 ? questions[i + 1] : null;
-
-            if (current.GetType() == typeof(MainTypeQuestion)) continue;
-
-            if (prev != null && prev.GetType() == current.GetType() ||
-                next != null && next.GetType() == current.GetType())
-            {
-                bool replaced = false;
-                for (int j = 0; j < n && !replaced; j++)
-                {
-                    IQuestion replaceable = questions[j];
-                    IQuestion prev1 = j > 0 ? questions[j - 1] : null;
-                    IQuestion next1 = j < n - 1 ? questions[j + 1] : null;
-
-                    if ((prev1 == null || prev1.GetType() != current.GetType())
-                        && (next1 == null || next1.GetType() != current.GetType()))
-                    {
-                        questions[j] = current;
-                        questions[i] = replaceable;
-                        replaced = true;
-                    }
-                }
-                if (!replaced)
-                {
-                    Debug.LogWarning($"Не удалось заменить вопрос {current} на позиции {i}");
-                }
-            }
-        }
-
         return questions;
     }
 
@@ -215,7 +181,9 @@ public class QuestionController : MonoBehaviour
                 if (allAnswers[i] == question.RightAnswer)
                 {
                     rightIndex = i;
+#if UNITY_EDITOR
                     print("Right index: " + i);
+#endif
                 }
             }
         }
@@ -242,7 +210,10 @@ public class QuestionController : MonoBehaviour
         NextQuestionLoaded?.Invoke();
     }
 
-    // Обработка нажатия кнопки при вопросе типов 1, 2
+    /// <summary>
+    /// Обработка нажатия кнопки при вопросе типов 1, 2
+    /// </summary>
+    /// <param name="index">Индекс кнопки</param>
     private void DefaultAnswer(int index)
     {
         if (nextButton.activeSelf) return;
@@ -258,7 +229,10 @@ public class QuestionController : MonoBehaviour
         Answered(isRight);
     }
 
-    // Обработка нажатия кнопки при вопросе типа 3
+    /// <summary>
+    /// Обработка нажатия кнопки при вопросе типа 3
+    /// </summary>
+    /// <param name="pressedButton">Экземпляр нажатой кнопки</param>
     private void CountAnswer(GameObject pressedButton)
     {
         if (nextButton.activeSelf) return;
@@ -298,7 +272,10 @@ public class QuestionController : MonoBehaviour
         }
     }
 
-    // Метод обновляет индексы на кнопках для типа 3
+    /// <summary>
+    /// Метод обновляет индексы на кнопках для типа 3
+    /// </summary>
+    /// <param name="changingButton">Экземпляр нажатой кнопки</param>
     private void UpdateButtonIndexes(GameObject changingButton)
     {
         if (changingButton != null)
@@ -357,7 +334,6 @@ public class QuestionController : MonoBehaviour
                 else
                 {
                     isWinning = false;
-                    currentQuestion = cards.Count;
                 }
             }
 
@@ -465,13 +441,16 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Метод показывает правильный ответ на вопрос
+    /// </summary>
     private void ShowRightAnswer()
     {
         isAnswerShowed = true;
         if (cards[currentQuestion - 1] is MainTypeQuestion)
         {
             Image rightButton = answersParent.GetChild(rightIndex).GetComponent<Image>();
-            rightButton.sprite = gameManager.questionConfig.rightAnswerSprite;
+            rightButton.sprite = gameManager.questionConfig.rightAnswerSprite != null ? gameManager.questionConfig.rightAnswerSprite : rightButton.sprite;
             rightButton.color = gameManager.questionConfig.rightButtonColor;
         }
         else if (cards[currentQuestion - 1] is CounterQuestion)
@@ -480,9 +459,8 @@ public class QuestionController : MonoBehaviour
 
             for (int i = 0; i < choosedSequence.Count; i++)
             {
-
                 Image button = answersParent.GetChild(i).GetComponent<Image>();
-                button.sprite = gameManager.questionConfig.rightAnswerSprite;
+                button.sprite = gameManager.questionConfig.rightAnswerSprite != null ? gameManager.questionConfig.rightAnswerSprite : button.sprite;
                 button.color = gameManager.questionConfig.rightButtonColor;
             }
             UpdateButtonIndexes(null);
@@ -533,6 +511,10 @@ public class QuestionController : MonoBehaviour
         QuestionsEnded?.Invoke(rightAnswers, cards.Count, isWinning);
     }
 
+    /// <summary>
+    /// Обрабатывает ошибки в показе рекламы за вознаграждение
+    /// </summary>
+    /// <param name="id">ID показанной рекламы</param>
     private void OnAdError(string id)
     {
         if (id == "0" || id == "3")

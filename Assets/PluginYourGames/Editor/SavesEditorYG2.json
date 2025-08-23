@@ -7,7 +7,7 @@
     false,
     false
   ],
-  "idSave": 145,
+  "idSave": 448,
   "quizCards": [
     {
       "cardId": "Minecraft",
@@ -19,7 +19,7 @@
       "cardId": "Minecraft v2",
       "level": 1,
       "maxExp": 30,
-      "exp": 17
+      "exp": 19
     },
     {
       "cardId": "Terraria",
@@ -29,9 +29,9 @@
     },
     {
       "cardId": "Brawl Stars",
-      "level": 1,
-      "maxExp": 30,
-      "exp": 0
+      "level": 2,
+      "maxExp": 60,
+      "exp": 17
     },
     {
       "cardId": "Clash Royale",
@@ -62,21 +62,22 @@
       "level": 1,
       "maxExp": 30,
       "exp": 0
+    },
+    {
+      "cardId": "Fortnite",
+      "level": 1,
+      "maxExp": 30,
+      "exp": 0
     }
   ],
   "favoriteCards": [],
   "otherCards": [
     "Minecraft",
-    "Minecraft v2",
-    "Terraria",
     "Brawl Stars",
-    "Clash Royale",
-    "Counter Strike 2",
-    "Valorant",
     "Genshin Impact",
-    "Honkai Star Rail"
+    "Fortnite"
   ],
-  "cash": 83,
+  "cash": 137,
   "isFirstQuiz": false,
   "isMusicPlaying": false
 }

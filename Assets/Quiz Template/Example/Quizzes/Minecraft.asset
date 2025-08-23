@@ -17,5 +17,5 @@ MonoBehaviour:
   - Minecraft
   - "\u041C\u0430\u0439\u043D\u043A\u0440\u0430\u0444\u0442"
   - "\u041C\u0430\u0439\u043D\u043A\u0440\u0443\u0444\u0442"
-  image: {fileID: 21300000, guid: 309dc7b3547411d469f36dea7a817753, type: 3}
+  image: {fileID: 21300000, guid: 995cecafac8b7be4295965eb711691cf, type: 3}
   testContainer: {fileID: 11400000, guid: 8d6730277aca0024abd75d8fcb66e8d0, type: 2}

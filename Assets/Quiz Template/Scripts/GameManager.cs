@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -82,6 +83,7 @@ public class GameManager : MonoBehaviour
     public void InitializeAndLoadLevelProgress()
     {
         YG2.onGetSDKData -= InitializeAndLoadLevelProgress;
+        StartCoroutine(SaveCoroutine());
 
         quizCardLevelProgress.Clear();
         YG2.saves.quizCards ??= new List<QuizCardSaveData>();
@@ -169,10 +171,19 @@ public class GameManager : MonoBehaviour
         {
             YG2.saves.quizCards.Add(saveData);
         }
-        YG2.SaveProgress();
     }
 
     public GameState GetGameState() { return state; }
+
+    IEnumerator SaveCoroutine()
+    {
+        YieldInstruction waiter = new WaitForSeconds(5f);
+        while (true)
+        {
+            YG2.SaveProgress();
+            yield return waiter;
+        }
+    }
 
     public static bool HaveEnoughCash(int cost)
     {
@@ -188,7 +199,6 @@ public class GameManager : MonoBehaviour
         if (!HaveEnoughCash(cost)) return;
 
         YG2.saves.cash += cost;
-        YG2.SaveProgress();
     }
 
     public void AddExperience(int amount)
@@ -239,7 +249,6 @@ public class GameManager : MonoBehaviour
             YG2.saves.otherCards[originalIndex] = name;
             YG2.saves.favoriteCards.Remove(name);
         }
-        YG2.SaveProgress();
     }
 
     private void OnQuestionsLoaded()

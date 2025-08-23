@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c76c304adbf541243a0d83466b471c2a
+guid: 45c3cb2c9cbe5b34681c2e5b7bcaf6a3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -96,13 +96,13 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
-    resizeAlgorithm: 1
-    textureFormat: 12
+    resizeAlgorithm: 0
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
-    overridden: 1
+    overridden: 0
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -110,7 +110,7 @@ TextureImporter:
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 50
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: button set_0
+      name: base small ui_0
       rect:
         serializedVersion: 2
-        x: 54
-        y: 951
-        width: 244
-        height: 233
+        x: 72
+        y: 472
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b2323efdada5b264799ef7cd25104873
-      internalID: -404806404
+      spriteID: 6387fb822c4932b4abae0c3c6dcb7314
+      internalID: -736379224
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_1
+      name: base small ui_1
       rect:
         serializedVersion: 2
-        x: 337
-        y: 951
-        width: 244
-        height: 233
+        x: 175
+        y: 472
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,20 +158,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 398bead9e435f8e4faabfc2dc189f7b3
-      internalID: 1179911902
+      spriteID: 8e523c1ca81f77b4f9926ee070de0873
+      internalID: 2054112902
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_2
+      name: base small ui_2
       rect:
         serializedVersion: 2
-        x: 620
-        y: 951
-        width: 244
-        height: 233
+        x: 277
+        y: 472
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,20 +179,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 01a8a43490bb218419fbd05d903e7c01
-      internalID: 400857613
+      spriteID: 138e733d85a1f484790d35958cc8d53f
+      internalID: 1777337910
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_3
+      name: base small ui_3
       rect:
         serializedVersion: 2
-        x: 903
-        y: 951
-        width: 244
-        height: 233
+        x: 380
+        y: 472
+        width: 73
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a8cc5d621d2fcf47b85c25c69113f69
-      internalID: 1630068598
+      spriteID: f235c2461f57571458fd8c1743d82711
+      internalID: -1805251817
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_4
+      name: base small ui_4
       rect:
         serializedVersion: 2
-        x: 54
-        y: 718
-        width: 244
-        height: 233
+        x: 482
+        y: 472
+        width: 73
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,20 +221,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 403bca66c15a2714ba7bf9f5060dd98a
-      internalID: 597326247
+      spriteID: 78b5bd8ca6ef6cf49b1c1e3d144f6e51
+      internalID: 1141497141
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_5
+      name: base small ui_5
       rect:
         serializedVersion: 2
-        x: 337
-        y: 718
-        width: 244
-        height: 233
+        x: 73
+        y: 359
+        width: 73
+        height: 76
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -242,20 +242,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 82448061707169148be730b5f0ba2f0d
-      internalID: 946141232
+      spriteID: f5bd43e807ec7694ba1e6d5d755fc5b0
+      internalID: 937525675
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_6
+      name: base small ui_6
       rect:
         serializedVersion: 2
-        x: 620
-        y: 718
-        width: 244
-        height: 233
+        x: 175
+        y: 359
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -263,20 +263,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 34bf2a886693d1043885ad380fe11821
-      internalID: -1309303354
+      spriteID: 3b2ce00b5f696d448bf1ff310767de7e
+      internalID: -1462904022
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_7
+      name: base small ui_7
       rect:
         serializedVersion: 2
-        x: 903
-        y: 718
-        width: 244
-        height: 233
+        x: 277
+        y: 359
+        width: 74
+        height: 76
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -284,20 +284,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47349e55d82521644b07dcb006ed4c33
-      internalID: 1570887181
+      spriteID: dfbf265b54be6b742a87c49c7c768af5
+      internalID: -1030801999
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_8
+      name: base small ui_8
       rect:
         serializedVersion: 2
-        x: 54
-        y: 485
-        width: 244
-        height: 233
+        x: 380
+        y: 359
+        width: 73
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -305,20 +305,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1bae2e5138d3d61409a0ec542435a56a
-      internalID: -793900612
+      spriteID: 0666f4fb9c6e6274f8284483b09fe391
+      internalID: -420283303
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_9
+      name: base small ui_9
       rect:
         serializedVersion: 2
-        x: 337
-        y: 485
-        width: 244
-        height: 233
+        x: 482
+        y: 359
+        width: 74
+        height: 76
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -326,20 +326,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b0abd1d7b3b72064e89aa3e9ec868a84
-      internalID: -2085722388
+      spriteID: 33dfb6731514f5d40a83ca50fdd016e2
+      internalID: -849714807
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_10
+      name: base small ui_10
       rect:
         serializedVersion: 2
-        x: 620
-        y: 485
-        width: 244
-        height: 233
+        x: 72
+        y: 246
+        width: 74
+        height: 76
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -347,20 +347,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9266f26bb7d8da340b984fa2a2675ac0
-      internalID: 329256772
+      spriteID: 64d0abba20558e9428c6d4cb30b6eef5
+      internalID: -2100589307
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_11
+      name: base small ui_11
       rect:
         serializedVersion: 2
-        x: 903
-        y: 485
-        width: 244
-        height: 233
+        x: 175
+        y: 246
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -368,20 +368,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0d06e6a98dc8755418f6461d691a34df
-      internalID: 1763033091
+      spriteID: a4db2926acf38934fbd7bb7c9615f868
+      internalID: -1013782782
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_12
+      name: base small ui_12
       rect:
         serializedVersion: 2
-        x: 54
-        y: 252
-        width: 244
-        height: 233
+        x: 277
+        y: 246
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -389,20 +389,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f3abbaeb6ae17b948908dc7af68bafeb
-      internalID: 155794074
+      spriteID: a530dba8e874a824fb5e00377af052ae
+      internalID: 1459938192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_13
+      name: base small ui_13
       rect:
         serializedVersion: 2
-        x: 337
-        y: 252
-        width: 244
-        height: 233
+        x: 380
+        y: 246
+        width: 73
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -410,20 +410,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5e554596f3cda5a49a5862b2d39f0f60
-      internalID: -1388681506
+      spriteID: cb8cbdfaa2e841a43bb61b63ce60edfa
+      internalID: 207465813
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_14
+      name: base small ui_14
       rect:
         serializedVersion: 2
-        x: 620
-        y: 252
-        width: 244
-        height: 233
+        x: 482
+        y: 246
+        width: 74
+        height: 76
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -431,20 +431,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f2be2a0010c8ffd4cb94cba27eefc9b2
-      internalID: 184764905
+      spriteID: a1689d1d389d27a4eadff93f02af4fc4
+      internalID: -1665475145
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_15
+      name: base small ui_15
       rect:
         serializedVersion: 2
-        x: 903
-        y: 252
-        width: 244
-        height: 233
+        x: 72
+        y: 132
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -452,20 +452,104 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f2a8739ec99d91409855cbe7df47ed6
-      internalID: 996711721
+      spriteID: dad3d0535a53cf246b1a5b088c8d9729
+      internalID: 1611728394
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_16
+      name: base small ui_16
       rect:
         serializedVersion: 2
-        x: 54
+        x: 175
+        y: 132
+        width: 74
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c68d66c93f3175942bb266f7e6ba8acd
+      internalID: -736628141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: base small ui_17
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 132
+        width: 74
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0f6262a661e2ec48b3a6b6b407e0f1b
+      internalID: -1406327752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: base small ui_18
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 132
+        width: 74
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53100317afbad9947951ceeb3874d0f3
+      internalID: 491245819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: base small ui_19
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 132
+        width: 73
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f29d8da97278a5b44998514aef67dbe4
+      internalID: 266328606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: base small ui_20
+      rect:
+        serializedVersion: 2
+        x: 72
         y: 19
-        width: 244
-        height: 233
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -473,20 +557,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eff772acc80e4394fa5b1fb56dc867c5
-      internalID: -1714286017
+      spriteID: fde6871b97b3914418485833eceef415
+      internalID: -863021175
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_17
+      name: base small ui_21
       rect:
         serializedVersion: 2
-        x: 337
+        x: 175
         y: 19
-        width: 244
-        height: 233
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -494,20 +578,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 495b067931227544aac7a80a47f1ef75
-      internalID: -1036284551
+      spriteID: 43f45d28fbb70a64290d27139fc1f783
+      internalID: -572721008
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_18
+      name: base small ui_22
       rect:
         serializedVersion: 2
-        x: 620
+        x: 277
         y: 19
-        width: 244
-        height: 233
+        width: 74
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -515,20 +599,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4dcb4382adbecee4185e04b3d37f412f
-      internalID: 1600375270
+      spriteID: 8056b4c462a434549b0a6328cd352ff4
+      internalID: 484942431
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: button set_19
+      name: base small ui_23
       rect:
         serializedVersion: 2
-        x: 903
+        x: 380
         y: 19
-        width: 244
-        height: 233
+        width: 73
+        height: 77
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -536,8 +620,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 65c8d098b78e49743b3c0f2928105035
-      internalID: -1618637016
+      spriteID: 4dda3b3026aaa7a439d42f5a79f7317e
+      internalID: 1817972430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: base small ui_24
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 19
+        width: 74
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7aa3ecd971dc7b240ab3b5f5ee6e11e7
+      internalID: -620952254
       vertices: []
       indices: 
       edges: []
@@ -545,7 +650,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 1251cd285a96bcc429a6cc4f10df06a1
+    spriteID: fb6e62a6582d2ba498be2b971de848eb
     internalID: 0
     vertices: []
     indices: 
@@ -553,26 +658,31 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      button set_0: -404806404
-      button set_1: 1179911902
-      button set_10: 329256772
-      button set_11: 1763033091
-      button set_12: 155794074
-      button set_13: -1388681506
-      button set_14: 184764905
-      button set_15: 996711721
-      button set_16: -1714286017
-      button set_17: -1036284551
-      button set_18: 1600375270
-      button set_19: -1618637016
-      button set_2: 400857613
-      button set_3: 1630068598
-      button set_4: 597326247
-      button set_5: 946141232
-      button set_6: -1309303354
-      button set_7: 1570887181
-      button set_8: -793900612
-      button set_9: -2085722388
+      base small ui_0: -736379224
+      base small ui_1: 2054112902
+      base small ui_10: -2100589307
+      base small ui_11: -1013782782
+      base small ui_12: 1459938192
+      base small ui_13: 207465813
+      base small ui_14: -1665475145
+      base small ui_15: 1611728394
+      base small ui_16: -736628141
+      base small ui_17: -1406327752
+      base small ui_18: 491245819
+      base small ui_19: 266328606
+      base small ui_2: 1777337910
+      base small ui_20: -863021175
+      base small ui_21: -572721008
+      base small ui_22: 484942431
+      base small ui_23: 1817972430
+      base small ui_24: -620952254
+      base small ui_3: -1805251817
+      base small ui_4: 1141497141
+      base small ui_5: 937525675
+      base small ui_6: -1462904022
+      base small ui_7: -1030801999
+      base small ui_8: -420283303
+      base small ui_9: -849714807
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

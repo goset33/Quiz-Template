@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6e2c9713091bd02409c2dcf7e05a88bc
+guid: d81a3dd6433018541ad52e97ec7f2fd9
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -96,13 +96,13 @@ TextureImporter:
   - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
-    resizeAlgorithm: 1
-    textureFormat: 12
+    resizeAlgorithm: 0
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
-    overridden: 1
+    overridden: 0
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -110,7 +110,7 @@ TextureImporter:
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 50
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: buttons4_0
+      name: bazovie_0
       rect:
         serializedVersion: 2
-        x: 34
-        y: 377
-        width: 196
-        height: 76
+        x: 0
+        y: 423
+        width: 103
+        height: 104
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d032df22c2bfde941b5bbc3f35239542
-      internalID: -1190058525
+      spriteID: ba972db2145c7ed4ebe156040c0030a3
+      internalID: 380410312
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons4_1
+      name: bazovie_1
       rect:
         serializedVersion: 2
-        x: 269
-        y: 377
-        width: 196
-        height: 76
+        x: 151
+        y: 420
+        width: 94
+        height: 105
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,20 +158,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1ecd8b4789b3faa4ab0b4948359133a3
-      internalID: -1763696740
+      spriteID: 5a3a0cb5a749b0048ac71a42231744c5
+      internalID: -2080973767
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons4_2
+      name: bazovie_2
       rect:
         serializedVersion: 2
-        x: 33
-        y: 266
+        x: 291
+        y: 427
         width: 198
-        height: 78
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,20 +179,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 89ea597b739bc6e4babcb474118d54b5
-      internalID: -2118705319
+      spriteID: cd7b461493e129b4584918cf4454c68c
+      internalID: -1713402816
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons4_3
+      name: main
       rect:
         serializedVersion: 2
-        x: 268
-        y: 266
-        width: 197
-        height: 78
+        x: 9
+        y: 286
+        width: 290
+        height: 101
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69aa790f7acf18946ac8cfd0faf0794e
-      internalID: -1837412408
+      spriteID: 5a42ddc21e54a6043872128136df03ba
+      internalID: 1836928324
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons4_4
+      name: bazovie_4
       rect:
         serializedVersion: 2
-        x: 34
-        y: 156
-        width: 197
-        height: 77
+        x: 338
+        y: 292
+        width: 53
+        height: 91
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,20 +221,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9dc87176971721142bc5688bd1633e7a
-      internalID: -1511441285
+      spriteID: f18aa30132a750a46843b15f9596cef2
+      internalID: -1128192985
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons4_5
+      name: bazovie_5
       rect:
         serializedVersion: 2
-        x: 268
-        y: 156
-        width: 198
-        height: 77
+        x: 436
+        y: 287
+        width: 52
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -242,20 +242,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eac8f30196b8be1418e2fd299f088d77
-      internalID: -406884109
+      spriteID: d168bef0a59098d459880268aa3704bf
+      internalID: 820112768
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons4_6
+      name: bazovie_6
       rect:
         serializedVersion: 2
-        x: 34
-        y: 45
-        width: 196
-        height: 77
+        x: 7
+        y: 143
+        width: 486
+        height: 103
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -263,20 +263,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 73412bfdb18c702418e79cee09783479
-      internalID: -1302274995
+      spriteID: 7028a70277fe87f479ac65a13218db3b
+      internalID: 781957260
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: buttons4_7
+      name: bazovie_7
       rect:
         serializedVersion: 2
-        x: 269
-        y: 47
-        width: 196
-        height: 75
+        x: 10
+        y: 0
+        width: 179
+        height: 105
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -284,8 +284,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9a0b04f8f18c409488bac24a56e68621
-      internalID: -1048151065
+      spriteID: b3cafcc00bb02244d9632c0e4162e7fd
+      internalID: 1508733458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bazovie_8
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 1
+        width: 105
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7115bad87f1c5d41ac77163649370a7
+      internalID: 1291396545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bazovie_9
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 2
+        width: 96
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce7d6175605dde5438b786376819e653
+      internalID: -1117706373
       vertices: []
       indices: 
       edges: []
@@ -293,7 +335,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: b9b3e1c59c14c454c8829fd4f8167400
+    spriteID: ac9da9c8bddf1964baab3f0a7c305109
     internalID: 0
     vertices: []
     indices: 
@@ -301,14 +343,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      buttons4_0: -1190058525
-      buttons4_1: -1763696740
-      buttons4_2: -2118705319
-      buttons4_3: -1837412408
-      buttons4_4: -1511441285
-      buttons4_5: -406884109
-      buttons4_6: -1302274995
-      buttons4_7: -1048151065
+      bazovie_0: 380410312
+      bazovie_1: -2080973767
+      bazovie_2: -1713402816
+      bazovie_4: -1128192985
+      bazovie_5: 820112768
+      bazovie_6: 781957260
+      bazovie_7: 1508733458
+      bazovie_8: 1291396545
+      bazovie_9: -1117706373
+      main: 1836928324
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
