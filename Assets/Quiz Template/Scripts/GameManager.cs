@@ -8,6 +8,7 @@ using YG;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
     public static string Language => YG2.lang;
 
     public enum GameState
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LoadController loadController;
     [SerializeField] private TimelessController timelessController;
     [SerializeField] private MenuController menuController;
+    [SerializeField] private SettingsController settingsController;
     [SerializeField] private ChooseController chooseController;
     [SerializeField] private HardnessController hardnessController;
     [SerializeField] private QuestionController questionController;
@@ -53,21 +55,17 @@ public class GameManager : MonoBehaviour
         // Настройка локализации
         LocalizationSettings.InitializationOperation.Completed += LoadLocale;
 
-        // Присвоение контроллерам и подписки на ивенты
-        MenuController.gameManager = this;
-        ChooseController.gameManager = this;
-        //HardnessController.gameManager = this;
-        QuestionController.gameManager = this;
-        ResultController.gameManager = this;
+        // Присвоение инстанса и подписки на ивенты
+        Instance = this;
 
         MenuController.GameStarted += GetIntoGame;
+        MenuController.SettingsOpened += OpenSettings;
         QuizCardSetter.QuizChoosed += OnQuizChoosed;
         //HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.AllReady += OnQuestionsLoaded;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
-        YG2.onGetSDKData += InitializeAndLoadLevelProgress;
-        YG2.onGetSDKData += timelessController.UpdateMusicState;
+        YG2.onGetSDKData += AfterSDKInitializing;
 
         // Настройка квизов в окне выбора квизов
         if (YG2.saves.otherCards == null || YG2.saves.otherCards.Length != quizzes.Count)
@@ -77,14 +75,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Инициализирует словарь quizCardLevelProgress. Вызывается после инициализации GameReadyAPI
-    /// </summary>
-    public void InitializeAndLoadLevelProgress()
+    private void AfterSDKInitializing()
     {
-        YG2.onGetSDKData -= InitializeAndLoadLevelProgress;
+        YG2.onGetSDKData -= AfterSDKInitializing;
+
+        SoundManager.Instance.SetMusicVolume(YG2.saves.musicVolume);
+        SoundManager.Instance.SetVfxVolume(YG2.saves.vfxVolume);
+
         StartCoroutine(SaveCoroutine());
 
+        InitializeAndLoadLevelProgress();
+    }
+
+    /// <summary>
+    /// Инициализирует словарь quizCardLevelProgress
+    /// </summary>
+    private void InitializeAndLoadLevelProgress()
+    {
         quizCardLevelProgress.Clear();
         YG2.saves.quizCards ??= new List<QuizCardSaveData>();
 
@@ -148,7 +155,10 @@ public class GameManager : MonoBehaviour
     {
         AIRequestHandler.Dispose();
 
+        StopAllCoroutines();
+
         MenuController.GameStarted -= GetIntoGame;
+        MenuController.SettingsOpened -= OpenSettings;
         QuizCardSetter.QuizChoosed -= OnQuizChoosed;
         //HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.AllReady -= OnQuestionsLoaded;
@@ -265,10 +275,16 @@ public class GameManager : MonoBehaviour
         menuController.transform.parent.gameObject.SetActive(true);
     }
 
-    public void GetIntoGame()
+    private void GetIntoGame()
     {
         menuController.transform.parent.gameObject.SetActive(false);
         chooseController.transform.parent.gameObject.SetActive(true);
+    }
+
+    private void OpenSettings()
+    {
+        menuController.transform.parent.gameObject.SetActive(false);
+        settingsController.transform.parent.gameObject.SetActive(true);
     }
 
     private void OnQuizChoosed(QuizCard obj)

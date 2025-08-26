@@ -9,12 +9,10 @@ using YG;
 
 public class ResultController : MonoBehaviour
 {
-    public static GameManager gameManager;
-
     private IntVariable rightAnswersLocale, allAnswersLocale;
 
     [SerializeField] TextMeshProUGUI header, resultText;
-    [SerializeField] Transform addingObject;
+    [SerializeField] Transform cashObject, expObject;
     [SerializeField] GameObject rewardButton;
 
     public LocalizedString[] headerLocales;
@@ -24,6 +22,9 @@ public class ResultController : MonoBehaviour
         var source = LocalizationSettings.StringDatabase.SmartFormatter.GetSourceExtension<PersistentVariablesSource>();
         rightAnswersLocale = source["global"]["rightAnswers"] as IntVariable;
         allAnswersLocale = source["global"]["allAnswers"] as IntVariable;
+
+        expObject.GetComponentInChildren<Image>().sprite = GameManager.Instance.config.expSprite;
+        cashObject.GetComponentInChildren<Image>().sprite = GameManager.Instance.config.cashSprite;
     }
 
     public void Init(int rightAnswers, int allAnswers, bool isGood)
@@ -33,8 +34,10 @@ public class ResultController : MonoBehaviour
 
         rightAnswersLocale.Value = rightAnswers;
         allAnswersLocale.Value = allAnswers;
-        addingObject.GetComponentInChildren<Image>().sprite = gameManager.config.cashSprite;
-        addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * 2}";
+
+        expObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers}";
+
+        cashObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * 2}";
         GameManager.ChangeCash(rightAnswers);
     }
 
@@ -46,14 +49,19 @@ public class ResultController : MonoBehaviour
     private void MultiplyReward()
     {
         int rights = rightAnswersLocale.Value;
+
+        expObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 2}";
+        GameManager.Instance.AddExperience(rights);
+
+        cashObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 4}";
         GameManager.ChangeCash(rights * 2);
-        addingObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 4}";
+
         rewardButton.SetActive(false);
     }
 
     public void BackButtonPressed()
     {
         rewardButton.SetActive(true);
-        gameManager.ReturnToMenu(transform);
+        GameManager.Instance.ReturnToMenu(transform);
     }
 }

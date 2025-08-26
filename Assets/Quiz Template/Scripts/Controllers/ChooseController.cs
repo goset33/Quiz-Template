@@ -3,30 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using YG;
 
 public class ChooseController : MonoBehaviour
 {
-    public static GameManager gameManager;
-
     [SerializeField] private GameObject quizCardPrefab;
-    [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Transform cardsParent;
-    //public LevelHandler levelHandler;
+    [SerializeField] private TextMeshProUGUI cashCounter;
+    [SerializeField] private TMP_InputField inputField;
 
     private void OnEnable()
     {
         //inputField.onValueChanged.AddListener(RedrawOrder);
-        //levelHandler.UpdateLevelUI();
 
         OnGameStart();
     }
 
     private void OnGameStart()
     {
+        cashCounter.text = YG2.saves.cash.ToString();
+        Image image = cashCounter.GetComponentInChildren<Image>();
+        if (image.sprite == null)
+        {
+            image.sprite = GameManager.Instance.config.cashSprite;
+        }
+
         if (cardsParent.childCount != 0) return;
 
-        foreach (QuizCard content in gameManager.quizzes)
+        foreach (QuizCard content in GameManager.Instance.quizzes)
         {
             if (content == null) continue;
 
@@ -38,7 +43,7 @@ public class ChooseController : MonoBehaviour
 
     public void BackInMenu()
     {
-        gameManager.ReturnToMenu(transform);
+        GameManager.Instance.ReturnToMenu(transform);
     }
 
     // --- Все что ниже - устарело ---
@@ -67,7 +72,7 @@ public class ChooseController : MonoBehaviour
         else
         {
             string[] arr = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
-            order = arr.ConvertToCards(gameManager.quizzes);
+            order = arr.ConvertToCards(GameManager.Instance.quizzes);
         }
 
         OnGameStart();
@@ -77,7 +82,7 @@ public class ChooseController : MonoBehaviour
     private QuizCard[] SearchQuizzesByName(string name)
     {
         string[] arr = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
-        QuizCard[] allCards = arr.ConvertToCards(gameManager.quizzes);
+        QuizCard[] allCards = arr.ConvertToCards(GameManager.Instance.quizzes);
         List<QuizCard> result = new();
 
         foreach (QuizCard card in allCards)
@@ -93,7 +98,7 @@ public class ChooseController : MonoBehaviour
     [Obsolete]
     public void UpdateCardPos(QuizCard card)
     {
-        gameManager.SetAsFavorite(card);
+        GameManager.Instance.SetAsFavorite(card);
         RedrawOrder(null);
     }
 }

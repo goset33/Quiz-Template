@@ -11,7 +11,9 @@ namespace YG
 
         public int cash = 0;
 
+        public float musicVolume = 1f;
+        public float vfxVolume = 1f;
+
         public bool isFirstQuiz = true;
-        public bool isMusicPlaying = true;
     }
 }

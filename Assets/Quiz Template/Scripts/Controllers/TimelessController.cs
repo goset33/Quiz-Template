@@ -8,56 +8,10 @@ using YG;
 
 public class TimelessController : MonoBehaviour
 {
-    [Header("Music Settings")]
-    [SerializeField] private Button musicButton;
-    [SerializeField] private Sprite[] musicSprites = new Sprite[2];
-
-    [Space]
     [SerializeField] private RectTransform popupWindow;
     [SerializeField] private RectTransform notificationText;
 
-    public static event Action<int> OnButtonPressed;
-
-    private AudioSource audioSource;
-    private Image buttonImage;
-
-    private void Awake()
-    {
-        audioSource = GetComponent<AudioSource>();
-        buttonImage = musicButton.GetComponent<Image>();
-    }
-
-    /// <summary>
-    /// Функция для обработки нажатия кнопки включения/выключения музыки
-    /// </summary>
-    public void MusicButtonPressed()
-    {
-        YG2.saves.isMusicPlaying = !YG2.saves.isMusicPlaying;
-        UpdateMusicState();
-    }
-
-    /// <summary>
-    /// Обновляет состояние проигрывания музыки в соответствии с сохранением
-    /// </summary>
-    public void UpdateMusicState()
-    {
-        if (audioSource == null || buttonImage == null) return;
-
-        bool shouldPlay = YG2.saves.isMusicPlaying;
-
-        if (shouldPlay)
-        {
-            if (!audioSource.isPlaying)
-                audioSource.Play();
-            buttonImage.sprite = musicSprites[1]; // включено
-        }
-        else
-        {
-            if (audioSource.isPlaying)
-                audioSource.Stop();
-            buttonImage.sprite = musicSprites[0]; // выключено
-        }
-    }
+    public static event Action<int> OnPopupButtonPressed;
 
     /// <summary>
     /// Создает окно в соответствии с настройками
@@ -86,7 +40,7 @@ public class TimelessController : MonoBehaviour
     public void ButtonPressed(int index)
     {
         popupWindow.gameObject.SetActive(false);
-        OnButtonPressed?.Invoke(index);
+        OnPopupButtonPressed?.Invoke(index);
     }
 
     /// <summary>

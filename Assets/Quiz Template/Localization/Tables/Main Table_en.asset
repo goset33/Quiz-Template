@@ -101,7 +101,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 18907080118849536
-    m_Localized: Are you sure you want to see the right answer? It will cost 1 cash
+    m_Localized: Are you sure you want to see the right answer for watching an ad?
     m_Metadata:
       m_Items: []
   - m_Id: 19176446441902080
@@ -176,6 +176,23 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 66120659808899072
     m_Localized: Hard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73043144814972928
+    m_Localized: Are you sure you want to reset all your data? <font-weight="800">This
+      action cannot be undone!</font-weight>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73046752902074368
+    m_Localized: Reset all data
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73046787534442496
+    m_Localized: Music Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73046840000991232
+    m_Localized: Sound Effects Volume
     m_Metadata:
       m_Items: []
   references:

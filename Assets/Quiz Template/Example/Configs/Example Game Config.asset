@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Example Game Config
   m_EditorClassIdentifier: 
   cashSprite: {fileID: 21300000, guid: 492e2e7ddeed5f048a9a0a78fd942b93, type: 3}
-  expSprite: {fileID: -292921124, guid: 71258609f5e6feb4595243c1cb1e6359, type: 3}
+  expSprite: {fileID: -839562070, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}
   harndessHeartCount: 03000000020000000100000001000000
+  questionTimer: 180
+  questionExtraTime: 50
   notifyLocales:
   - m_TableReference:
       m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1

@@ -39,6 +39,8 @@ public class QuizCardSetter : MonoBehaviour
         this.controller = controller;
         imageComponent.sprite = cardContent.image;
 
+        SoundManager.Instance.AddUniqueSoundToButton(GetComponent<Button>(), 0);
+
         UpdateContent();
 
         //int index = GameManager.GetQuizHardness(cardContent);

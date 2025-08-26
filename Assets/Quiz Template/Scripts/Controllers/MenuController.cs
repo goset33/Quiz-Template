@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class MenuController : MonoBehaviour
 {
-    public static GameManager gameManager;
-
-    public static event Action GameStarted;
+    public static event Action GameStarted, SettingsOpened;
 
     public void PlayButtonPressed()
     {
@@ -14,7 +12,7 @@ public class MenuController : MonoBehaviour
 
     public void SettingsButtonPressed()
     {
-
+        SettingsOpened?.Invoke();
     }
 
     public void AchivementsButtonPressed()

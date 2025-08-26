@@ -7,46 +7,16 @@
     false,
     false
   ],
-  "idSave": 448,
+  "idSave": 388,
   "quizCards": [
     {
       "cardId": "Minecraft",
-      "level": 4,
-      "maxExp": 120,
-      "exp": 120
-    },
-    {
-      "cardId": "Minecraft v2",
-      "level": 1,
-      "maxExp": 30,
-      "exp": 19
-    },
-    {
-      "cardId": "Terraria",
       "level": 1,
       "maxExp": 30,
       "exp": 0
     },
     {
       "cardId": "Brawl Stars",
-      "level": 2,
-      "maxExp": 60,
-      "exp": 17
-    },
-    {
-      "cardId": "Clash Royale",
-      "level": 1,
-      "maxExp": 30,
-      "exp": 0
-    },
-    {
-      "cardId": "Counter Strike 2",
-      "level": 1,
-      "maxExp": 30,
-      "exp": 0
-    },
-    {
-      "cardId": "Valorant",
       "level": 1,
       "maxExp": 30,
       "exp": 0
@@ -55,13 +25,7 @@
       "cardId": "Genshin Impact",
       "level": 1,
       "maxExp": 30,
-      "exp": 0
-    },
-    {
-      "cardId": "Honkai Star Rail",
-      "level": 1,
-      "maxExp": 30,
-      "exp": 0
+      "exp": 9
     },
     {
       "cardId": "Fortnite",
@@ -77,7 +41,8 @@
     "Genshin Impact",
     "Fortnite"
   ],
-  "cash": 137,
-  "isFirstQuiz": false,
-  "isMusicPlaying": false
+  "cash": 0,
+  "musicVolume": 0.0410598554,
+  "vfxVolume": 0.637986243,
+  "isFirstQuiz": false
 }

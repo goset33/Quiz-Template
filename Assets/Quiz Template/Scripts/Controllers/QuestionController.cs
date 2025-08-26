@@ -11,7 +11,8 @@ using Random = UnityEngine.Random;
 
 public class QuestionController : MonoBehaviour
 {
-    public static GameManager gameManager;
+    private GameManager gameManager;
+
     public static event Action<int, int, bool> QuestionsEnded;
     public static event Action AllReady, NextQuestionLoaded, WrongAnswer;
 
@@ -46,6 +47,11 @@ public class QuestionController : MonoBehaviour
     [Header("Locales")]
     [SerializeField] private LocalizedString[] difficultiesLocales;
     [SerializeField] private LocalizedString[] backInMenuLocales, showAnswerLocales, lackOfLivesLocales, outOfTimeLocales, getHintLocales;
+
+    private void Awake()
+    {
+        gameManager = GameManager.Instance;
+    }
 
     private async void OnEnable()
     {
@@ -173,17 +179,23 @@ public class QuestionController : MonoBehaviour
             List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Все рандомные варианты ответов
             for (int i = 0; i < allAnswers.Count; i++)
             {
-                GameObject button = Instantiate(answerButtonPrefab, answersParent);
+                Button button = Instantiate(answerButtonPrefab, answersParent).GetComponent<Button>();
+
                 int index = i;
-                button.GetComponent<Button>().onClick.AddListener(() => DefaultAnswer(index));
+                button.onClick.AddListener(() => DefaultAnswer(index));
                 button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = allAnswers[i];
 
                 if (allAnswers[i] == question.RightAnswer)
                 {
                     rightIndex = i;
+                    SoundManager.Instance.AddUniqueSoundToButton(button, 1);
 #if UNITY_EDITOR
                     print("Right index: " + i);
 #endif
+                }
+                else
+                {
+                    SoundManager.Instance.AddUniqueSoundToButton(button, 2);
                 }
             }
         }
@@ -201,10 +213,6 @@ public class QuestionController : MonoBehaviour
                 rightSequence[answers.IndexOf(randomizedAnswers[i])] = button;
                 button.GetComponent<Button>().onClick.AddListener(() => CountAnswer(button));
             }
-        }
-        else if (card is ConnectQuestion)
-        {
-
         }
 
         NextQuestionLoaded?.Invoke();
@@ -323,13 +331,19 @@ public class QuestionController : MonoBehaviour
         {
             WrongAnswer?.Invoke();
             heartContainer.TakeOneDamage();
+
+            foreach (Button button in answersParent.GetComponentsInChildren<Button>())
+            {
+                button.onClick.RemoveAllListeners();
+            }
+
             if (heartContainer.HeartCount == 0)
             {
                 if (reviveCount < 2)
                 {
                     reviveCount++;
                     gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, loseCounterPrefab, lackOfLivesLocales));
-                    TimelessController.OnButtonPressed += WhenDeathButtonPressed;
+                    TimelessController.OnPopupButtonPressed += WhenDeathButtonPressed;
                 }
                 else
                 {
@@ -345,7 +359,7 @@ public class QuestionController : MonoBehaviour
 
     private void WhenDeathButtonPressed(int buttonIndex)
     {
-        TimelessController.OnButtonPressed -= WhenDeathButtonPressed;
+        TimelessController.OnPopupButtonPressed -= WhenDeathButtonPressed;
         if (buttonIndex == 0)
         {
             isWinning = false;
@@ -363,7 +377,7 @@ public class QuestionController : MonoBehaviour
         {
             reviveCount++;
             gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, loseCounterPrefab, outOfTimeLocales));
-            TimelessController.OnButtonPressed += TimeEndButtonPressed;
+            TimelessController.OnPopupButtonPressed += TimeEndButtonPressed;
         }
         else
         {
@@ -394,13 +408,19 @@ public class QuestionController : MonoBehaviour
         ClearScreen();
         YG2.InterstitialAdvShow();
 
+        if (YG2.envir.payload == "~AdminPanel~-Shift+Tab"
 #if UNITY_EDITOR
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab))
-        {
-            currentQuestion = cards.Count;
-            gameManager.AddExperience(currentQuestion);
-        }
+            || true
 #endif
+           )
+        {
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.Tab))
+            {
+                currentQuestion = cards.Count;
+                gameManager.AddExperience(currentQuestion);
+            }
+        }
+
 
         if (currentQuestion != cards.Count) // Если вопрос был не последний
         {
@@ -413,32 +433,12 @@ public class QuestionController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Показывает правильный ответ за валюту
-    /// </summary>
-    /// <param name="buttonIndex">0 = нет, 1 = да</param>
-    public void BuyRightAnswerButtonPressed()
+    public void TellRightAnswerPressed()
     {
         if (isAnswerShowed) return;
 
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales));
-        TimelessController.OnButtonPressed += BuyRightAnswer;
-    }
-
-    private void BuyRightAnswer(int pressedIndex)
-    {
-        TimelessController.OnButtonPressed -= BuyRightAnswer;
-        if (pressedIndex != 1) return;
-
-        if (GameManager.HaveEnoughCash(-1))
-        {
-            GameManager.ChangeCash(-1);
-            ShowRightAnswer();
-        }
-        else
-        {
-            gameManager.InvokeNotification(0);
-        }
+        TimelessController.OnPopupButtonPressed += GetHint;
     }
 
     /// <summary>
@@ -467,18 +467,21 @@ public class QuestionController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Метод вызывается при нажатии кнопки подсказки
+    /// </summary>
     public void GetHintPressed()
     {
         if (QuestionDiffucult == 3 || isAnswerShowed) return;
 
         timerHandler.PauseTime();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, getHintLocales));
-        TimelessController.OnButtonPressed += GetHint;
+        TimelessController.OnPopupButtonPressed += GetHint;
     }
 
     private void GetHint(int pressedIndex)
     {
-        TimelessController.OnButtonPressed -= GetHint;
+        TimelessController.OnPopupButtonPressed -= GetHint;
         timerHandler.PauseTime();
         if (pressedIndex == 1)
         {
@@ -528,12 +531,12 @@ public class QuestionController : MonoBehaviour
     {
         timerHandler.PauseTime();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
-        TimelessController.OnButtonPressed += BackToMenu;
+        TimelessController.OnPopupButtonPressed += BackToMenu;
     }
 
     private void BackToMenu(int pressedIndex)
     {
-        TimelessController.OnButtonPressed -= BackToMenu;
+        TimelessController.OnPopupButtonPressed -= BackToMenu;
         timerHandler.PauseTime();
         if (pressedIndex == 1)
         {
