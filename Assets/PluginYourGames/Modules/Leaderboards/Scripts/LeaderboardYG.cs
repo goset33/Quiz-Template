@@ -71,7 +71,7 @@ namespace YG
 #endif
         public int decimalSize = 1;
 
-        public UnityEvent onUpdateData;
+        public UnityEvent<LBData> onUpdateData;
 
         private LBPlayerDataYG[] players = new LBPlayerDataYG[0];
 
@@ -184,7 +184,7 @@ namespace YG
                     SpawnPlayersList(lbData);
                 }
             }
-            onUpdateData?.Invoke();
+            onUpdateData?.Invoke(lbData);
         }
 
         private void DestroyLBList()

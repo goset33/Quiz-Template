@@ -163,20 +163,28 @@ MonoBehaviour:
     m_Key: BOSS_DIFFICULT
     m_Metadata:
       m_Items: []
-  - m_Id: 73043144814972928
-    m_Key: RESET_DATA_TEXT
-    m_Metadata:
-      m_Items: []
-  - m_Id: 73046752902074368
-    m_Key: RESET_DATA_BUTTON
-    m_Metadata:
-      m_Items: []
   - m_Id: 73046787534442496
     m_Key: MUSIC_VOLUME_TEXT
     m_Metadata:
       m_Items: []
   - m_Id: 73046840000991232
     m_Key: VFX_VOLUME_TEXT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73397275295567872
+    m_Key: NAME_OF_PLAYER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73397913609916416
+    m_Key: SCORE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73398932909674496
+    m_Key: NUMBER_OF_STARS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73405258087878656
+    m_Key: YOU
     m_Metadata:
       m_Items: []
   m_Metadata:

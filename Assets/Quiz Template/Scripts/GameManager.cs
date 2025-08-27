@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TimelessController timelessController;
     [SerializeField] private MenuController menuController;
     [SerializeField] private SettingsController settingsController;
+    [SerializeField] private LeaderboardController leaderboardController;
     [SerializeField] private ChooseController chooseController;
     [SerializeField] private HardnessController hardnessController;
     [SerializeField] private QuestionController questionController;
@@ -60,12 +61,14 @@ public class GameManager : MonoBehaviour
 
         MenuController.GameStarted += GetIntoGame;
         MenuController.SettingsOpened += OpenSettings;
+        MenuController.LeaderboardOpened += OpenLeaderboard;
         QuizCardSetter.QuizChoosed += OnQuizChoosed;
         //HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.AllReady += OnQuestionsLoaded;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
         YG2.onGetSDKData += AfterSDKInitializing;
+        YG2.onGetLeaderboard += leaderboardController.OnLeaderboardInitialized;
 
         // Настройка квизов в окне выбора квизов
         if (YG2.saves.otherCards == null || YG2.saves.otherCards.Length != quizzes.Count)
@@ -165,6 +168,7 @@ public class GameManager : MonoBehaviour
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
 
         YG2.onGetSDKData -= InitializeAndLoadLevelProgress;
+        YG2.onGetLeaderboard -= leaderboardController.OnLeaderboardInitialized;
         if (LocalizationSettings.Instance != null)
         {
             LocalizationSettings.InitializationOperation.Completed -= LoadLocale;
@@ -191,6 +195,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             YG2.SaveProgress();
+            YG2.SetLeaderboard("Stars", YG2.saves.cash);
             yield return waiter;
         }
     }
@@ -285,6 +290,12 @@ public class GameManager : MonoBehaviour
     {
         menuController.transform.parent.gameObject.SetActive(false);
         settingsController.transform.parent.gameObject.SetActive(true);
+    }
+
+    private void OpenLeaderboard()
+    {
+        menuController.transform.parent.gameObject.SetActive(false);
+        leaderboardController.transform.parent.gameObject.SetActive(true);
     }
 
     private void OnQuizChoosed(QuizCard obj)

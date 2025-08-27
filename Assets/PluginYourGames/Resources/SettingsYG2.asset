@@ -159,7 +159,7 @@ MonoBehaviour:
         name: Masha
         score: 90
         photo: demo image
-        uniqueID: 321
+        uniqueID: 985
         extraData: 
       - rank: 3
         name: anonymous
@@ -177,7 +177,7 @@ MonoBehaviour:
         name: Player current
         score: 60
         photo: demo image
-        uniqueID: 000
+        uniqueID: 176
         extraData: 
       - rank: 6
         name: Player 6
@@ -209,9 +209,249 @@ MonoBehaviour:
         photo: demo image
         uniqueID: 330
         extraData: 
+      - rank: 10
+        name: Player2
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 11
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 7777
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 7
+        name: P
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
+      - rank: 666
+        name: Pla 10
+        score: 10
+        photo: demo image
+        uniqueID: 330
+        extraData: 
       currentPlayer:
-        rank: 5
-        score: 60
+        rank: 454
+        score: 1
         extraData: 
   Localization:
     setLanguageMod: 1

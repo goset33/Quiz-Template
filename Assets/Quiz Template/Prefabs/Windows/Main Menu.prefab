@@ -1470,7 +1470,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4410684683006218340}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: OnlineButtonPressed
+        m_MethodName: LeaderboardButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

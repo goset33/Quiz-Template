@@ -11,7 +11,6 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip[] sounds;
 
     private AudioSource audioSource;
-    private readonly WaitForSeconds waiter = new WaitForSeconds(1f);
 
     void Awake()
     {
@@ -64,6 +63,7 @@ public class SoundManager : MonoBehaviour
 
     IEnumerator PitchChanger()
     {
+        YieldInstruction waiter = new WaitForSeconds(1f);
         while (true)
         {
             audioSource.pitch = Random.Range(0.7f, 1.3f);

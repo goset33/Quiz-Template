@@ -178,13 +178,12 @@ MonoBehaviour:
     m_Localized: Hard
     m_Metadata:
       m_Items: []
-  - m_Id: 73043144814972928
-    m_Localized: Are you sure you want to reset all your data? <font-weight="800">This
-      action cannot be undone!</font-weight>
+  - m_Id: 73397275295567872
+    m_Localized: Player Name
     m_Metadata:
       m_Items: []
-  - m_Id: 73046752902074368
-    m_Localized: Reset all data
+  - m_Id: 73397913609916416
+    m_Localized: Score
     m_Metadata:
       m_Items: []
   - m_Id: 73046787534442496
@@ -193,6 +192,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 73046840000991232
     m_Localized: Sound Effects Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73398932909674496
+    m_Localized: Number Of Stars
+    m_Metadata:
+      m_Items: []
+  - m_Id: 73405258087878656
+    m_Localized: You
     m_Metadata:
       m_Items: []
   references:
