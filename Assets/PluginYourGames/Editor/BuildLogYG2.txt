@@ -1,0 +1,3 @@
+Build path: E:/Unity/Builds/Quiz Template WEB
+Build number: 2
+PluginYG version: 2.005

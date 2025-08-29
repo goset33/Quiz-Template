@@ -975,6 +975,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 446334165}
     - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: settingsController
       value: 
       objectReference: {fileID: 915706983}
@@ -986,6 +990,22 @@ PrefabInstance:
       propertyPath: leaderboardController
       value: 
       objectReference: {fileID: 2126245535}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: fdde859cde5875048a2b2d5c4f016022, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: e07f4283738343d4596a1facdc5ce7a8, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: c3f78037d1def5b43b677345afbf074c, type: 2}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1e50a54bcf80dab499138c7a0ec7a154, type: 2}
     - target: {fileID: 4150746042448487324, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 374.29892

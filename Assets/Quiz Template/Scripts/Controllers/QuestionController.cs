@@ -13,7 +13,7 @@ public class QuestionController : MonoBehaviour
 {
     private GameManager gameManager;
 
-    public static event Action<int, int, bool> QuestionsEnded;
+    public static event Action<int, int, int, bool> QuestionsEnded;
     public static event Action AllReady, NextQuestionLoaded, WrongAnswer;
 
     private int rightIndex;
@@ -22,7 +22,7 @@ public class QuestionController : MonoBehaviour
 
     private int quizHardness; // 0 - FTUE, дальше как обычно
     private int[] questionsHardness = null; // Массив, равный количеству вопросов и показывающий уровень сложности каждого вопроса
-    private int QuestionDiffucult => questionsHardness[currentQuestion - 1];
+    private int QuestionDifficult => questionsHardness[currentQuestion - 1];
 
     private readonly Color[] difficultColors = new Color[4] { Color.green, Color.yellow, Color.red, new(105f, 0f, 198f) };
     private int reviveCount = 2;
@@ -123,6 +123,9 @@ public class QuestionController : MonoBehaviour
         //cards = AIAnswerParser.ParseJsonAnswer(json);
         //cards = MixQuestions(cards);
 
+        Dictionary<string, object> data = new() { { "Имя квиза", gameManager.chosenQuiz.GetName() }, { "Уровень сложности квиза", quizHardness } };
+        YG2.MetricaSend("QuizStart", data);
+
         LoadNextQuestion(cards[currentQuestion - 1]);
         AllReady?.Invoke();
     }
@@ -163,19 +166,19 @@ public class QuestionController : MonoBehaviour
             return;
         }
 
-        difficultText.text = difficultiesLocales[QuestionDiffucult].GetLocalizedString();
-        difficultText.color = difficultColors[QuestionDiffucult];
+        difficultText.text = difficultiesLocales[QuestionDifficult].GetLocalizedString();
+        difficultText.color = difficultColors[QuestionDifficult];
         questionText.text = card.QuestionText;
         //imageField.sprite = card.Image;
         counterText.text = $"{currentQuestion}/{cards.Count}";
-        if (QuestionDiffucult == 3)
+        if (QuestionDifficult == 3)
         {
             hintCross.SetActive(true);
         }
 
         if (card is MainTypeQuestion question)
         {
-            var wrongs = question.WrongAnswers.OrderBy(_ => Random.value).Take(Mathf.Min(QuestionDiffucult + 1, 3)).ToList(); // Неправильные ответы рандомно
+            var wrongs = question.WrongAnswers.OrderBy(_ => Random.value).Take(Mathf.Min(QuestionDifficult + 1, 3)).ToList(); // Неправильные ответы рандомно
             List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); // Все рандомные варианты ответов
             for (int i = 0; i < allAnswers.Count; i++)
             {
@@ -204,7 +207,7 @@ public class QuestionController : MonoBehaviour
             choosedSequence.Clear();
             rightSequence = new GameObject[quizHardness + 2];
 
-            List<string> answers = new(card.AllAnswers.Take(Mathf.Min(QuestionDiffucult + 2, 4)));
+            List<string> answers = new(card.AllAnswers.Take(Mathf.Min(QuestionDifficult + 2, 4)));
             List<string> randomizedAnswers = answers.OrderBy(_ => Random.value).ToList();
             for (int i = 0; i < randomizedAnswers.Count; i++)
             {
@@ -319,6 +322,9 @@ public class QuestionController : MonoBehaviour
     /// <param name="isRight">Был ли ответ верным</param>
     private void Answered(bool isRight)
     {
+        Dictionary<string, object> data = new() { { "Правильный ответ?", isRight }, { "Уровень сложности вопроса", QuestionDifficult }, { "Текст вопроса", cards[currentQuestion - 1].QuestionText } };
+        YG2.MetricaSend("GivesAnswer", data);
+
         if (isRight)
         {
             rightAnswers++;
@@ -433,14 +439,6 @@ public class QuestionController : MonoBehaviour
         }
     }
 
-    public void TellRightAnswerPressed()
-    {
-        if (isAnswerShowed) return;
-
-        gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales));
-        TimelessController.OnPopupButtonPressed += GetHint;
-    }
-
     /// <summary>
     /// Метод показывает правильный ответ на вопрос
     /// </summary>
@@ -468,11 +466,43 @@ public class QuestionController : MonoBehaviour
     }
 
     /// <summary>
+    /// Метод вызывается при нажатии кнопки показа правильного ответа
+    /// </summary>
+    public void TellRightAnswerPressed()
+    {
+        if (isAnswerShowed) return;
+
+        gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales));
+        TimelessController.OnPopupButtonPressed += GetAnswerTold;
+    }
+
+    private void GetAnswerTold(int pressedIndex)
+    {
+        TimelessController.OnPopupButtonPressed -= GetAnswerTold;
+        timerHandler.PauseTime();
+        if (pressedIndex == 1)
+        {
+            YG2.RewardedAdvShow("4", ShowAnswerTold);
+        }
+    }
+
+    private void ShowAnswerTold()
+    {
+        Dictionary<string, object> data = new() { 
+            { "Имя квиза", gameManager.chosenQuiz.GetName() }, 
+            { "Уровень сложности квиза", quizHardness }, 
+            { "Уровень сложности вопроса", QuestionDifficult },
+            { "Текст вопроса", cards[currentQuestion - 1].QuestionText } };
+        YG2.MetricaSend("AnswerTold", data);
+        ShowRightAnswer();
+    }
+
+    /// <summary>
     /// Метод вызывается при нажатии кнопки подсказки
     /// </summary>
     public void GetHintPressed()
     {
-        if (QuestionDiffucult == 3 || isAnswerShowed) return;
+        if (QuestionDifficult == 3 || isAnswerShowed) return;
 
         timerHandler.PauseTime();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, getHintLocales));
@@ -485,8 +515,19 @@ public class QuestionController : MonoBehaviour
         timerHandler.PauseTime();
         if (pressedIndex == 1)
         {
-            YG2.RewardedAdvShow("2", ShowRightAnswer);
+            YG2.RewardedAdvShow("2", ShowHintAnswer);
         }
+    }
+
+    private void ShowHintAnswer()
+    {
+        Dictionary<string, object> data = new() { 
+            { "Имя квиза", gameManager.chosenQuiz.GetName() }, 
+            { "Уровень сложности квиза", quizHardness }, 
+            { "Уровень сложности вопроса", QuestionDifficult },
+            { "Текст вопроса", cards[currentQuestion - 1].QuestionText }};
+        YG2.MetricaSend("HintUsed", data);
+        ShowRightAnswer();
     }
 
     /// <summary>
@@ -511,7 +552,7 @@ public class QuestionController : MonoBehaviour
     {
         //if (isWinning) gameManager.IncrementQuizHardness();
 
-        QuestionsEnded?.Invoke(rightAnswers, cards.Count, isWinning);
+        QuestionsEnded?.Invoke(rightAnswers, cards.Count, reviveCount, isWinning);
     }
 
     /// <summary>
@@ -540,6 +581,15 @@ public class QuestionController : MonoBehaviour
         timerHandler.PauseTime();
         if (pressedIndex == 1)
         {
+            Dictionary<string, object> data = new() { 
+                { "Имя квиза", gameManager.chosenQuiz.GetName() }, 
+                { "Уровень сложности квиза", quizHardness }, 
+                { "Номер последнего вопроса", currentQuestion },    
+                { "Сложность последнего вопроса", QuestionDifficult },
+                { "Текст последнего вопроса", cards[currentQuestion - 1].QuestionText },
+                { "Количество возрождений", reviveCount },
+                { "Количество сердец", heartContainer.HeartCount } };
+            YG2.MetricaSend("QuizLeave", data);
             gameManager.ReturnToMenu(transform);
         }
     }

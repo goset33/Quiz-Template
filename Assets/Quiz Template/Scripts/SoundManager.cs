@@ -1,21 +1,23 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
+    [SerializeField] private AudioSource vfxSource, clickSource;
     [SerializeField] private AudioMixer mixer;
-    [SerializeField] private AudioClip[] sounds;
+    [SerializeField] private AudioClip[] buttonSounds, endJingles;
 
-    private AudioSource audioSource;
+    public static event Action<int> JingleEnded; // ѕередает 0 если перва€ стади€ и 1 если втора€ стади€
 
     void Awake()
     {
         Instance = this;
-        audioSource = GetComponent<AudioSource>();
         StartCoroutine(PitchChanger());
 
         Button[] buttons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -37,9 +39,34 @@ public class SoundManager : MonoBehaviour
         mixer.SetFloat("VFXVolume", dB);
     }
 
+    public void PlayJingle(bool isGood)
+    {
+        StartCoroutine(JingleSequence(isGood));
+    }
+
+    private IEnumerator JingleSequence(bool isGood)
+    {
+        int index = isGood ? 0 : 1;
+        vfxSource.PlayOneShot(endJingles[index], 1f);
+
+        yield return new WaitForSeconds(endJingles[index].length);
+        JingleEnded?.Invoke(0);
+
+        vfxSource.PlayOneShot(endJingles[2], 1f);
+
+        yield return new WaitForSeconds(endJingles[2].length);
+        JingleEnded?.Invoke(1);
+    }
+
     private void PlayButtonSound(int index)
     {
-        audioSource.PlayOneShot(sounds[index], 1f);
+        if (index == 0)
+        {
+            clickSource.PlayOneShot(buttonSounds[index], 1f);
+            return;
+        }
+
+        vfxSource.PlayOneShot(buttonSounds[index], 1f);
     }
 
     /// <summary>
@@ -66,7 +93,7 @@ public class SoundManager : MonoBehaviour
         YieldInstruction waiter = new WaitForSeconds(1f);
         while (true)
         {
-            audioSource.pitch = Random.Range(0.7f, 1.3f);
+            clickSource.pitch = Random.Range(0.7f, 1.3f);
             yield return waiter;
         }
     }

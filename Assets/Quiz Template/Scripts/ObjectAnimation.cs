@@ -26,7 +26,7 @@ public class ObjectAnimation : MonoBehaviour
         sequence = DOTween.Sequence();
         if (type == AnimationType.Scale)
         {
-            sequence.Append(rect.DOScale(amplitude, 0.7f)).Append(rect.DOScale(1f, 0.7f)).SetLoops(-1, LoopType.Restart);
+            sequence.Append(rect.DOScale(amplitude, 0.7f)).Append(rect.DOScale(1f, 0.7f)).SetLoops(-1);
         }
         else if (type == AnimationType.Shake)
         {

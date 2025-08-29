@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private QuestionController questionController;
     [SerializeField] private ResultController resultController;
 
+    private float timer = 0f; // Я мог бы использовать Time.realtimeSinceStartupAsDouble и не мучаться, но рот я ебал юнитеков и баг, которому уже 5 лет
+
     /// <summary>
     /// Bootstrap для всей игры. На старте запускает инициализацию меню 
     /// </summary>
@@ -80,6 +82,8 @@ public class GameManager : MonoBehaviour
 
     private void AfterSDKInitializing()
     {
+        YG2.MetricaSend("GameEnter");
+
         YG2.onGetSDKData -= AfterSDKInitializing;
 
         SoundManager.Instance.SetMusicVolume(YG2.saves.musicVolume);
@@ -160,6 +164,8 @@ public class GameManager : MonoBehaviour
 
         StopAllCoroutines();
 
+        YG2.MetricaSend("SessionTime", new Dictionary<string, object> { { "Время в секундах", timer } });
+
         MenuController.GameStarted -= GetIntoGame;
         MenuController.SettingsOpened -= OpenSettings;
         QuizCardSetter.QuizChoosed -= OnQuizChoosed;
@@ -173,6 +179,11 @@ public class GameManager : MonoBehaviour
         {
             LocalizationSettings.InitializationOperation.Completed -= LoadLocale;
         }
+    }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
     }
 
     /// <summary>
@@ -314,11 +325,11 @@ public class GameManager : MonoBehaviour
     //    questionController.transform.parent.gameObject.SetActive(true);
     //}
 
-    private void OnQuestionsSolved(int arg1, int arg2, bool isItGood)
+    private void OnQuestionsSolved(int arg1, int arg2, int arg3, bool isItGood)
     {
         YG2.InterstitialAdvShow();
         questionController.transform.parent.gameObject.SetActive(false);
         resultController.transform.parent.gameObject.SetActive(true);
-        resultController.Init(arg1, arg2, isItGood);
+        resultController.Init(arg1, arg2, arg3, isItGood);
     }
 }

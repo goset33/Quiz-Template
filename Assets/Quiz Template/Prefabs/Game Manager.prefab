@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2702332924067682122}
   - component: {fileID: 3956301894370319385}
   - component: {fileID: 8894641519377838139}
-  - component: {fileID: 7049651185906996524}
+  - component: {fileID: 1385887059867428962}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -48,11 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: feba4a2cb93aebc4aa364cd5364e340e, type: 2}
-  quizzes:
-  - {fileID: 11400000, guid: fdde859cde5875048a2b2d5c4f016022, type: 2}
-  - {fileID: 11400000, guid: e07f4283738343d4596a1facdc5ce7a8, type: 2}
-  - {fileID: 11400000, guid: 1e50a54bcf80dab499138c7a0ec7a154, type: 2}
-  - {fileID: 11400000, guid: c3f78037d1def5b43b677345afbf074c, type: 2}
+  quizzes: []
   chosenQuiz: {fileID: 0}
   questionConfig: {fileID: 11400000, guid: e4e6d52ed2c6b844382eeddef9d61c17, type: 2}
   shouldShuffle: 1
@@ -60,6 +56,7 @@ MonoBehaviour:
   timelessController: {fileID: 0}
   menuController: {fileID: 0}
   settingsController: {fileID: 0}
+  leaderboardController: {fileID: 0}
   chooseController: {fileID: 0}
   hardnessController: {fileID: 0}
   questionController: {fileID: 0}
@@ -76,13 +73,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dfab62feb655d84699e5474240de1b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vfxSource: {fileID: 8894641519377838139}
+  clickSource: {fileID: 1385887059867428962}
   mixer: {fileID: 24100000, guid: 0b0c95c6701266d49aeca82b6463aac6, type: 2}
-  sounds:
+  buttonSounds:
   - {fileID: 8300000, guid: b47099310c2eae649ab83867516faa1b, type: 3}
   - {fileID: 8300000, guid: 47e3d71035e1cdc448c484c65048101a, type: 3}
   - {fileID: 8300000, guid: c3be5e090aa08ba4aa34e0df74d8380f, type: 3}
+  endJingles:
   - {fileID: 8300000, guid: 297c74df99f16a04fa0d3f5e06fcbfdc, type: 3}
-  volume: 1
+  - {fileID: 8300000, guid: 988f21a860eda7646a12a348f010c8cf, type: 3}
+  - {fileID: 8300000, guid: 550eee8ec6f37b449a126bf18269cdf0, type: 3}
 --- !u!82 &8894641519377838139
 AudioSource:
   m_ObjectHideFlags: 0
@@ -179,7 +180,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!82 &7049651185906996524
+--- !u!82 &1385887059867428962
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,12 +189,12 @@ AudioSource:
   m_GameObject: {fileID: 1068417982188332365}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 5756195843770140213, guid: 0b0c95c6701266d49aeca82b6463aac6, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 6fcc687f440516b499d9e64b42b14a62, type: 3}
-  m_PlayOnAwake: 1
+  OutputAudioMixerGroup: {fileID: -4941304878924873749, guid: 0b0c95c6701266d49aeca82b6463aac6, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
