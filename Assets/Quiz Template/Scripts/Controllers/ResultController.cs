@@ -16,7 +16,7 @@ public class ResultController : MonoBehaviour
     [SerializeField] private GameObject rewardButton, backButton;
 
     [Space]
-    [SerializeField] private LocalizedString[] headerLocales;
+    [SerializeField] private LocalizedString[] headerLocales, textLocales;
 
     private CanvasGroup[] canvasGroups;
     private IntVariable rightAnswersLocale, allAnswersLocale;
@@ -39,11 +39,15 @@ public class ResultController : MonoBehaviour
 
     private void OnEnable()
     {
+        SoundManager.Instance.ChangeMusicState();
+
         SoundManager.JingleEnded += ShowUI;
     }
 
     private void OnDisable()
     {
+        SoundManager.Instance.ChangeMusicState();
+
         SoundManager.JingleEnded -= ShowUI;
 
         foreach (CanvasGroup group in canvasGroups)
@@ -55,9 +59,11 @@ public class ResultController : MonoBehaviour
 
     public void Init(int rightAnswers, int allAnswers, int revives, bool isGood)
     {
+        int hardness = GameManager.Instance.GetQuizHardness();
+
         Dictionary<string, object> data = new() { 
             { "Имя квиза", GameManager.Instance.chosenQuiz.GetName() }, 
-            { "Уровень сложности квиза", GameManager.Instance.GetQuizHardness() }, 
+            { "Уровень сложности квиза", hardness }, 
             { "Количество верных ответов", rightAnswers },
             { "Количество возрождений", revives },
             { "Игрок прошел квиз?", isGood } };
@@ -69,16 +75,33 @@ public class ResultController : MonoBehaviour
         rightAnswersLocale.Value = rightAnswers;
         allAnswersLocale.Value = allAnswers;
 
-        expObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers}";
+        index = rightAnswers < 7 ? 0 : 1;
+        resultText.text = textLocales[index].GetLocalizedString();
 
-        cashObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * 2}";
-        GameManager.ChangeCash(rightAnswers);
+        if (hardness != 4)
+        {
+            expObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers}";
+        }
+        else
+        {
+            expObject.GetComponent<TextMeshProUGUI>().text = "+0";
+        }
 
-        SoundManager.Instance.PlayJingle(isGood);
+        cashObject.GetComponent<TextMeshProUGUI>().text = $"+{rightAnswers * GameManager.Instance.config.cashAddCount[hardness - 1] * 2}";
+        GameManager.ChangeCash(rightAnswers * GameManager.Instance.config.cashAddCount[hardness - 1]);
+
+        bool isGotSmth = rightAnswers != 0;
+        SoundManager.Instance.PlayJingle(isGood, isGotSmth);
     }
 
     private void ShowUI(int stage)
     {
+        if (rightAnswersLocale.Value == 0 && stage == 0)
+        {
+            canvasGroups[3].DOFade(1f, 1f).OnComplete(() => canvasGroups[3].blocksRaycasts = true);
+            return;
+        }
+
         int startsFrom = stage == 0 ? 0 : 2;
         for (int i = startsFrom; i < startsFrom + 2; i++)
         {
@@ -99,15 +122,18 @@ public class ResultController : MonoBehaviour
         Dictionary<string, object> data = new() {
             { "Имя квиза", GameManager.Instance.chosenQuiz.GetName() },
             { "Уровень сложности квиза", GameManager.Instance.GetQuizHardness() },
-            { "Количество звезд до удвоения", rights * 2 },
-            { "Количество опыта до удвоения", rights } };
+            { "Количество звезд до удвоения", int.Parse(cashObject.GetComponent<TextMeshProUGUI>().text) },
+            { "Количество опыта до удвоения", int.Parse(expObject.GetComponent<TextMeshProUGUI>().text) } };
         YG2.MetricaSend("RewardDoubling", data);
 
-        expObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 2}";
-        GameManager.Instance.AddExperience(rights);
+        if (GameManager.Instance.GetQuizHardness() != 4)
+        {
+            expObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 2}";
+            GameManager.Instance.AddExperience(rights);
+        }
 
-        cashObject.GetComponent<TextMeshProUGUI>().text = $"+{rights * 4}";
-        GameManager.ChangeCash(rights * 2);
+        GameManager.ChangeCash(int.Parse(cashObject.GetComponent<TextMeshProUGUI>().text));
+        cashObject.GetComponent<TextMeshProUGUI>().text = $"+{int.Parse(cashObject.GetComponent<TextMeshProUGUI>().text) * 2}";
 
         rewardButton.SetActive(false);
     }

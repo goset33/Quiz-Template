@@ -8,6 +8,7 @@ public class GameConfig : ScriptableObject
 
     [Space]
     public int[] harndessHeartCount = { 3, 2, 1, 1 }; //  оличество стартовых сердец дл€ каждого из уровней сложности
+    public int[] cashAddCount = { 1, 1, 2, 3, 5 }; //  оличество денег, добавл€емых за один вопрос на каждом уровне сложности
     public float questionTimer = 180f, questionExtraTime = 50f; // ¬ секундах
     public int[][] questionsHardness = new int[][]
     {

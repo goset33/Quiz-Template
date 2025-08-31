@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Authorization:
     playerPhotoSize: 1
-    authorized: 1
+    authorized: 0
     playerName: Player
     uniqueID: 000
     playerPhoto: demo image
@@ -450,8 +450,8 @@ MonoBehaviour:
         uniqueID: 330
         extraData: 
       currentPlayer:
-        rank: 454
-        score: 1
+        rank: 0
+        score: 0
         extraData: 
   Localization:
     setLanguageMod: 1
@@ -460,6 +460,10 @@ MonoBehaviour:
     metricaCounterID: 103924103
     log: 1
     useYandexMetrica: 1
+  QuitGameEvent:
+    enable: 1
+    objectName: Game Manager
+    methodName: OnGameQuit
   RewardedAdv:
     rewardedAfterClosing: 1
     skipInterAdvAfterReward: 0

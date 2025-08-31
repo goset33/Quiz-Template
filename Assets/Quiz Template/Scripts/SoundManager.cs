@@ -9,7 +9,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
 
-    [SerializeField] private AudioSource vfxSource, clickSource;
+    [SerializeField] private AudioSource vfxSource, clickSource, musicSource;
     [SerializeField] private AudioMixer mixer;
     [SerializeField] private AudioClip[] buttonSounds, endJingles;
 
@@ -38,13 +38,24 @@ public class SoundManager : MonoBehaviour
         float dB = volume > 0 ? Mathf.Log10(volume) * 20 : -80f;
         mixer.SetFloat("VFXVolume", dB);
     }
-
-    public void PlayJingle(bool isGood)
+    
+    public void ChangeMusicState()
     {
-        StartCoroutine(JingleSequence(isGood));
+        if (musicSource.isPlaying)
+        {
+            musicSource.Pause();
+        } else
+        {
+            musicSource.UnPause();
+        }
     }
 
-    private IEnumerator JingleSequence(bool isGood)
+    public void PlayJingle(bool isGood, bool isFull)
+    {
+        StartCoroutine(JingleSequence(isGood, isFull));
+    }
+
+    private IEnumerator JingleSequence(bool isGood, bool isFull)
     {
         int index = isGood ? 0 : 1;
         vfxSource.PlayOneShot(endJingles[index], 1f);
@@ -52,10 +63,13 @@ public class SoundManager : MonoBehaviour
         yield return new WaitForSeconds(endJingles[index].length);
         JingleEnded?.Invoke(0);
 
-        vfxSource.PlayOneShot(endJingles[2], 1f);
+        if (isFull)
+        {
+            vfxSource.PlayOneShot(endJingles[2], 1f);
 
-        yield return new WaitForSeconds(endJingles[2].length);
-        JingleEnded?.Invoke(1);
+            yield return new WaitForSeconds(endJingles[2].length);
+            JingleEnded?.Invoke(1);
+        }
     }
 
     private void PlayButtonSound(int index)

@@ -23,6 +23,7 @@ public class QuestionController : MonoBehaviour
     private int quizHardness; // 0 - FTUE, дальше как обычно
     private int[] questionsHardness = null; // Массив, равный количеству вопросов и показывающий уровень сложности каждого вопроса
     private int QuestionDifficult => questionsHardness[currentQuestion - 1];
+    private int AccruedCash => gameManager.config.cashAddCount[quizHardness - 1];
 
     private readonly Color[] difficultColors = new Color[4] { Color.green, Color.yellow, Color.red, new(105f, 0f, 198f) };
     private int reviveCount = 2;
@@ -329,7 +330,7 @@ public class QuestionController : MonoBehaviour
         {
             rightAnswers++;
             gameManager.AddExperience(1);
-            GameManager.ChangeCash(1);
+            GameManager.ChangeCash(AccruedCash);
             NextButtonPressed();
             print("Right!");
         }
@@ -479,7 +480,7 @@ public class QuestionController : MonoBehaviour
     private void GetAnswerTold(int pressedIndex)
     {
         TimelessController.OnPopupButtonPressed -= GetAnswerTold;
-        timerHandler.PauseTime();
+        timerHandler.ChangeTimePauseState();
         if (pressedIndex == 1)
         {
             YG2.RewardedAdvShow("4", ShowAnswerTold);
@@ -504,7 +505,7 @@ public class QuestionController : MonoBehaviour
     {
         if (QuestionDifficult == 3 || isAnswerShowed) return;
 
-        timerHandler.PauseTime();
+        timerHandler.ChangeTimePauseState();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, getHintLocales));
         TimelessController.OnPopupButtonPressed += GetHint;
     }
@@ -512,7 +513,7 @@ public class QuestionController : MonoBehaviour
     private void GetHint(int pressedIndex)
     {
         TimelessController.OnPopupButtonPressed -= GetHint;
-        timerHandler.PauseTime();
+        timerHandler.ChangeTimePauseState();
         if (pressedIndex == 1)
         {
             YG2.RewardedAdvShow("2", ShowHintAnswer);
@@ -570,7 +571,7 @@ public class QuestionController : MonoBehaviour
 
     public void MenuButtonPressed()
     {
-        timerHandler.PauseTime();
+        timerHandler.ChangeTimePauseState();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
         TimelessController.OnPopupButtonPressed += BackToMenu;
     }
@@ -578,7 +579,7 @@ public class QuestionController : MonoBehaviour
     private void BackToMenu(int pressedIndex)
     {
         TimelessController.OnPopupButtonPressed -= BackToMenu;
-        timerHandler.PauseTime();
+        timerHandler.ChangeTimePauseState();
         if (pressedIndex == 1)
         {
             Dictionary<string, object> data = new() { 

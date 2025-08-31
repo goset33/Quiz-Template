@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cashSprite: {fileID: 21300000, guid: 492e2e7ddeed5f048a9a0a78fd942b93, type: 3}
   expSprite: {fileID: -839562070, guid: 3ab03580421104b4d9d41c8a2fd5c96e, type: 3}
-  harndessHeartCount: 03000000020000000100000001000000
+  harndessHeartCount: 03000000030000000300000003000000
   questionTimer: 180
   questionExtraTime: 50
   notifyLocales:

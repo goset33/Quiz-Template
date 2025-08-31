@@ -84,8 +84,6 @@ public class GameManager : MonoBehaviour
     {
         YG2.MetricaSend("GameEnter");
 
-        YG2.onGetSDKData -= AfterSDKInitializing;
-
         SoundManager.Instance.SetMusicVolume(YG2.saves.musicVolume);
         SoundManager.Instance.SetVfxVolume(YG2.saves.vfxVolume);
 
@@ -158,10 +156,10 @@ public class GameManager : MonoBehaviour
         loadController.EndLoad();
     }
 
-    private void OnDisable()
+    private void OnGameQuit()
     {
         AIRequestHandler.Dispose();
-
+            
         StopAllCoroutines();
 
         YG2.MetricaSend("SessionTime", new Dictionary<string, object> { { "Время в секундах", timer } });
@@ -173,7 +171,7 @@ public class GameManager : MonoBehaviour
         QuestionController.AllReady -= OnQuestionsLoaded;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
 
-        YG2.onGetSDKData -= InitializeAndLoadLevelProgress;
+        YG2.onGetSDKData -= AfterSDKInitializing;
         YG2.onGetLeaderboard -= leaderboardController.OnLeaderboardInitialized;
         if (LocalizationSettings.Instance != null)
         {
@@ -246,6 +244,12 @@ public class GameManager : MonoBehaviour
         timelessController.CreateNotification(config.notifyLocales[notifyIndex]);
     }
 
+    /// <summary>
+    /// Возвращает сложность текущего квиза
+    /// </summary>
+    /// <returns>
+    /// 0 - FTUE; 1-4 - Как обычно
+    /// </returns>
     public int GetQuizHardness()
     {
         if (YG2.saves.isFirstQuiz) return 0;

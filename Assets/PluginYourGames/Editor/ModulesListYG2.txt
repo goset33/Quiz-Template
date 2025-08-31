@@ -4,5 +4,6 @@ InterstitialAdv v1.001
 Leaderboards v1.01
 Localization v1.001
 Metrica v1.01
+QuitGameEvent v1.001
 RewardedAdv v1.001
 Storage v1.01

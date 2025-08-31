@@ -79,7 +79,7 @@ public class TimerHandler : MonoBehaviour
     /// <summary>
     /// Ставит и снимает время с паузы
     /// </summary>
-    public void PauseTime()
+    public void ChangeTimePauseState()
     {
         isRunning = !isRunning;
         if (!isRunning)
@@ -142,6 +142,8 @@ public class TimerHandler : MonoBehaviour
 
     public void OnWrongAnswer()
     {
+        if (routine == null) return;
+
         StopCoroutine(routine);
         routine = null;
     }

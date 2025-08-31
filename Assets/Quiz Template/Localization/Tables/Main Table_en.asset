@@ -88,7 +88,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 321015472803840
-    m_Localized: You scored {global.rightAnswers} of {global.allAnswers} points!
+    m_Localized: You answered {global.right Answers} of {global.allAnswers} questions
+      correctly.
     m_Metadata:
       m_Items:
       - rid: 6898860568132976666
@@ -202,6 +203,11 @@ MonoBehaviour:
     m_Localized: You
     m_Metadata:
       m_Items: []
+  - m_Id: 74915228713308160
+    m_Localized: You answered {global.right Answers} questions correctly.
+    m_Metadata:
+      m_Items:
+      - rid: 6898860568132976666
   references:
     version: 2
     RefIds:
@@ -212,3 +218,4 @@ MonoBehaviour:
         m_SharedEntries:
         - id: 314563236548608
         - id: 321015472803840
+        - id: 74915228713308160
