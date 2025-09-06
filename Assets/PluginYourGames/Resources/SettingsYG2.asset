@@ -15,7 +15,7 @@ MonoBehaviour:
   Authorization:
     playerPhotoSize: 1
     authorized: 0
-    playerName: Player
+    playerName: Player test
     uniqueID: 000
     playerPhoto: demo image
     payingStatus: 0

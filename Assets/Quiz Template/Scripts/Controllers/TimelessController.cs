@@ -3,15 +3,17 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
-using UnityEngine.UI;
 using YG;
 
 public class TimelessController : MonoBehaviour
 {
-    [SerializeField] private RectTransform popupWindow;
-    [SerializeField] private RectTransform notificationText;
+    [SerializeField] private RectTransform popupWindow, notificationText, nameWindow;
 
-    public static event Action<int> OnPopupButtonPressed;
+    [Space]
+    [SerializeField] private LocalizedString playerLocale;
+    [SerializeField] private LocalizedString[] applyNameLocales;
+
+   public static event Action<int> OnPopupButtonPressed;
 
     /// <summary>
     /// Создает окно в соответствии с настройками
@@ -65,5 +67,40 @@ public class TimelessController : MonoBehaviour
             .Append(notificationText.DOAnchorPosY(notificationText.position.y + 1f, 2f))
             .Join(notificationText.GetComponent<TextMeshProUGUI>().DOFade(0f, 2f))
             .SetId(0);
+    }
+
+    public void ActivateTheNameWindow()
+    {
+        nameWindow.gameObject.SetActive(true);
+    }
+
+    public void NameTypePressed()
+    {
+        TMP_InputField inputField = nameWindow.GetComponentInChildren<TMP_InputField>(true);
+
+        if (inputField.text.Length >= 3)
+        {
+            ApplyName(inputField.text);
+        }
+        else
+        {
+            CreatePopup(new PopupSettings(PopupSettings.PopupSize.Small, applyNameLocales));
+            OnPopupButtonPressed += SetNameAsPlayer;
+        }
+    }
+
+    private void SetNameAsPlayer(int index)
+    {
+        OnPopupButtonPressed -= SetNameAsPlayer;
+        if (index == 1)
+        {
+            ApplyName(playerLocale.GetLocalizedString());
+        }
+    }
+
+    private void ApplyName(string name)
+    {
+        YG2.saves.nickname = name;
+        nameWindow.gameObject.SetActive(false);
     }
 }

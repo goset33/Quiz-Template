@@ -208,6 +208,31 @@ MonoBehaviour:
     m_Metadata:
       m_Items:
       - rid: 6898860568132976666
+  - m_Id: 77004751563739136
+    m_Localized: What is your name?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77004809810038784
+    m_Localized: Done
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77004787798331392
+    m_Localized: "\rEnter name..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77022822584111104
+    m_Localized: Player
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77023188721684480
+    m_Localized: Are you sure you want to keep the name "Player"?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77155826597974016
+    m_Localized: The name length must be 3-16 characters, the name must not contain
+      numbers or special characters!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

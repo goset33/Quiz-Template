@@ -4,7 +4,8 @@ namespace YG
 {
     public partial class SavesYG
     {
-        // Ваши сохранения
+        public string nickname = null;
+
         public List<QuizCardSaveData> quizCards = new();
         public List<string> favoriteCards = new();
         public string[] otherCards = null;

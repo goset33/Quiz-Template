@@ -191,6 +191,30 @@ MonoBehaviour:
     m_Key: RESULT_TEXT
     m_Metadata:
       m_Items: []
+  - m_Id: 77004751563739136
+    m_Key: WHATS_THE_NAME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77004787798331392
+    m_Key: ENTER_NAME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77004809810038784
+    m_Key: DONE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77022822584111104
+    m_Key: PLAYER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77023188721684480
+    m_Key: NAME_AS_PLAYER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 77155826597974016
+    m_Key: NAME_LIMITS
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

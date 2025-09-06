@@ -90,6 +90,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SaveCoroutine());
 
         InitializeAndLoadLevelProgress();
+
+        if (string.IsNullOrEmpty(YG2.saves.nickname))
+        {
+            GetPlayerName();
+        }
     }
 
     /// <summary>
@@ -156,7 +161,7 @@ public class GameManager : MonoBehaviour
         loadController.EndLoad();
     }
 
-    private void OnGameQuit()
+    public void OnGameQuit()
     {
         AIRequestHandler.Dispose();
             
@@ -196,8 +201,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public GameState GetGameState() { return state; }
-
     IEnumerator SaveCoroutine()
     {
         YieldInstruction waiter = new WaitForSeconds(5f);
@@ -208,6 +211,19 @@ public class GameManager : MonoBehaviour
             yield return waiter;
         }
     }
+
+    private void GetPlayerName()
+    {
+        if (YG2.player.auth && !YG2.player.name.Equals("anonymous"))
+        {
+            YG2.saves.nickname = YG2.player.name;
+            return;
+        }
+
+        timelessController.ActivateTheNameWindow();
+    }
+
+    public GameState GetGameState() { return state; }
 
     public static bool HaveEnoughCash(int cost)
     {

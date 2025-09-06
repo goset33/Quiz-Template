@@ -11,23 +11,9 @@ public class LeaderboardController : MonoBehaviour
 
     public void OnLeaderboardInitialized(LBData data)
     {
-        if (YG2.player.name == "unauthorized")
-        {
-            YG2.OpenAuthDialog();
-            BackInMenu();
-            return;
-        }
-
         LBCurrentPlayerData playerData = data.currentPlayer;
 
-        if (YG2.player.name == "unauthorized" || YG2.player.name == "anonymous")
-        {
-            currentPlayer.data.name = youLocale.GetLocalizedString();
-        }
-        else
-        {
-            currentPlayer.data.name = YG2.player.name;
-        }
+        currentPlayer.data.name = YG2.saves.nickname;
 
         currentPlayer.data.rank = playerData.rank.ToString();
         currentPlayer.data.score = playerData.score.ToString();
