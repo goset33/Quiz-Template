@@ -27,18 +27,29 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Устанавливает громкость музыки
+    /// </summary>
+    /// <param name="volume">Значение громкости музыки в диапазоне 0-1</param>
     public void SetMusicVolume(float volume)
     {
         float dB = volume > 0 ? Mathf.Log10(volume) * 20 : -80f;
         mixer.SetFloat("MusicVolume", dB);
     }
 
+    /// <summary>
+    /// Устанавливает громкость спецэффектов
+    /// </summary>
+    /// <param name="volume">Значение громкости спецэффектов в диапазоне 0-1</param>
     public void SetVfxVolume(float volume)
     {
         float dB = volume > 0 ? Mathf.Log10(volume) * 20 : -80f;
         mixer.SetFloat("VFXVolume", dB);
     }
     
+    /// <summary>
+    /// Ставит и снимает музыку с паузы
+    /// </summary>
     public void ChangeMusicState()
     {
         if (musicSource.isPlaying)
@@ -50,6 +61,11 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Запускает корутину проигрывания финальных джинглов
+    /// </summary>
+    /// <param name="isGood">Победил ли игрок</param>
+    /// <param name="isFull">Нужно ли проигрывать вторую часть джингла</param>
     public void PlayJingle(bool isGood, bool isFull)
     {
         StartCoroutine(JingleSequence(isGood, isFull));
@@ -102,6 +118,9 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Раз в секунду меняет pitch звука нажатия кнопок
+    /// </summary>
     IEnumerator PitchChanger()
     {
         YieldInstruction waiter = new WaitForSeconds(1f);

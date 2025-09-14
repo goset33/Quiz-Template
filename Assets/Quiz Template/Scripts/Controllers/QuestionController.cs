@@ -22,7 +22,7 @@ public class QuestionController : MonoBehaviour
 
     private int quizHardness; // 0 - FTUE, дальше как обычно
     private int[] questionsHardness = null; // Массив, равный количеству вопросов и показывающий уровень сложности каждого вопроса
-    private int QuestionDifficult => questionsHardness[currentQuestion - 1];
+    private int QuestionDifficult => questionsHardness[currentQuestion - 1]; // Сложность текущего вопроса
     private int AccruedCash => gameManager.config.cashAddCount[quizHardness - 1];
 
     private readonly Color[] difficultColors = new Color[4] { Color.green, Color.yellow, Color.red, new(105f, 0f, 198f) };
@@ -323,7 +323,10 @@ public class QuestionController : MonoBehaviour
     /// <param name="isRight">Был ли ответ верным</param>
     private void Answered(bool isRight)
     {
-        Dictionary<string, object> data = new() { { "Правильный ответ?", isRight }, { "Уровень сложности вопроса", QuestionDifficult }, { "Текст вопроса", cards[currentQuestion - 1].QuestionText } };
+        Dictionary<string, object> data = new() { 
+            { "Правильный ответ?", isRight }, 
+            { "Уровень сложности вопроса", QuestionDifficult }, 
+            { "Текст вопроса", cards[currentQuestion - 1].QuestionText } };
         YG2.MetricaSend("GivesAnswer", data);
 
         if (isRight)
@@ -415,7 +418,7 @@ public class QuestionController : MonoBehaviour
         ClearScreen();
         YG2.InterstitialAdvShow();
 
-        if (YG2.envir.payload == "~AdminPanel~-Shift+Tab"
+        if (YG2.envir.payload == "AdminPanel-Shift+Tab"
 #if UNITY_EDITOR
             || true
 #endif

@@ -11,16 +11,6 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public static string Language => YG2.lang;
 
-    public enum GameState
-    {
-        InMainMenu,
-        ChoosingQuiz,
-        ChoosingHardness,
-        SolvingQuestions,
-        GettingResults
-    }
-    private GameState state;
-
     public GameConfig config;
 
     [Header("Choose Settings")]
@@ -32,7 +22,6 @@ public class GameManager : MonoBehaviour
     public QuestionConfig questionConfig;
     public bool shouldShuffle; // Следует ли рандомизировать порядок вопросов
 
-    // Идея: Сейчас переменные используются только для переключения окон. В целом можно передавать ивенты типа Action<Transform, int> и тогда убрать все эти зависимости
     [Header("Controllers")]
     [SerializeField] private LoadController loadController;
     [SerializeField] private TimelessController timelessController;
@@ -52,7 +41,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         // Место для дебаг строк
-
+        
         // Удалить потом обязательно
 
         // Настройка локализации
@@ -73,6 +62,7 @@ public class GameManager : MonoBehaviour
         YG2.onGetLeaderboard += leaderboardController.OnLeaderboardInitialized;
 
         // Настройка квизов в окне выбора квизов
+        // Наверняка можно упростить, но я уже не помню как там всё выглядит после временной интеграции избранных квизов. Работает и славно
         if (YG2.saves.otherCards == null || YG2.saves.otherCards.Length != quizzes.Count)
         {
             YG2.saves.otherCards = quizzes.ConvertToNames();
@@ -90,11 +80,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SaveCoroutine());
 
         InitializeAndLoadLevelProgress();
-
-        if (string.IsNullOrEmpty(YG2.saves.nickname))
-        {
-            GetPlayerName();
-        }
     }
 
     /// <summary>
@@ -161,6 +146,9 @@ public class GameManager : MonoBehaviour
         loadController.EndLoad();
     }
 
+    /// <summary>
+    /// Вызывается перед выходом из игры. Обнуляет всё и делает отписки от ивентов
+    /// </summary>
     public void OnGameQuit()
     {
         AIRequestHandler.Dispose();
@@ -212,19 +200,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void GetPlayerName()
-    {
-        if (YG2.player.auth && !YG2.player.name.Equals("anonymous"))
-        {
-            YG2.saves.nickname = YG2.player.name;
-            return;
-        }
-
-        timelessController.ActivateTheNameWindow();
-    }
-
-    public GameState GetGameState() { return state; }
-
     public static bool HaveEnoughCash(int cost)
     {
         if (cost < 0)
@@ -274,6 +249,11 @@ public class GameManager : MonoBehaviour
         return data.level;
     }
 
+    private void OnQuestionsLoaded()
+    {
+        loadController.EndLoad();
+    }
+
     /// <summary>
     /// Изменяет позицию карточки квиза в массиве, не трогая отображение
     /// </summary>
@@ -295,11 +275,6 @@ public class GameManager : MonoBehaviour
             YG2.saves.otherCards[originalIndex] = name;
             YG2.saves.favoriteCards.Remove(name);
         }
-    }
-
-    private void OnQuestionsLoaded()
-    {
-        loadController.EndLoad();
     }
 
     // --- Функции переходов между экранами ---

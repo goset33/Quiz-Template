@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using YG;
 
+/// <summary>
+/// Устанавливает содержимое карточки квиза при инициализации в соответствии с переданным cardContent
+/// </summary>
 public class QuizCardSetter : MonoBehaviour
 {
     private QuizCard cardContent;
