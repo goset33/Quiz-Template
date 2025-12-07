@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: Localization-Assets-Shared
   m_EditorClassIdentifier: 
   m_GroupName: Localization-Assets-Shared
-  m_Data:
-    m_SerializedData: []
   m_GUID: 65f8af731e66e2d48a43b9d2a3a3d129
   m_SerializeEntries:
+  - m_GUID: 4bf1b964954066c47b4fb30f9f0bbc79
+    m_Address: Assets/Quiz Template/Localization/Tables/Asset Table Shared Data.asset
+    m_ReadOnly: 1
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2b025560d9220e4f8f138865dba18d1
     m_Address: Assets/Quiz Template/Localization/Tables/Main Table Shared Data.asset
     m_ReadOnly: 1
