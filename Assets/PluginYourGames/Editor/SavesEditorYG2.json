@@ -1,6 +1,5 @@
 {
-  "idSave": 1234,
-  "nickname": "ПпGgFgF",
+  "idSave": 2007,
   "quizCards": [
     {
       "cardId": "Minecraft",
@@ -34,7 +33,7 @@
     "Genshin Impact",
     "Fortnite"
   ],
-  "cash": 712,
+  "cash": 757,
   "musicVolume": 0.952297747,
   "vfxVolume": 1.0,
   "isFirstQuiz": false

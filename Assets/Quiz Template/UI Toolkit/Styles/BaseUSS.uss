@@ -1,0 +1,13 @@
+.background {
+
+}
+
+.main-button {
+    margin-top: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    max-width: none;
+    min-width: 100px;
+    min-height: 50px;
+}
