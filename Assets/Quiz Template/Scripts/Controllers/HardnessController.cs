@@ -94,6 +94,6 @@ public class HardnessController : MonoBehaviour
 
     public void BackInMenuButtonPressed()
     {
-        gameManager.ReturnToMenu(transform);
+        GameManager.Instance.OpenWindow<MenuController>();
     }
 }

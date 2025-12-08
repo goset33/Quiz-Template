@@ -3,9 +3,8 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
-using YG;
 
-public class TimelessController : MonoBehaviour
+public class TimelessController : AbstractController
 {
     [SerializeField] private RectTransform popupWindow, notificationText;
 

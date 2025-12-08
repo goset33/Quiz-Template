@@ -25,13 +25,12 @@ public class GameManager : MonoBehaviour
     [Header("Controllers")]
     [SerializeField] private LoadController loadController;
     [SerializeField] private TimelessController timelessController;
-    [SerializeField] private MenuController menuController;
-    [SerializeField] private SettingsController settingsController;
     [SerializeField] private LeaderboardController leaderboardController;
-    [SerializeField] private ChooseController chooseController;
-    [SerializeField] private HardnessController hardnessController;
-    [SerializeField] private QuestionController questionController;
+    //[SerializeField] private HardnessController hardnessController;
     [SerializeField] private ResultController resultController;
+
+    private Dictionary<Type, AbstractController> controllers = new Dictionary<Type, AbstractController>();
+    private Type currentWindowType;
 
     private float timer = 0f; // Я мог бы использовать Time.realtimeSinceStartupAsDouble и не мучаться, но рот я ебал юнитеков и баг, которому уже 5 лет
 
@@ -50,9 +49,9 @@ public class GameManager : MonoBehaviour
         // Присвоение инстанса и подписки на ивенты
         Instance = this;
 
-        MenuController.GameStarted += GetIntoGame;
-        MenuController.SettingsOpened += OpenSettings;
-        MenuController.LeaderboardOpened += OpenLeaderboard;
+        MenuController.GameStarted += OpenWindow<ChooseController>;
+        MenuController.SettingsOpened += OpenWindow<SettingsController>;
+        MenuController.LeaderboardOpened += OpenWindow<LeaderboardController>;
         QuizCardSetter.QuizChoosed += OnQuizChoosed;
         //HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.AllReady += OnQuestionsLoaded;
@@ -68,6 +67,16 @@ public class GameManager : MonoBehaviour
             YG2.saves.otherCards = quizzes.ConvertToNames();
             YG2.saves.favoriteCards.Clear();
         }
+
+        var allControllers = FindObjectsByType<AbstractController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var controller in allControllers)
+        {
+            controllers[controller.GetType()] = controller;
+            controller.Init();
+            controller.ChangeVisibilityState(false);
+        }
+        controllers[typeof(MenuController)].ChangeVisibilityState(true);
+        currentWindowType = typeof(MenuController);
     }
 
     private void AfterSDKInitializing()
@@ -157,8 +166,9 @@ public class GameManager : MonoBehaviour
 
         YG2.MetricaSend("SessionTime", new Dictionary<string, object> { { "Время в секундах", timer } });
 
-        MenuController.GameStarted -= GetIntoGame;
-        MenuController.SettingsOpened -= OpenSettings;
+        MenuController.GameStarted -= OpenWindow<ChooseController>;
+        MenuController.SettingsOpened -= OpenWindow<SettingsController>;
+        MenuController.LeaderboardOpened -= OpenWindow<LeaderboardController>;
         QuizCardSetter.QuizChoosed -= OnQuizChoosed;
         //HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.AllReady -= OnQuestionsLoaded;
@@ -195,7 +205,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             YG2.SaveProgress();
-            YG2.SetLeaderboard("Stars", YG2.saves.cash);
+            YG2.SetLeaderboard("Stars", YG2.saves.cash.Value);
             yield return waiter;
         }
     }
@@ -204,7 +214,7 @@ public class GameManager : MonoBehaviour
     {
         if (cost < 0)
         {
-            return YG2.saves.cash >= Math.Abs(cost);
+            return YG2.saves.cash.Value >= Math.Abs(cost);
         }
         return true;
     }
@@ -213,7 +223,7 @@ public class GameManager : MonoBehaviour
     {
         if (!HaveEnoughCash(cost)) return;
 
-        YG2.saves.cash += cost;
+        YG2.saves.cash.Value += cost;
     }
 
     public void AddExperience(int amount)
@@ -279,52 +289,28 @@ public class GameManager : MonoBehaviour
 
     // --- Функции переходов между экранами ---
 
-    public void ReturnToMenu(Transform currentController)
+    public void OpenWindow<T>() where T : AbstractController
     {
+        if (currentWindowType != null)
+            controllers[currentWindowType].ChangeVisibilityState();
+
+        controllers[typeof(T)].ChangeVisibilityState();
+        currentWindowType = typeof(T);
+
         YG2.InterstitialAdvShow();
-        currentController.parent.gameObject.SetActive(false);
-        menuController.transform.parent.gameObject.SetActive(true);
-    }
-
-    private void GetIntoGame()
-    {
-        menuController.transform.parent.gameObject.SetActive(false);
-        chooseController.transform.parent.gameObject.SetActive(true);
-    }
-
-    private void OpenSettings()
-    {
-        menuController.transform.parent.gameObject.SetActive(false);
-        settingsController.transform.parent.gameObject.SetActive(true);
-    }
-
-    private void OpenLeaderboard()
-    {
-        menuController.transform.parent.gameObject.SetActive(false);
-        leaderboardController.transform.parent.gameObject.SetActive(true);
     }
 
     private void OnQuizChoosed(QuizCard obj)
     {
         chosenQuiz = obj;
         loadController.StartLoad(() => {
-            chooseController.transform.parent.gameObject.SetActive(false);
-            questionController.transform.parent.gameObject.SetActive(true);
+            OpenWindow<QuestionController>();
         });
     }
 
-    //private void OnLevelChoosed(int obj)
-    //{
-    //    chosenHardnessIndex = obj;
-    //    hardnessController.transform.parent.gameObject.SetActive(false);
-    //    questionController.transform.parent.gameObject.SetActive(true);
-    //}
-
     private void OnQuestionsSolved(int arg1, int arg2, int arg3, bool isItGood)
     {
-        YG2.InterstitialAdvShow();
-        questionController.transform.parent.gameObject.SetActive(false);
-        resultController.transform.parent.gameObject.SetActive(true);
+        OpenWindow<ResultController>();
         resultController.Init(arg1, arg2, arg3, isItGood);
     }
 }

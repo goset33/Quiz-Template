@@ -4,7 +4,7 @@ using UnityEngine.Localization;
 using UnityEngine.UI;
 using YG;
 
-public class SettingsController : MonoBehaviour
+public class SettingsController : AbstractController
 {
     [SerializeField] private Slider musicSlider, vfxSlider;
     [SerializeField] private TextMeshProUGUI musicValue, vfxValue; 
@@ -39,6 +39,6 @@ public class SettingsController : MonoBehaviour
 
     public void BackInMenu()
     {
-        GameManager.Instance.ReturnToMenu(transform);
+        GameManager.Instance.OpenWindow<MenuController>();
     }
 }

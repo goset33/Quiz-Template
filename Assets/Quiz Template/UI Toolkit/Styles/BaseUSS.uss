@@ -15,8 +15,6 @@
     -unity-text-auto-size: best-fit 10px 100px;
 }
 
-
-
 .back-in-menu-button {
     top: 10%;
     left: 2%;
@@ -50,3 +48,15 @@
     transition-duration: 0.1s;
     scale: 0.96 0.96 0.96;
 }
+
+
+
+
+
+
+
+
+
+
+
+

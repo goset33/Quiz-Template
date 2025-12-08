@@ -9,9 +9,21 @@
         </ui:VisualElement>
         <ui:VisualElement name="CenterZone" style="height: 60%;">
             <ui:VisualElement name="ButtonContainer" class="button-container">
-                <LocalizedButton localization-key="START_GAME" name="PlayButton" class="button-primary dynamic-text" style="height: 40%; white-space: pre-wrap;"/>
-                <LocalizedButton localization-key="SETTINGS" name="SettingsButton" class="button-secondary dynamic-text"/>
-                <LocalizedButton localization-key="LEADERBOARDS" name="LeaderboardButton" class="button-secondary dynamic-text"/>
+                <ui:Button text="Button" name="PlayButton" class="button-primary dynamic-text">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537584146927616)"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button text="Button" name="SettingsButton" class="dynamic-text button-secondary">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537733258629120)"/>
+                    </Bindings>
+                </ui:Button>
+                <ui:Button text="Button" name="LeaderboardsButton" class="dynamic-text button-secondary">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537606087331840)"/>
+                    </Bindings>
+                </ui:Button>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

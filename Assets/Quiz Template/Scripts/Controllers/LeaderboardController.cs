@@ -3,7 +3,7 @@ using UnityEngine.Localization;
 using YG;
 using YG.Utils.LB;
 
-public class LeaderboardController : MonoBehaviour
+public class LeaderboardController : AbstractController
 {
     [SerializeField] private LBPlayerDataYG currentPlayer;
 
@@ -32,6 +32,6 @@ public class LeaderboardController : MonoBehaviour
 
     public void BackInMenu()
     {
-        GameManager.Instance.ReturnToMenu(transform);
+        GameManager.Instance.OpenWindow<MenuController>();
     }
 }

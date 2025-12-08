@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadController : MonoBehaviour
+public class LoadController : AbstractController
 {
     [SerializeField] private Transform canvas;
 

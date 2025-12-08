@@ -104,7 +104,7 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     /// <param name="button"> нопка</param>
     /// <param name="indexRights">0 - классический звук нажати€. 1 - звук правильного ответа. 2 - звук неправильного ответа.</param>
-    public void AddUniqueSoundToButton(Button button, int indexRights)
+    public void AddUniqueSoundToButton(UnityEngine.UI.Button button, int indexRights)
     {
         if (indexRights < 0 || indexRights > 3)
         {
@@ -115,6 +115,20 @@ public class SoundManager : MonoBehaviour
         if (button != null)
         {
             button.onClick.AddListener(() => PlayButtonSound(indexRights));
+        }
+    }
+
+    public void AddUniqueSoundToButton(UnityEngine.UIElements.Button button, int indexRights)
+    {
+        if (indexRights < 0 || indexRights > 3)
+        {
+            Debug.LogError("»ндекс не 0-3");
+            return;
+        }
+
+        if (button != null)
+        {
+            button.clicked += () => PlayButtonSound(indexRights);
         }
     }
 

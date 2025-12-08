@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using YG;
 using Random = UnityEngine.Random;
 
-public class QuestionController : MonoBehaviour
+public class QuestionController : AbstractController
 {
     private GameManager gameManager;
 
@@ -81,7 +81,7 @@ public class QuestionController : MonoBehaviour
         if (container == null)
         {
             gameManager.InvokeNotification(2);
-            gameManager.ReturnToMenu(transform);
+            GameManager.Instance.OpenWindow<MenuController>();
             return;
         }
 
@@ -594,7 +594,7 @@ public class QuestionController : MonoBehaviour
                 { "Количество возрождений", reviveCount },
                 { "Количество сердец", heartContainer.HeartCount } };
             YG2.MetricaSend("QuizLeave", data);
-            gameManager.ReturnToMenu(transform);
+            GameManager.Instance.OpenWindow<MenuController>();
         }
     }
 }

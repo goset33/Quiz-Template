@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using R3;
+using System.Collections.Generic;
 
 namespace YG
 {
@@ -8,7 +9,7 @@ namespace YG
         public List<string> favoriteCards = new();
         public string[] otherCards = null;
 
-        public int cash = 0;
+        public ReactiveProperty<int> cash = new ReactiveProperty<int>(0);
 
         public float musicVolume = 1f;
         public float vfxVolume = 1f;

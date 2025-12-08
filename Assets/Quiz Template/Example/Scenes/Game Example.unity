@@ -374,7 +374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &991519961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -579,6 +579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2090316523}
   - component: {fileID: 2090316522}
+  - component: {fileID: 2090316524}
   m_Layer: 0
   m_Name: Choose Quiz
   m_TagString: Untagged
@@ -624,6 +625,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2090316524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090316521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a23f47f7de03b47bd2e157f52de4b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChooseController
+  quizCardPrefab: {fileID: 0}
 --- !u!114 &2126245535 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4647276313314237215, guid: e8d9dae2daffc354295646eaf84f7d75, type: 3}
@@ -651,7 +665,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2145915894
 Transform:
   m_ObjectHideFlags: 0
@@ -755,6 +769,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 384168481308353671, guid: 1642724b39f30a94bac0afbb4d207063, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 506737895918054065, guid: 1642724b39f30a94bac0afbb4d207063, type: 3}
       propertyPath: m_LocalPosition.x
       value: 339.1106
@@ -858,6 +876,10 @@ PrefabInstance:
     - target: {fileID: 4183593376984769358, guid: 1642724b39f30a94bac0afbb4d207063, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410684683006218340, guid: 1642724b39f30a94bac0afbb4d207063, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4656134332572604527, guid: 1642724b39f30a94bac0afbb4d207063, type: 3}
       propertyPath: m_fontSize

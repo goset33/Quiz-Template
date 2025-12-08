@@ -61,10 +61,4 @@ public class QuizCardSetter : MonoBehaviour
     {
         QuizChoosed?.Invoke(cardContent);
     }
-
-    [Obsolete]
-    public void FavoritePressed()
-    {
-        controller.UpdateCardPos(cardContent);
-    }
 }

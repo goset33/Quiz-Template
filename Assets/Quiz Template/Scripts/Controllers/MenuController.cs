@@ -1,9 +1,31 @@
 using System;
-using UnityEngine;
+using UnityEngine.UIElements;
 
-public class MenuController : MonoBehaviour
+public class MenuController : AbstractController
 {
     public static event Action GameStarted, SettingsOpened, LeaderboardOpened;
+
+    public override void Init()
+    {
+        base.Init();
+        root.Query<Button>().ForEach(button =>
+        {
+            SoundManager.Instance.AddUniqueSoundToButton(button, 0);
+
+            switch (button.name)
+            {
+                case "PlayButton":
+                    button.clicked += PlayButtonPressed;
+                    break;
+                case "SettingsButton":
+                    button.clicked += SettingsButtonPressed;
+                    break;
+                case "LeaderboardsButton":
+                    button.clicked += LeaderboardButtonPressed;
+                    break;
+            }
+        });
+    }
 
     public void PlayButtonPressed()
     {

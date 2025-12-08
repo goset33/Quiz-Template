@@ -9,7 +9,7 @@ using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using UnityEngine.UI;
 using YG;
 
-public class ResultController : MonoBehaviour
+public class ResultController : AbstractController
 {
     [SerializeField] private TextMeshProUGUI header, resultText;
     [SerializeField] private Transform cashObject, expObject;
@@ -141,6 +141,6 @@ public class ResultController : MonoBehaviour
     public void BackButtonPressed()
     {
         rewardButton.SetActive(true);
-        GameManager.Instance.ReturnToMenu(transform);
+        GameManager.Instance.OpenWindow<MenuController>();
     }
 }

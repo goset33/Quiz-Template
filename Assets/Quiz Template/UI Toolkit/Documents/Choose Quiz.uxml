@@ -4,13 +4,21 @@
     <ui:VisualElement name="ChooseQuiz" class="background" style="flex-grow: 1;">
         <ui:VisualElement name="TopZone" style="width: 100%; height: 10%; margin-bottom: 1%; flex-direction: row-reverse; flex-wrap: nowrap; justify-content: space-between;">
             <ui:VisualElement name="CurrencyPanel" class="currency-panel" style="top: 20%; height: 60%;">
-                <ui:VisualElement name="CurrencyIcon" class="currency-icon" style="aspect-ratio: 1;"/>
-                <ui:Label text="1250" name="CurrencyAmount" class="currency-amount dynamic-text"/>
+                <ui:VisualElement name="CurrencyIcon" data-source="project://database/Assets/Quiz%20Template/UI%20Toolkit/Bindings/UIBinding%20Object.asset?fileID=11400000&amp;guid=674a16ed7f1d912478b60901069a116c&amp;type=2#UIBinding Object" class="currency-icon">
+                    <Bindings>
+                        <ui:DataBinding property="style.backgroundImage" data-source-path="cashSprite" data-source-type="UIBindingObject, Assembly-CSharp" binding-mode="ToTarget" data-source="project://database/Assets/Quiz%20Template/Example/Configs/Example%20Game%20Config.asset?fileID=11400000&amp;guid=feba4a2cb93aebc4aa364cd5364e340e&amp;type=2#Example Game Config"/>
+                    </Bindings>
+                </ui:VisualElement>
+                <ui:Label name="CurrencyAmount" text="1250" class="currency-amount dynamic-text">
+                    <Bindings>
+                        <ui:DataBinding property="text" data-source-path="cash" binding-mode="ToTarget" data-source="project://database/Assets/Quiz%20Template/UI%20Toolkit/Bindings/UIBinding%20Object.asset?fileID=11400000&amp;guid=674a16ed7f1d912478b60901069a116c&amp;type=2#UIBinding Object" data-source-type="YG.SavesYG, Assembly-CSharp"/>
+                    </Bindings>
+                </ui:Label>
             </ui:VisualElement>
             <ui:Button name="Back" class="back-in-menu-button"/>
         </ui:VisualElement>
         <ui:VisualElement name="MainZone" style="flex-grow: 1; width: 100%; height: 90%; align-items: center;">
-            <ui:ListView item-template="project://database/Assets/Quiz%20Template/UI%20Toolkit/Documents/Quiz%20Card.uxml?fileID=9197481963319205126&amp;guid=47f35b7d99c605b43ae28f88f6a7d951&amp;type=3#Quiz Card" binding-source-selection-mode="Manual" reorder-mode="Animated" reorderable="false" name="QuizContainer" style="width: 90%; padding-bottom: 2%;"/>
+            <ui:ListView item-template="project://database/Assets/Quiz%20Template/UI%20Toolkit/Documents/Quiz%20Card.uxml?fileID=9197481963319205126&amp;guid=47f35b7d99c605b43ae28f88f6a7d951&amp;type=3#Quiz Card" reorder-mode="Animated" name="QuizContainer" style="width: 90%; padding-bottom: 2%;"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

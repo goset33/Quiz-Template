@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 
 /// <summary>
@@ -20,7 +21,7 @@ public static class QuizCardExtentions
     public static QuizCard[] ConvertToCards(this IList<string> names, IList<QuizCard> target)
     {
         QuizCard[] cards = new QuizCard[names.Count];
-        for (int i = 0; i < names.Count;i++)
+        for (int i = 0; i < names.Count; i++)
         {
             if (string.IsNullOrEmpty(names[i])) continue;
 
@@ -81,5 +82,11 @@ public static class QuizCardExtentions
         {
             array[i] *= multiplier;
         }
+    }
+
+    public static QuizCard GetQuizCardByQuizUIData(this IList<QuizCard> quizzes, QuizUIData data)
+    {
+        Sprite image = data.image;
+        return quizzes.FirstOrDefault(quizCard => quizCard.image == data.image);
     }
 }

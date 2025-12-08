@@ -1,104 +1,74 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 using YG;
 
-public class ChooseController : MonoBehaviour
+public class ChooseController : AbstractController
 {
-    [SerializeField] private GameObject quizCardPrefab;
-    [SerializeField] private Transform cardsParent;
-    [SerializeField] private TextMeshProUGUI cashCounter;
-    [SerializeField] private TMP_InputField inputField;
+    public static event Action<QuizCard> QuizChoosed;
 
-    private void OnEnable()
+    [SerializeField] private VisualTreeAsset quizCardTemplate;
+
+    private ListView quizListView;
+    private List<QuizUIData> quizItems = new List<QuizUIData>();
+
+    //[SerializeField] private Transform cardsParent;
+    //[SerializeField] private TextMeshProUGUI cashCounter;
+
+    public override void Init()
     {
-        //inputField.onValueChanged.AddListener(RedrawOrder);
+        base.Init();
 
-        OnGameStart();
+        quizItems = new(GameManager.Instance.quizzes.Count);
+        for (int i = 0;  i < quizItems.Count; i++)
+        {
+            QuizCard quizCard = GameManager.Instance.quizzes[i];
+            QuizCardSaveData saveData = YG2.saves.quizCards.GetSaveDataByQuizCard(quizCard);
+
+            quizItems[i].image = quizCard.image;
+            quizItems[i].level = saveData.level;
+            quizItems[i].exp = saveData.exp;
+            quizItems[i].maxExp = saveData.maxExp;
+        }
+
+        quizListView = root.Q<ListView>();
+        quizListView.makeItem = () =>
+        {
+            return quizCardTemplate.CloneTree();
+        };
+
+        quizListView.bindItem = (element, index) =>
+        {
+            QuizUIData quizData = quizItems[index];
+            QuizCard quizCard = GameManager.Instance.quizzes.GetQuizCardByQuizUIData(quizData);
+
+            var startButton = element.Q<Button>();
+            if (startButton != null)
+            {
+                startButton.clickable.clicked += () => QuizChooseButtonPressed(quizCard);
+            }
+        };
+
+        quizListView.itemsSource = quizItems;
+        quizListView.fixedItemHeight = 200; // Высота одной карточки
+        quizListView.Rebuild();
     }
 
-    private void OnGameStart()
+    private void QuizChooseButtonPressed(QuizCard quizCard)
     {
-        cashCounter.text = YG2.saves.cash.ToString();
-        Image image = cashCounter.GetComponentInChildren<Image>();
-        if (image.sprite == null)
-        {
-            image.sprite = GameManager.Instance.config.cashSprite;
-        }
-
-        if (cardsParent.childCount != 0) return;
-
-        foreach (QuizCard content in GameManager.Instance.quizzes)
-        {
-            if (content == null) continue;
-
-            QuizCardSetter card = Instantiate(quizCardPrefab, cardsParent).GetComponent<QuizCardSetter>();
-            //bool isFav = YG2.saves.favoriteCards.ContainsThatQuizCard(content);
-            card.SetContent(content, this);
-        }
+        QuizChoosed?.Invoke(quizCard);
     }
 
     public void BackInMenu()
     {
-        GameManager.Instance.ReturnToMenu(transform);
+        GameManager.Instance.OpenWindow<MenuController>();
     }
+}
 
-    // --- Все что ниже - устарело ---
-
-    //private void OnDisable()
-    //{
-    //    inputField.onValueChanged.RemoveListener(RedrawOrder);
-    //}
-
-    /// <summary>
-    /// Заново отрисовывает порядок квизов. Нужен только если существует поиск и избранные
-    /// </summary>
-    [Obsolete]
-    public void RedrawOrder(string _)
-    {
-        for (int i = 0; i < cardsParent.childCount; i++)
-        {
-            Destroy(cardsParent.GetChild(i).gameObject);
-        }
-
-        QuizCard[] order;
-        if (!string.IsNullOrEmpty(inputField.text))
-        {
-            order = SearchQuizzesByName(inputField.text);
-        }
-        else
-        {
-            string[] arr = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
-            order = arr.ConvertToCards(GameManager.Instance.quizzes);
-        }
-
-        OnGameStart();
-    }
-
-    [Obsolete]
-    private QuizCard[] SearchQuizzesByName(string name)
-    {
-        string[] arr = YG2.saves.favoriteCards.Concat(YG2.saves.otherCards).ToArray();
-        QuizCard[] allCards = arr.ConvertToCards(GameManager.Instance.quizzes);
-        List<QuizCard> result = new();
-
-        foreach (QuizCard card in allCards)
-        {
-            if (card != null && card.names != null && card.names.Any(n => n != null && n.Contains(name, StringComparison.OrdinalIgnoreCase)))
-            {
-                result.Add(card);
-            }
-        }
-        return result.ToArray();
-    }
-
-    [Obsolete]
-    public void UpdateCardPos(QuizCard card)
-    {
-        GameManager.Instance.SetAsFavorite(card);
-        RedrawOrder(null);
-    }
+public class QuizUIData
+{
+    public Sprite image;
+    public int level;
+    public int exp, maxExp;
 }
