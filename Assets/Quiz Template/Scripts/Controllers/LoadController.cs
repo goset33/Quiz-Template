@@ -1,38 +1,45 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class LoadController : AbstractController
 {
-    [SerializeField] private Transform canvas;
+    private ProgressBar loadBar;
+    private VisualElement starsBackground;
 
-    private List<Image> images = new();
-    private List<TextMeshProUGUI> texts = new();
+    private BackgroundPosition currentOffsetX = new(BackgroundPositionKeyword.Right, 20);
+    private BackgroundPosition currentOffsetY = new(BackgroundPositionKeyword.Top, -10);
+    private StyleBackgroundPosition cachedStylePositionX = new();
+    private StyleBackgroundPosition cachedStylePositionY = new();
 
-    public void Awake()
+    public override void Init()
     {
-        for (int i = 0; i < canvas.childCount; i++)
-        {
-            Transform child = canvas.GetChild(i);
+        base.Init();
 
-            if (child.TryGetComponent(out Image image))
-            {
-                images.Add(image);
-            }
-            else if (child.TryGetComponent(out TextMeshProUGUI text))
-            {
-                texts.Add(text);
-            }
-        }
+        loadBar = root.Q<ProgressBar>();
+        starsBackground = root.Q<VisualElement>("BackgroundStars");
+
+        loadBar.value = 33;
+
+        new Delayer(this).IntervalForOneFrame(() =>
+        {
+            if (!root.visible) return;
+
+            currentOffsetX.offset.value -= 10f * Time.deltaTime;
+            currentOffsetY.offset.value += 10f * Time.deltaTime;
+
+            cachedStylePositionX.value = currentOffsetX;
+            cachedStylePositionY.value = currentOffsetY;
+
+            starsBackground.style.backgroundPositionX = cachedStylePositionX;
+            starsBackground.style.backgroundPositionY = cachedStylePositionY;
+        });
     }
 
     public void StartLoad(Action callback = null)
     {
-        canvas.gameObject.SetActive(true);
         StartCoroutine(FadeVisuals(1f, 0.5f, callback));
     }
 
@@ -51,32 +58,38 @@ public class LoadController : AbstractController
     {
         Sequence fadeSequence = DOTween.Sequence();
 
-        foreach (Image img in images)
+        if (targetAlpha > 0 && !root.visible)
         {
-            if (img != null)
-            {
-                fadeSequence.Join(img.DOFade(targetAlpha, duration));
-            }
+            root.visible = true;
+            root.style.opacity = 0f;
+            loadBar.value = 0;
+        }
+        else if (targetAlpha == 0 && root.visible)
+        {
+            root.style.opacity = 1f;
+
+            fadeSequence.Append(DOTween.To(() => loadBar.value, x => loadBar.value = x, 66f, 0.3f));
+            fadeSequence.AppendInterval(0.3f);
+            fadeSequence.Append(DOTween.To(() => loadBar.value, x => loadBar.value = x, 100f, 0.3f));
         }
 
-        foreach (TextMeshProUGUI txt in texts)
+        fadeSequence.Append(DOTween.To(() => root.resolvedStyle.opacity, x => root.style.opacity = x, targetAlpha, duration));
+
+        if (targetAlpha > 0)
         {
-            if (txt != null)
-            {
-                fadeSequence.Join(txt.DOFade(targetAlpha, duration));
-            }
+            fadeSequence.Append(DOTween.To(() => loadBar.value, x => loadBar.value = x, 33f, 0.3f));
         }
 
-        fadeSequence.OnComplete(() => {
+        fadeSequence.OnComplete(() =>
+        {
+            if (targetAlpha == 0)
+            {
+                root.visible = false;
+            }
             callback?.Invoke();
-            if (targetAlpha == 0f)
-            {
-                canvas.gameObject.SetActive(false);
-            }
         });
 
         fadeSequence.Play();
-
         yield return fadeSequence.WaitForCompletion();
     }
 }

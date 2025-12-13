@@ -1,5 +1,5 @@
 {
-  "idSave": 6,
+  "idSave": 1145,
   "quizCards": [
     {
       "cardId": "Minecraft",
@@ -33,16 +33,24 @@
     "Fortnite",
     "Genshin Impact"
   ],
-  "cash": {
+  "cash": 0,
+  "musicVolume": {
     "EqualityComparer": {},
-    "CurrentValue": 0,
-    "HasObservers": false,
+    "CurrentValue": 19,
+    "HasObservers": true,
     "IsCompleted": false,
     "IsDisposed": false,
     "IsCompletedOrDisposed": false,
-    "Value": 0
+    "Value": 19
   },
-  "musicVolume": 1.0,
-  "vfxVolume": 1.0,
+  "vfxVolume": {
+    "EqualityComparer": {},
+    "CurrentValue": 79,
+    "HasObservers": true,
+    "IsCompleted": false,
+    "IsDisposed": false,
+    "IsCompletedOrDisposed": false,
+    "Value": 79
+  },
   "isFirstQuiz": true
 }

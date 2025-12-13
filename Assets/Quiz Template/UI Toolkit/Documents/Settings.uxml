@@ -1,10 +1,32 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3#BaseUSS"/>
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3"/>
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Settings.uss?fileID=7433441132597879392&amp;guid=966e1340c2458e34fa444b7cbbc76da1&amp;type=3#Settings"/>
     <ui:VisualElement class="background" style="flex-grow: 1;">
         <ui:VisualElement name="TopZone" style="width: 100%; height: 10%; margin-bottom: 1%; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: stretch;">
             <ui:Button name="Back" enabled="true" class="back-in-menu-button" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
-            <LocalizedLabel localization-key="SETTINGS" display-tooltip-when-elided="true" class="dynamic-text" style="-unity-font-style: bold; margin-right: 25%; margin-left: 0%; margin-top: 0; margin-bottom: 0; padding-left: 2px; align-self: center; width: 50%; height: 80%; -unity-text-align: upper-center;"/>
+            <ui:Label text="Label" class="dynamic-text" style="-unity-font-style: bold; padding-left: 2px; margin-right: 25%; align-self: center; width: 50%; height: 80%; -unity-text-align: upper-center;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537733258629120)"/>
+                </Bindings>
+            </ui:Label>
         </ui:VisualElement>
-        <ui:VisualElement name="MainZone" style="flex-grow: 1;"/>
+        <ui:VisualElement name="MainZone" style="flex-grow: 1; margin-top: 15%;">
+            <ui:VisualElement name="Music" style="flex-grow: 0; background-color: rgba(255, 255, 255, 0); background-image: url(&quot;project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&amp;guid=9d241c14e7dc5774a99c5f73ad07bf3b&amp;type=3#button&quot;); -unity-slice-scale: 2.3px; width: 90%; align-items: flex-start; align-self: center; height: 20%; padding-top: 5%; padding-right: 5%; padding-bottom: 5%; padding-left: 5%; margin-bottom: 5%;">
+                <ui:Label text="Label" class="dynamic-text" style="-unity-font-style: bold; width: 100%; height: 40%; margin-bottom: 4%;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(73046787534442496)"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:SliderInt value="100" high-value="100" fill="true" show-input-field="true" low-value="0" enabled="true" name="MusicSlider" style="min-height: 0; width: 100%; padding-right: 1%; height: 25%;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="VFX" style="flex-grow: 0; background-color: rgba(255, 255, 255, 0); background-image: url(&quot;project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&amp;guid=9d241c14e7dc5774a99c5f73ad07bf3b&amp;type=3#button&quot;); -unity-slice-scale: 2.3px; width: 90%; align-items: flex-start; align-self: center; height: 20%; padding-top: 5%; padding-right: 5%; padding-bottom: 5%; padding-left: 5%;">
+                <ui:Label text="Label" class="dynamic-text" style="-unity-font-style: bold; width: 100%; height: 40%; margin-bottom: 4%;">
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(73046840000991232)"/>
+                    </Bindings>
+                </ui:Label>
+                <ui:SliderInt value="0" high-value="100" fill="true" show-input-field="true" low-value="0" enabled="true" name="VFXSlider" style="min-height: 0; width: 100%; padding-right: 1%; height: 25%;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -144,7 +144,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 39024527610040320
-    m_Key: LOAD_SCREEN_TEXT
+    m_Key: LOAD_SCREEN_HEADER
     m_Metadata:
       m_Items: []
   - m_Id: 66118804513050624
@@ -213,6 +213,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 77155826597974016
     m_Key: NAME_LIMITS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 112239231907090432
+    m_Key: LOAD_SCREEN_TEXT
     m_Metadata:
       m_Items: []
   m_Metadata:

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using R3;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public static string Language => YG2.lang;
+
+    public static CompositeDisposable disposables = new CompositeDisposable();
 
     public GameConfig config;
 
@@ -25,7 +28,6 @@ public class GameManager : MonoBehaviour
     [Header("Controllers")]
     [SerializeField] private LoadController loadController;
     [SerializeField] private TimelessController timelessController;
-    [SerializeField] private LeaderboardController leaderboardController;
     //[SerializeField] private HardnessController hardnessController;
     [SerializeField] private ResultController resultController;
 
@@ -52,13 +54,12 @@ public class GameManager : MonoBehaviour
         MenuController.GameStarted += OpenWindow<ChooseController>;
         MenuController.SettingsOpened += OpenWindow<SettingsController>;
         MenuController.LeaderboardOpened += OpenWindow<LeaderboardController>;
-        QuizCardSetter.QuizChoosed += OnQuizChoosed;
+        ChooseController.QuizChoosed += OnQuizChoosed;
         //HardnessController.LevelChoosed += OnLevelChoosed;
         QuestionController.AllReady += OnQuestionsLoaded;
         QuestionController.QuestionsEnded += OnQuestionsSolved;
 
         YG2.onGetSDKData += AfterSDKInitializing;
-        YG2.onGetLeaderboard += leaderboardController.OnLeaderboardInitialized;
 
         // Настройка квизов в окне выбора квизов
         // Наверняка можно упростить, но я уже не помню как там всё выглядит после временной интеграции избранных квизов. Работает и славно
@@ -73,7 +74,11 @@ public class GameManager : MonoBehaviour
         {
             controllers[controller.GetType()] = controller;
             controller.Init();
-            controller.ChangeVisibilityState(false);
+
+            if (controller is not LoadController)
+            {
+                controller.ChangeVisibilityState(false);
+            }
         }
         controllers[typeof(MenuController)].ChangeVisibilityState(true);
         currentWindowType = typeof(MenuController);
@@ -83,8 +88,7 @@ public class GameManager : MonoBehaviour
     {
         YG2.MetricaSend("GameEnter");
 
-        SoundManager.Instance.SetMusicVolume(YG2.saves.musicVolume);
-        SoundManager.Instance.SetVfxVolume(YG2.saves.vfxVolume);
+        SoundManager.Instance.Init();
 
         StartCoroutine(SaveCoroutine());
 
@@ -161,6 +165,7 @@ public class GameManager : MonoBehaviour
     public void OnGameQuit()
     {
         AIRequestHandler.Dispose();
+        disposables?.Dispose();
             
         StopAllCoroutines();
 
@@ -169,13 +174,12 @@ public class GameManager : MonoBehaviour
         MenuController.GameStarted -= OpenWindow<ChooseController>;
         MenuController.SettingsOpened -= OpenWindow<SettingsController>;
         MenuController.LeaderboardOpened -= OpenWindow<LeaderboardController>;
-        QuizCardSetter.QuizChoosed -= OnQuizChoosed;
+        ChooseController.QuizChoosed -= OnQuizChoosed;
         //HardnessController.LevelChoosed -= OnLevelChoosed;
         QuestionController.AllReady -= OnQuestionsLoaded;
         QuestionController.QuestionsEnded -= OnQuestionsSolved;
 
         YG2.onGetSDKData -= AfterSDKInitializing;
-        YG2.onGetLeaderboard -= leaderboardController.OnLeaderboardInitialized;
         if (LocalizationSettings.Instance != null)
         {
             LocalizationSettings.InitializationOperation.Completed -= LoadLocale;
@@ -205,7 +209,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             YG2.SaveProgress();
-            YG2.SetLeaderboard("Stars", YG2.saves.cash.Value);
+            YG2.SetLeaderboard("Stars", YG2.saves.cash);
             yield return waiter;
         }
     }
@@ -214,7 +218,7 @@ public class GameManager : MonoBehaviour
     {
         if (cost < 0)
         {
-            return YG2.saves.cash.Value >= Math.Abs(cost);
+            return YG2.saves.cash >= Math.Abs(cost);
         }
         return true;
     }
@@ -223,7 +227,7 @@ public class GameManager : MonoBehaviour
     {
         if (!HaveEnoughCash(cost)) return;
 
-        YG2.saves.cash.Value += cost;
+        YG2.saves.cash += cost;
     }
 
     public void AddExperience(int amount)

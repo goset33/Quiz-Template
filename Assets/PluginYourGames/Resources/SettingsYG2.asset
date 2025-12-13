@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Authorization:
     playerPhotoSize: 1
-    authorized: 0
+    authorized: 1
     playerName: Player test
     uniqueID: 000
     playerPhoto: demo image
@@ -450,8 +450,8 @@ MonoBehaviour:
         uniqueID: 330
         extraData: 
       currentPlayer:
-        rank: 0
-        score: 0
+        rank: 32
+        score: 3
         extraData: 
   Localization:
     setLanguageMod: 1

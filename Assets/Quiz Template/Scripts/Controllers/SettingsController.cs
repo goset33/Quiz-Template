@@ -1,44 +1,29 @@
-using TMPro;
-using UnityEngine;
-using UnityEngine.Localization;
-using UnityEngine.UI;
+using R3;
+using UnityEngine.UIElements;
 using YG;
 
 public class SettingsController : AbstractController
 {
-    [SerializeField] private Slider musicSlider, vfxSlider;
-    [SerializeField] private TextMeshProUGUI musicValue, vfxValue; 
-
-    private void Awake()
+    public override void Init()
     {
-        musicSlider.onValueChanged.AddListener(MusicSliderValueChanged);
-        vfxSlider.onValueChanged.AddListener(VfxSliderValueChanged);
+        base.Init();
 
-        musicSlider.value = YG2.saves.musicVolume;
-        vfxSlider.value = YG2.saves.vfxVolume;
+        root.Query<TextField>().ForEach(field =>
+        {
+            field.isReadOnly = true;
+            field.selectAllOnFocus = false;
+            field.selectAllOnMouseUp = false;
+            field.doubleClickSelectsWord = false;
+            field.tripleClickSelectsLine = false;
+        });
 
-        musicValue.text = Mathf.RoundToInt(YG2.saves.musicVolume * 100).ToString();
-        vfxValue.text = Mathf.RoundToInt(YG2.saves.vfxVolume * 100).ToString();
-    }
+        var musicSlider = root.Q<SliderInt>("MusicSlider");
+        var vfxSlider = root.Q<SliderInt>("VFXSlider");
 
-    private void MusicSliderValueChanged(float value)
-    {
-        YG2.saves.musicVolume = value;
-        SoundManager.Instance.SetMusicVolume(value);
+        musicSlider.RegisterValueChangedCallback(evt => YG2.saves.musicVolume.Value = evt.newValue);
+        vfxSlider.RegisterValueChangedCallback(evt => YG2.saves.vfxVolume.Value = evt.newValue);
 
-        musicValue.text = Mathf.RoundToInt(YG2.saves.musicVolume * 100).ToString();
-    }
-
-    private void VfxSliderValueChanged(float value)
-    {
-        YG2.saves.vfxVolume = value;
-        SoundManager.Instance.SetVfxVolume(value);
-
-        vfxValue.text = Mathf.RoundToInt(YG2.saves.vfxVolume * 100).ToString();
-    }
-
-    public void BackInMenu()
-    {
-        GameManager.Instance.OpenWindow<MenuController>();
+        YG2.saves.musicVolume.AsObservable().Subscribe(value => musicSlider.value = value).AddTo(GameManager.disposables);
+        YG2.saves.vfxVolume.AsObservable().Subscribe(value => vfxSlider.value = value).AddTo(GameManager.disposables);
     }
 }

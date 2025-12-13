@@ -1,0 +1,39 @@
+.background-stars {
+    flex-grow: 1;
+    justify-content: center;
+    background-image: url("project://database/Assets/Quiz%20Template/Images/round-star.png?fileID=21300000&guid=d6148ee4d5c291c4eafe8540fa86e186&type=3#round-star");
+    background-repeat: round round;
+    -unity-background-image-tint-color: rgba(253, 255, 0, 0.27);
+    background-size: 32% 20%;
+    background-position-y: top -10%;
+    background-position-x: right 20%;
+}
+
+.unity-progress-bar__container {
+    height: 100%;
+    width: 100%;
+    min-height: auto;
+    max-height: none;
+}
+
+.unity-progress-bar__background {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 23px;
+    border-top-right-radius: 23px;
+    border-bottom-right-radius: 23px;
+    border-bottom-left-radius: 23px;
+    height: 100%;
+    width: 100%;
+}
+
+.unity-progress-bar__progress {
+    border-top-left-radius: 23px;
+    border-bottom-left-radius: 23px;
+    border-top-right-radius: 23px;
+    border-bottom-right-radius: 23px;
+    background-color: rgb(255, 198, 0);
+}

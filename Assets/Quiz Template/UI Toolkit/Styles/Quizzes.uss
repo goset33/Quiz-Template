@@ -35,13 +35,25 @@
     width: 100%;
     align-self: center;
     background-color: rgba(0, 0, 0, 0);
-    height: auto;
+    height: 100%;
     aspect-ratio: 1.777778;
     flex-direction: column-reverse;
     flex-wrap: wrap;
     -unity-slice-scale: 1.1px;
     background-image: url("project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&guid=9d241c14e7dc5774a99c5f73ad07bf3b&type=3#button");
     -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.hidden-container .unity-list-view,
+.hidden-container .unity-template-container,
+.hidden-container .unity-visual-element {
+    display: none;
+    visibility: hidden;
+}
+
+.unity-list-view__item:hover,
+.unity-list-view__item:selected {
+    background-color: transparent;
 }
 
 #Background > .unity-progress-bar > #unity-progress-bar > .unity-progress-bar__background {

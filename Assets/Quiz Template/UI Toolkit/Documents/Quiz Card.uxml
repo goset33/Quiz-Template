@@ -2,11 +2,11 @@
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3#BaseUSS"/>
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Quizzes.uss?fileID=7433441132597879392&amp;guid=d2d19566fb4b9764d9f1a37e1df85575&amp;type=3#Quizzes"/>
     <ui:VisualElement class="quiz-card-background" style="flex-grow: 1; overflow: hidden; -unity-background-image-tint-color: rgba(255, 255, 255, 0); position: absolute; height: auto; visibility: visible; display: flex; opacity: 1; border-top-left-radius: 11px; border-top-right-radius: 11px; border-bottom-right-radius: 11px; border-bottom-left-radius: 11px;">
-        <ui:Button name="Background" class="quiz-card-background" style="background-image: url(&quot;project://database/Assets/Quiz%20Template/Example/Images/Brawl%20Stars.png?fileID=21300000&amp;guid=89af33dff0990be49938e4c9b66699ce&amp;type=3#Brawl Stars&quot;); height: 100%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-bottom: 0; padding-right: 0; padding-left: 0;">
+        <ui:VisualElement name="Background" class="quiz-card-background" style="flex-grow: 1;">
             <ui:ProgressBar value="19" name="ExpBar" style="background-image: url(&quot;project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&amp;guid=9d241c14e7dc5774a99c5f73ad07bf3b&amp;type=3#button&quot;); -unity-slice-scale: 0.5px; margin-bottom: 0%; margin-right: 0%; margin-top: 1%; margin-left: 0; width: 100%; height: 4%;"/>
             <ui:VisualElement style="flex-grow: 0; flex-shrink: 1; align-self: flex-end; background-image: url(&quot;project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&amp;guid=9d241c14e7dc5774a99c5f73ad07bf3b&amp;type=3#button&quot;); aspect-ratio: 1; width: 15%; height: 15%; -unity-slice-scale: 4.5px; justify-content: center; align-content: center; align-items: center;">
-                <ui:Label text="4" name="LevelText" class="dynamic-text" style="align-self: center; flex-shrink: 1; flex-grow: 1; width: 100%; height: 100%; -unity-font-style: bold;"/>
+                <ui:Label text="4" name="LevelText" class="dynamic-text" style="align-self: center; flex-shrink: 1; flex-grow: 1; width: 100%; height: 100%; -unity-font-style: bold; -unity-text-align: middle-center;"/>
             </ui:VisualElement>
-        </ui:Button>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

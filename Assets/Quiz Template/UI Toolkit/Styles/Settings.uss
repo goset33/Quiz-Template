@@ -1,0 +1,98 @@
+.unity-base-slider__input {
+    align-items: center;
+    flex-direction: row;
+}
+
+.unity-base-slider__drag-container {
+    width: auto;
+    height: 100%;
+}
+
+.unity-base-slider__tracker {
+    background-color: rgba(183, 183, 183, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    background-image: url("project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&guid=9d241c14e7dc5774a99c5f73ad07bf3b&type=3#button");
+    -unity-slice-scale: 1.3px;
+    height: 100%;
+    -unity-background-image-tint-color: rgb(183, 183, 183);
+    width: 95%;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.unity-base-slider__dragger {
+    height: 100%;
+    width: 9%;
+    opacity: 0;
+    display: none;
+    visibility: hidden;
+    overflow: visible;
+}
+
+.unity-base-slider__fill {
+    background-color: rgba(255, 241, 0, 0);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-image: url("project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&guid=9d241c14e7dc5774a99c5f73ad07bf3b&type=3#button");
+    -unity-background-image-tint-color: rgb(255, 241, 0);
+    -unity-slice-scale: 1.3px;
+    border-top-left-radius: 29px;
+    border-top-right-radius: 29px;
+    border-bottom-right-radius: 29px;
+    border-bottom-left-radius: 29px;
+}
+
+.unity-base-slider__text-field {
+    height: 135%;
+    color: rgb(46, 58, 69);
+    -unity-text-align: middle-center;
+    white-space: normal; 
+    -unity-font-style: bold;
+    width: 10%;
+    --unity-cursor-color: transparent;
+}
+
+.unity-base-text-field__input {
+    background-image: url("project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&guid=9d241c14e7dc5774a99c5f73ad07bf3b&type=3#button");
+    background-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    -unity-background-image-tint-color: rgb(183, 183, 183);
+    -unity-slice-scale: 1.3px;
+    align-items: center;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    height: 100%;
+    width: auto;
+}
+
+.unity-text-element--inner-input-field-component {
+    padding-top: 9%;
+    padding-right: 9%;
+    padding-bottom: 9%;
+    padding-left: 9%;
+    align-items: center;
+    justify-content: flex-end;
+    align-self: center;
+    -unity-text-generator: advanced;
+    -unity-text-auto-size: best-fit 10px 100px;
+    -unity-text-align: middle-center;
+    width: 100%;
+}

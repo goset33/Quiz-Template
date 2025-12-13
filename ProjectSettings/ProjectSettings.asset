@@ -18,7 +18,7 @@ PlayerSettings:
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
-  m_ShowUnitySplashLogo: 1
+  m_ShowUnitySplashLogo: 0
   m_SplashScreenOverlayOpacity: 1
   m_SplashScreenAnimation: 1
   m_SplashScreenLogoStyle: 1
@@ -39,9 +39,7 @@ PlayerSettings:
     y: 0
     width: 1
     height: 1
-  m_SplashScreenLogos:
-  - logo: {fileID: 10404, guid: 0000000000000000f000000000000000, type: 0}
-    duration: 2
+  m_SplashScreenLogos: []
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1920
@@ -795,9 +793,9 @@ PlayerSettings:
     PS5: DOTWEEN;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Localization_yg;Metrica_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Leaderboards_yg;QuitGameEvent_yg
     QNX: DOTWEEN
     Stadia: DOTWEEN
-    Standalone: YG_PLUGIN_YANDEX_GAME;DOTWEEN;YG_TEXT_MESH_PRO;YG_NEWTONSOFT_FOR_AUTOLOCALIZATION;YG_NEWTONSOFT_FOR_SAVES;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Localization_yg;Metrica_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Leaderboards_yg;QuitGameEvent_yg
+    Standalone: YG_PLUGIN_YANDEX_GAME;DOTWEEN;YG_TEXT_MESH_PRO;YG_NEWTONSOFT_FOR_AUTOLOCALIZATION;YG_NEWTONSOFT_FOR_SAVES;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Localization_yg;Metrica_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Leaderboards_yg;QuitGameEvent_yg;APP_UI_EDITOR_ONLY
     VisionOS: DOTWEEN
-    WebGL: DOTWEEN;YG_PLUGIN_YANDEX_GAME;YG_NEWTONSOFT_FOR_AUTOLOCALIZATION;YG_TEXT_MESH_PRO;YG_NEWTONSOFT_FOR_SAVES;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Localization_yg;RU_YG2;NJSON_STORAGE_YG2;Metrica_yg;Leaderboards_yg;QuitGameEvent_yg
+    WebGL: DOTWEEN;YG_PLUGIN_YANDEX_GAME;YG_NEWTONSOFT_FOR_AUTOLOCALIZATION;YG_TEXT_MESH_PRO;YG_NEWTONSOFT_FOR_SAVES;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Localization_yg;RU_YG2;NJSON_STORAGE_YG2;Metrica_yg;Leaderboards_yg;QuitGameEvent_yg;APP_UI_EDITOR_ONLY
     Windows Store Apps: DOTWEEN;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Localization_yg;Metrica_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Leaderboards_yg;QuitGameEvent_yg
     XboxOne: DOTWEEN;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Localization_yg;Metrica_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Leaderboards_yg;QuitGameEvent_yg
     iPhone: DOTWEEN;PLUGIN_YG_2;YandexGamesPlatform_yg;Authorization_yg;EnvirData_yg;InterstitialAdv_yg;Localization_yg;Metrica_yg;RewardedAdv_yg;Storage_yg;TMP_YG2;NJSON_YG2;Leaderboards_yg;QuitGameEvent_yg

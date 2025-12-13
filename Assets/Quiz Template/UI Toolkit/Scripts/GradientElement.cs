@@ -1,7 +1,5 @@
-using static UnityEngine.UIElements.VisualElement;
-using System.Xml.Serialization;
-using UnityEngine.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum GradientDirection
 {
@@ -53,6 +51,11 @@ public partial class GradientElement : VisualElement
         var meshWriteData = meshGenerationContext.Allocate(_vertices.Length, _indices.Length);
         meshWriteData.SetAllVertices(_vertices);
         meshWriteData.SetAllIndices(_indices);
+    }
+
+    public new void Add(VisualElement child)
+    {
+        gradient.Add(child);
     }
 
     static void UpdateVerticesPosition(Rect rect)

@@ -1,8 +1,10 @@
+using R3;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using YG;
 using Random = UnityEngine.Random;
 
 public class SoundManager : MonoBehaviour
@@ -15,9 +17,13 @@ public class SoundManager : MonoBehaviour
 
     public static event Action<int> JingleEnded; // ѕередает 0 если перва€ стади€ и 1 если втора€ стади€
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
+    }
+
+    public void Init()
+    {
         StartCoroutine(PitchChanger());
 
         Button[] buttons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -25,6 +31,9 @@ public class SoundManager : MonoBehaviour
         {
             button.onClick.AddListener(() => PlayButtonSound(0));
         }
+
+        YG2.saves.musicVolume.AsObservable().Subscribe(value => SetMusicVolume(value / 100f)).AddTo(GameManager.disposables);
+        YG2.saves.vfxVolume.AsObservable().Subscribe(value => SetVfxVolume(value / 100f)).AddTo(GameManager.disposables);
     }
 
     /// <summary>

@@ -1,19 +1,23 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3#BaseUSS"/>
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3"/>
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Main%20Menu.uss?fileID=7433441132597879392&amp;guid=68c57bea38ce18241b666562c7833b86&amp;type=3#Main Menu"/>
     <ui:VisualElement name="MainContainer" class="background">
         <ui:VisualElement name="LogoZone" style="width: 100%; height: 38%; margin-bottom: 1%; margin-top: 10%;">
             <ui:VisualElement name="LogoContainer" class="logo-container">
-                <LocalizedImage localization-key="LOGO"/>
+                <ui:Image>
+                    <Bindings>
+                        <UnityEngine.Localization.LocalizedSprite property="source" table="GUID:4bf1b964954066c47b4fb30f9f0bbc79" entry="Id(21662486528)"/>
+                    </Bindings>
+                </ui:Image>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="CenterZone" style="height: 60%;">
             <ui:VisualElement name="ButtonContainer" class="button-container">
-                <ui:Button text="Button" name="PlayButton" class="button-primary dynamic-text">
+                <GradientButton gradient-direction="Vertical" gradient-from="rgb(0, 119, 194)" gradient-to="rgb(0, 87, 142)" name="PlayButton" class="button-primary dynamic-text" style="-unity-background-image-tint-color: rgb(255, 255, 255); border-top-left-radius: 43px; border-top-right-radius: 43px; border-bottom-right-radius: 43px; border-bottom-left-radius: 43px;">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537584146927616)"/>
                     </Bindings>
-                </ui:Button>
+                </GradientButton>
                 <ui:Button text="Button" name="SettingsButton" class="dynamic-text button-secondary">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537733258629120)"/>

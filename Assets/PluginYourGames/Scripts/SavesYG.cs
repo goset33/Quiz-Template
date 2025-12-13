@@ -9,11 +9,11 @@ namespace YG
         public List<string> favoriteCards = new();
         public string[] otherCards = null;
 
-        public ReactiveProperty<int> cash = new ReactiveProperty<int>(0);
+        public int cash = 0;
 
-        public float musicVolume = 1f;
-        public float vfxVolume = 1f;
+        public ReactiveProperty<int> musicVolume = new ReactiveProperty<int>(100);
+        public ReactiveProperty<int> vfxVolume = new ReactiveProperty<int>(100);
 
-        public bool isFirstQuiz = true;
+        public bool isFirstQuiz = true;       
     }
 }

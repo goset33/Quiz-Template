@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 using YG;
@@ -13,46 +14,87 @@ public class ChooseController : AbstractController
     private ListView quizListView;
     private List<QuizUIData> quizItems = new List<QuizUIData>();
 
-    //[SerializeField] private Transform cardsParent;
-    //[SerializeField] private TextMeshProUGUI cashCounter;
-
     public override void Init()
     {
         base.Init();
-
-        quizItems = new(GameManager.Instance.quizzes.Count);
-        for (int i = 0;  i < quizItems.Count; i++)
-        {
-            QuizCard quizCard = GameManager.Instance.quizzes[i];
-            QuizCardSaveData saveData = YG2.saves.quizCards.GetSaveDataByQuizCard(quizCard);
-
-            quizItems[i].image = quizCard.image;
-            quizItems[i].level = saveData.level;
-            quizItems[i].exp = saveData.exp;
-            quizItems[i].maxExp = saveData.maxExp;
-        }
-
         quizListView = root.Q<ListView>();
+
+        root.Q<Label>("CurrencyAmount").SetBinding("text", new DataBinding
+        {
+            dataSource = YG2.saves,
+            dataSourcePath = PropertyPath.FromName(nameof(SavesYG.cash)),
+            bindingMode = BindingMode.ToTarget
+        });
+
+        SetupListView();
+    }
+
+    private void SetupListView()
+    {
         quizListView.makeItem = () =>
         {
-            return quizCardTemplate.CloneTree();
+            var card = quizCardTemplate.CloneTree();
+
+            var cached = new CachedRefs
+            {
+                background = card.Q<VisualElement>("Background"),
+                expBar = card.Q<ProgressBar>("ExpBar"),
+                levelText = card.Q<Label>("LevelText"),
+            };
+
+            quizListView.selectionType = SelectionType.Single;
+            quizListView.selectionChanged += (selectedItems) =>
+            {
+                foreach (var item in selectedItems)
+                {
+                    if (item is QuizUIData quizData)
+                    {
+                        print($"Selected: {quizData.quizCard.name}");
+                        QuizChooseButtonPressed(quizData.quizCard);
+                    }
+                }
+            };
+
+            card.userData = cached;
+            return card;
         };
 
         quizListView.bindItem = (element, index) =>
         {
             QuizUIData quizData = quizItems[index];
-            QuizCard quizCard = GameManager.Instance.quizzes.GetQuizCardByQuizUIData(quizData);
 
-            var startButton = element.Q<Button>();
-            if (startButton != null)
-            {
-                startButton.clickable.clicked += () => QuizChooseButtonPressed(quizCard);
-            }
+            if (element.userData is not CachedRefs cached) return;
+
+            cached.background.style.backgroundImage = new StyleBackground(quizData.image);
+            cached.expBar.highValue = quizData.maxExp;
+            cached.expBar.value = quizData.exp;
+            cached.levelText.text = $"{quizData.level}";
         };
 
         quizListView.itemsSource = quizItems;
-        quizListView.fixedItemHeight = 200; // Высота одной карточки
+        quizListView.fixedItemHeight = 512;
         quizListView.Rebuild();
+    }
+
+    private void RefreshAllQuizData()
+    {
+        quizItems.Clear();
+
+        foreach (QuizCard quizCard in GameManager.Instance.quizzes)
+        {
+            QuizCardSaveData saveData = YG2.saves.quizCards.GetSaveDataByQuizCard(quizCard);
+
+            quizItems.Add(new QuizUIData
+            {
+                quizCard = quizCard,
+                image = quizCard.image,
+                level = saveData.level,
+                exp = saveData.exp,
+                maxExp = saveData.maxExp
+            });
+        }
+
+        quizListView?.RefreshItems();
     }
 
     private void QuizChooseButtonPressed(QuizCard quizCard)
@@ -60,14 +102,33 @@ public class ChooseController : AbstractController
         QuizChoosed?.Invoke(quizCard);
     }
 
-    public void BackInMenu()
+    public override void ChangeVisibilityState(bool newState)
     {
-        GameManager.Instance.OpenWindow<MenuController>();
+        base.ChangeVisibilityState(newState);
+
+        if (newState)
+        {
+            root.RemoveFromClassList("hidden-container");
+            RefreshAllQuizData();
+        }
+        else
+        {
+            root.AddToClassList("hidden-container");
+        }
+    }
+
+    class CachedRefs
+    {
+        public VisualElement background;
+        public ProgressBar expBar;
+        public Label levelText;
     }
 }
 
 public class QuizUIData
 {
+    public QuizCard quizCard;
+
     public Sprite image;
     public int level;
     public int exp, maxExp;

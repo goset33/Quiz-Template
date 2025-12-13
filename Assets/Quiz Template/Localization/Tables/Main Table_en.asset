@@ -233,6 +233,10 @@ MonoBehaviour:
       numbers or special characters!
     m_Metadata:
       m_Items: []
+  - m_Id: 112239231907090432
+    m_Localized: Preparation of game content...
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

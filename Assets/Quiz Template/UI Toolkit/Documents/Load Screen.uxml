@@ -1,0 +1,22 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3#BaseUSS"/>
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Load.uss?fileID=7433441132597879392&amp;guid=867e522ed368a654a9121e2c0e5149bd&amp;type=3#Load"/>
+    <GradientElement gradient-from="rgb(222, 247, 255)" gradient-direction="Vertical" gradient-to="rgb(191, 234, 245)" class="background">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1;"/>
+    </GradientElement>
+    <ui:VisualElement name="BackgroundStars" class="background background-stars">
+        <ui:VisualElement name="MainZone" style="flex-grow: 0; width: 100%; height: 40%; justify-content: center; align-items: center;">
+            <ui:Label text="Label" name="Header" class="dynamic-text" style="-unity-text-align: middle-center; -unity-font-style: bold; -unity-text-auto-size: best-fit 10px 75px; width: 30%;">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(39024527610040320)"/>
+                </Bindings>
+            </ui:Label>
+            <ui:ProgressBar value="43.7" name="ProgressBar" style="background-color: rgba(0, 0, 0, 0); width: 30%; margin-bottom: 2%; margin-top: 2%; height: 5%;"/>
+            <ui:Label text="Label" name="HintText" class="dynamic-text" style="-unity-font-style: normal; -unity-text-align: upper-center; width: 50%; color: rgba(27, 27, 27, 0.73);">
+                <Bindings>
+                    <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(112239231907090432)"/>
+                </Bindings>
+            </ui:Label>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
