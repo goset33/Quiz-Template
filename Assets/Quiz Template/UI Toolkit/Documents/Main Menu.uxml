@@ -13,7 +13,7 @@
         </ui:VisualElement>
         <ui:VisualElement name="CenterZone" style="height: 60%;">
             <ui:VisualElement name="ButtonContainer" class="button-container">
-                <GradientButton gradient-direction="Vertical" gradient-from="rgb(0, 119, 194)" gradient-to="rgb(0, 87, 142)" name="PlayButton" class="button-primary dynamic-text" style="-unity-background-image-tint-color: rgb(255, 255, 255); border-top-left-radius: 43px; border-top-right-radius: 43px; border-bottom-right-radius: 43px; border-bottom-left-radius: 43px;">
+                <GradientButton gradient-direction="Vertical" gradient-from="rgb(0, 119, 194)" gradient-to="rgb(0, 87, 142)" name="PlayButton" class="button-primary dynamic-text">
                     <Bindings>
                         <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537584146927616)"/>
                     </Bindings>

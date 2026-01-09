@@ -10,8 +10,6 @@ public class MenuController : AbstractController
         base.Init();
         root.Query<Button>().ForEach(button =>
         {
-            SoundManager.Instance.AddUniqueSoundToButton(button, 0);
-
             switch (button.name)
             {
                 case "PlayButton":

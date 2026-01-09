@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Settings.uss?fileID=7433441132597879392&amp;guid=966e1340c2458e34fa444b7cbbc76da1&amp;type=3#Settings"/>
     <ui:VisualElement class="background" style="flex-grow: 1;">
         <ui:VisualElement name="TopZone" style="width: 100%; height: 10%; margin-bottom: 1%; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: stretch;">
-            <ui:Button name="Back" enabled="true" class="back-in-menu-button" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;"/>
+            <ui:Button name="Back" enabled="true" class="back-in-menu-button"/>
             <ui:Label text="Label" class="dynamic-text" style="-unity-font-style: bold; padding-left: 2px; margin-right: 25%; align-self: center; width: 50%; height: 80%; -unity-text-align: upper-center;">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(24537733258629120)"/>

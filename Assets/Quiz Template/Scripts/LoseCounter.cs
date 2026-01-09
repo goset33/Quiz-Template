@@ -1,43 +1,65 @@
+using System.Threading;
 using System;
-using TMPro;
+using UnityEngine.UIElements;
 using UnityEngine;
-using UnityEngine.UI;
+using System.Threading.Tasks;
 
-/// <summary>
-/// Класс отвечает за круговой таймер, который показывается игроку при проигрыше
-/// Объект со скриптом самоуничтожается по истечении таймера и вызывает функцию TimelessController.ButtonPressed()
-/// </summary>
-public class LoseCounter : MonoBehaviour
+public class LoseCounter : AbstractObjectController
 {
-    [SerializeField] private Slider slider;
-    [SerializeField] private TextMeshProUGUI counter;
-
+    private RadialProgressBar progressBar;
     private float timer = 5f;
+    private TimelessController controller;
+    private CancellationTokenSource cts;
 
-    private static event Action<int> OnTimeEnd;
-
-    private void Start()
+    public override void Init(float t, TimelessController controller, VisualElement element)
     {
-        OnTimeEnd += transform.parent.parent.parent.GetComponent<TimelessController>().ButtonPressed;
+        timer = t;
+        this.controller = controller;
+        cts = new CancellationTokenSource();
+
+        progressBar = element.Q<RadialProgressBar>();
+        progressBar.maxValue = t;
+        progressBar.value = t;
+
+        _ = RunTimerAsync(cts.Token);
     }
 
-    private void OnDisable()
+    private async Task RunTimerAsync(CancellationToken cancellationToken)
     {
-        OnTimeEnd -= transform.parent.parent.parent.GetComponent<TimelessController>().ButtonPressed;
-        Destroy(gameObject);
-    }
-
-    private void Update()
-    {
-        timer -= Time.deltaTime;
-        counter.text = Mathf.RoundToInt(timer).ToString();
-        if (timer <= 0)
+        try
         {
-            OnTimeEnd.Invoke(0);
-            slider.value = 0f;
-            return;
-        }
+            while (timer > 0 && !cancellationToken.IsCancellationRequested)
+            {
+                await Task.Yield();
 
-        slider.value = timer / 5f;        
+                timer -= Time.deltaTime;
+                progressBar.value = timer;
+            }
+
+            if (timer <= 0 && !cancellationToken.IsCancellationRequested)
+            {
+                progressBar.value = 0f;
+                controller.ButtonPressed(0);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Нормальная отмена
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Ошибка в таймере: {ex.Message}");
+        }
+        finally
+        {
+            Dispose();
+        }
+    }
+
+    public override void Dispose()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = null;
     }
 }

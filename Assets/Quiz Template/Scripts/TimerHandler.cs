@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TimerHandler : MonoBehaviour
 {
@@ -11,60 +11,24 @@ public class TimerHandler : MonoBehaviour
     public static bool isRunning = false;
     public static event Action OnTimeEnd;
 
-    private TextMeshProUGUI textComponent;
+    public bool IsEnabled => timerText.parent.visible;
+    private Label timerText;
 
     private Coroutine routine = null;
     private readonly WaitForSeconds waitFor = new WaitForSeconds(1f);
 
-    private void Start()
+    public void InitTimer(Label text)
     {
-        textComponent = GetComponent<TextMeshProUGUI>();
-    }
+        timerText = text;
 
-    private void OnEnable()
-    {
         QuestionController.NextQuestionLoaded += WhenNextQuestion;
         QuestionController.WrongAnswer += OnWrongAnswer;
-    }
-
-    private void OnDisable()
-    {
-        StopTime();
-        QuestionController.NextQuestionLoaded -= WhenNextQuestion;
-        QuestionController.WrongAnswer -= OnWrongAnswer;
-    }
-
-    /// <summary>
-    /// Инициализирует таймер. Вызывать при инициализации окна теста
-    /// </summary>
-    /// <param name="_maxTime">Начальное время на таймере</param>
-    /// <param name="isGlobal">True - время общее для всех вопросов. False - время отдельно для каждого вопроса</param>
-    public void InitializeTime(float _maxTime, bool isGlobal)
-    {
-        if (isRunning) return;
-
-        maxTime = 0f;
-        time = _maxTime;
-        isRunning = true;
-        if (!isGlobal)
-        {
-            maxTime = _maxTime;
-        }
-
-        textComponent.text = ConvertSecondsToClock(time);
-
-        if (routine != null)
-        {
-            StopCoroutine(routine);
-        }
-
-        routine = StartCoroutine(TimerCoroutine());
     }
 
     /// <summary>
     /// Останавливает и обнуляет таймер
     /// </summary>
-    public void StopTime()
+    public void ResetTime()
     {
         isRunning = false;
         time = 0f;
@@ -76,11 +40,52 @@ public class TimerHandler : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        ResetTime();
+        QuestionController.NextQuestionLoaded -= WhenNextQuestion;
+        QuestionController.WrongAnswer -= OnWrongAnswer;
+    }
+
+    public void ChangeVisibility(bool newState)
+    {
+        timerText.parent.visible = newState;
+    }
+
+    /// <summary>
+    /// Инициализирует таймер. Вызывать при инициализации окна теста
+    /// </summary>
+    /// <param name="_maxTime">Начальное время на таймере</param>
+    /// <param name="isGlobal">True - время общее для всех вопросов. False - время отдельно для каждого вопроса</param>
+    public void SetTime(float _maxTime, bool isGlobal)
+    {
+        if (isRunning || !IsEnabled) return;
+
+        maxTime = 0f;
+        time = _maxTime;
+        isRunning = true;
+        if (!isGlobal)
+        {
+            maxTime = _maxTime;
+        }
+
+        timerText.text = ConvertSecondsToClock(time);
+
+        if (routine != null)
+        {
+            StopCoroutine(routine);
+        }
+
+        routine = StartCoroutine(TimerCoroutine());
+    }
+
     /// <summary>
     /// Ставит и снимает время с паузы
     /// </summary>
     public void ChangeTimePauseState()
     {
+        if (!IsEnabled) return;
+
         isRunning = !isRunning;
         if (!isRunning)
         {
@@ -107,15 +112,17 @@ public class TimerHandler : MonoBehaviour
     /// <param name="addingTime">Время, которое нужно восстановить</param>
     public void RestoreSomeTime(float addingTime)
     {
+        if (!IsEnabled) return;
+
         if (maxTime == 0f)
         {
-            InitializeTime(addingTime, true);
+            SetTime(addingTime, true);
         }
         else
         {
             time = addingTime;
             isRunning = true;
-            textComponent.text = ConvertSecondsToClock(time);
+            timerText.text = ConvertSecondsToClock(time);
             routine = StartCoroutine(TimerCoroutine());
         }
     }
@@ -129,20 +136,20 @@ public class TimerHandler : MonoBehaviour
         {
             yield return waitFor;
             time -= 1f;
-            textComponent.text = ConvertSecondsToClock(time);
+            timerText.text = ConvertSecondsToClock(time);
         }
 
         if (time <= 0f)
         {
             OnTimeEnd?.Invoke();
             isRunning = false;
-            StopTime();
+            ResetTime();
         }
     }
 
     public void OnWrongAnswer()
     {
-        if (routine == null) return;
+        if (routine == null || !IsEnabled) return;
 
         StopCoroutine(routine);
         routine = null;
@@ -150,13 +157,15 @@ public class TimerHandler : MonoBehaviour
 
     public void WhenNextQuestion()
     {
+        if (!IsEnabled) return;
+
         if (maxTime != 0f)
         {
             time = maxTime;
             isRunning = true;
         }
 
-        textComponent.text = ConvertSecondsToClock(time);
+        timerText.text = ConvertSecondsToClock(time);
         routine ??= StartCoroutine(TimerCoroutine());
     }
 

@@ -1,23 +1,23 @@
 {
-  "idSave": 1145,
+  "idSave": 2888,
   "quizCards": [
     {
       "cardId": "Minecraft",
-      "level": 1,
-      "maxExp": 30,
-      "exp": 0
+      "level": 3,
+      "maxExp": 90,
+      "exp": 12
     },
     {
       "cardId": "Brawl Stars",
       "level": 1,
       "maxExp": 30,
-      "exp": 0
+      "exp": 2
     },
     {
       "cardId": "Fortnite",
       "level": 1,
       "maxExp": 30,
-      "exp": 0
+      "exp": 2
     },
     {
       "cardId": "Genshin Impact",
@@ -33,24 +33,24 @@
     "Fortnite",
     "Genshin Impact"
   ],
-  "cash": 0,
+  "cash": -2147483587,
   "musicVolume": {
     "EqualityComparer": {},
-    "CurrentValue": 19,
+    "CurrentValue": 2,
     "HasObservers": true,
     "IsCompleted": false,
     "IsDisposed": false,
     "IsCompletedOrDisposed": false,
-    "Value": 19
+    "Value": 2
   },
   "vfxVolume": {
     "EqualityComparer": {},
-    "CurrentValue": 79,
+    "CurrentValue": 36,
     "HasObservers": true,
     "IsCompleted": false,
     "IsDisposed": false,
     "IsCompletedOrDisposed": false,
-    "Value": 79
+    "Value": 36
   },
-  "isFirstQuiz": true
+  "isFirstQuiz": false
 }

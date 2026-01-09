@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3"/>
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Quizzes.uss?fileID=7433441132597879392&amp;guid=d2d19566fb4b9764d9f1a37e1df85575&amp;type=3#Quizzes"/>
     <ui:VisualElement name="ChooseQuiz" class="background" style="flex-grow: 1;">
-        <ui:VisualElement name="TopZone" style="width: 100%; height: 10%; margin-bottom: 1%; flex-direction: row-reverse; flex-wrap: nowrap; justify-content: space-between;">
+        <ui:VisualElement name="TopZone" style="width: 100%; height: 10%; margin-bottom: 1%; flex-direction: row-reverse; flex-wrap: nowrap; justify-content: space-between; align-items: stretch;">
             <ui:VisualElement name="CurrencyPanel" class="currency-panel" style="top: 20%; height: 60%;">
                 <ui:VisualElement name="CurrencyIcon" class="currency-icon">
                     <Bindings>
@@ -11,7 +11,7 @@
                 </ui:VisualElement>
                 <ui:Label name="CurrencyAmount" text="000" class="currency-amount dynamic-text"/>
             </ui:VisualElement>
-            <ui:Button name="Back" class="back-in-menu-button"/>
+            <ui:Button name="Back" class="back-in-menu-button" style="align-self: center;"/>
         </ui:VisualElement>
         <ui:VisualElement name="MainZone" style="flex-grow: 1; width: 100%; height: 90%; align-items: center; padding-top: 0%; padding-right: 5%; padding-bottom: 15%; padding-left: 5%;">
             <ui:ListView item-template="project://database/Assets/Quiz%20Template/UI%20Toolkit/Documents/Quiz%20Card.uxml?fileID=9197481963319205126&amp;guid=47f35b7d99c605b43ae28f88f6a7d951&amp;type=3#Quiz Card" name="QuizContainer" allow-add="false" allow-remove="false" style="width: 90%; padding-bottom: 2%; height: 100%;"/>

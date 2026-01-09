@@ -10,82 +10,102 @@ public enum GradientDirection
 [UxmlElement]
 public partial class GradientElement : VisualElement
 {
-    static readonly Vertex[] _vertices = new Vertex[4];
-    static readonly ushort[] _indices = { 0, 1, 2, 2, 3, 0 };
-    private VisualElement gradient;
+    private static readonly int TextureSize = 2;
+    private Texture2D _gradientTexture;
+
+    private GradientDirection _gradientDirection = GradientDirection.Horizontal;
+    private Color _gradientFrom = Color.white;
+    private Color _gradientTo = Color.black;
 
     [UxmlAttribute]
-    public GradientDirection GradientDirection { get; set; } = GradientDirection.Horizontal;
+    public GradientDirection GradientDirection
+    {
+        get => _gradientDirection;
+        set
+        {
+            if (_gradientDirection == value) return;
+            _gradientDirection = value;
+            UpdateGradient();
+        }
+    }
 
     [UxmlAttribute]
-    public Color GradientFrom { get; set; }
+    public Color GradientFrom
+    {
+        get => _gradientFrom;
+        set
+        {
+            if (_gradientFrom == value) return;
+            _gradientFrom = value;
+            UpdateGradient();
+        }
+    }
 
     [UxmlAttribute]
-    public Color GradientTo { get; set; }
+    public Color GradientTo
+    {
+        get => _gradientTo;
+        set
+        {
+            if (_gradientTo == value) return;
+            _gradientTo = value;
+            UpdateGradient();
+        }
+    }
 
     public GradientElement()
     {
-        this.style.overflow = Overflow.Hidden;
-
-        gradient = new VisualElement();
-        gradient.name = "Gradient";
-        gradient.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-        gradient.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-        gradient.generateVisualContent += GenerateVisualContent;
-
-        hierarchy.Add(gradient);
+        RegisterCallback<AttachToPanelEvent>(_ => UpdateGradient());
+        RegisterCallback<DetachFromPanelEvent>(_ => DestroyTexture());
     }
 
-    void GenerateVisualContent(MeshGenerationContext meshGenerationContext)
+    private void DestroyTexture()
     {
-        var rect = gradient.contentRect;
+        if (_gradientTexture == null) return;
 
-        if (rect.width < 0.1f || rect.height < 0.1f)
+        if (Application.isPlaying)
+            Object.Destroy(_gradientTexture);
+        else
+            Object.DestroyImmediate(_gradientTexture);
+
+        _gradientTexture = null;
+    }
+
+    private void UpdateGradient()
+    {
+        if (panel == null) return;
+
+        bool isHorizontal = _gradientDirection == GradientDirection.Horizontal;
+        int width = isHorizontal ? TextureSize : 1;
+        int height = isHorizontal ? 1 : TextureSize;
+
+        if (_gradientTexture == null ||
+            _gradientTexture.width != width ||
+            _gradientTexture.height != height)
         {
-            return;
+            DestroyTexture();
+            _gradientTexture = new Texture2D(width, height, TextureFormat.RGBA32, false)
+            {
+                wrapMode = TextureWrapMode.Clamp,
+                filterMode = FilterMode.Bilinear
+            };
         }
 
-        UpdateVerticesTint();
-        UpdateVerticesPosition(rect);
-
-        var meshWriteData = meshGenerationContext.Allocate(_vertices.Length, _indices.Length);
-        meshWriteData.SetAllVertices(_vertices);
-        meshWriteData.SetAllIndices(_indices);
-    }
-
-    public new void Add(VisualElement child)
-    {
-        gradient.Add(child);
-    }
-
-    static void UpdateVerticesPosition(Rect rect)
-    {
-        const float left = 0f;
-        var right = rect.width;
-        const float top = 0f;
-        var bottom = rect.height;
-
-        _vertices[0].position = new Vector3(left, bottom, Vertex.nearZ);
-        _vertices[1].position = new Vector3(left, top, Vertex.nearZ);
-        _vertices[2].position = new Vector3(right, top, Vertex.nearZ);
-        _vertices[3].position = new Vector3(right, bottom, Vertex.nearZ);
-    }
-
-    void UpdateVerticesTint()
-    {
-        if (GradientDirection is GradientDirection.Horizontal)
+        if (isHorizontal)
         {
-            _vertices[0].tint = GradientFrom;
-            _vertices[1].tint = GradientFrom;
-            _vertices[2].tint = GradientTo;
-            _vertices[3].tint = GradientTo;
+            // From слева -> To справа
+            _gradientTexture.SetPixel(0, 0, _gradientFrom);
+            _gradientTexture.SetPixel(1, 0, _gradientTo);
         }
         else
         {
-            _vertices[0].tint = GradientTo;
-            _vertices[1].tint = GradientFrom;
-            _vertices[2].tint = GradientFrom;
-            _vertices[3].tint = GradientTo;
+            // From сверху -> To снизу
+            _gradientTexture.SetPixel(0, 0, _gradientTo);
+            _gradientTexture.SetPixel(0, 1, _gradientFrom);
         }
+
+        _gradientTexture.Apply();
+
+        style.backgroundImage = new StyleBackground(_gradientTexture);
     }
 }

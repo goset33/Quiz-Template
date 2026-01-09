@@ -1,15 +1,18 @@
 using R3;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
 using YG;
 using Random = UnityEngine.Random;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
+
+    private static Dictionary<Button, List<Action>> subscribes = new Dictionary<Button, List<Action>>();
 
     [SerializeField] private AudioSource vfxSource, clickSource, musicSource;
     [SerializeField] private AudioMixer mixer;
@@ -26,10 +29,19 @@ public class SoundManager : MonoBehaviour
     {
         StartCoroutine(PitchChanger());
 
-        Button[] buttons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        VisualElement root = FindFirstObjectByType<UIDocument>().rootVisualElement;
+
+        List<Button> buttons = root.parent.Query<Button>().ToList();
         foreach (Button button in buttons)
         {
-            button.onClick.AddListener(() => PlayButtonSound(0));
+            if (button.ClassListContains("variant-button")) continue;
+
+            Action action = () => PlayButtonSound(0);
+            button.clicked += action;
+            if (!subscribes.ContainsKey(button))
+                subscribes[button] = new List<Action>();
+
+            subscribes[button].Add(action);
         }
 
         YG2.saves.musicVolume.AsObservable().Subscribe(value => SetMusicVolume(value / 100f)).AddTo(GameManager.disposables);
@@ -113,7 +125,7 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     /// <param name="button"> нопка</param>
     /// <param name="indexRights">0 - классический звук нажати€. 1 - звук правильного ответа. 2 - звук неправильного ответа.</param>
-    public void AddUniqueSoundToButton(UnityEngine.UI.Button button, int indexRights)
+    public void AddUniqueSoundToButton(Button button, int indexRights)
     {
         if (indexRights < 0 || indexRights > 3)
         {
@@ -123,21 +135,26 @@ public class SoundManager : MonoBehaviour
 
         if (button != null)
         {
-            button.onClick.AddListener(() => PlayButtonSound(indexRights));
+            Action action = () => PlayButtonSound(indexRights);
+            button.clicked += action;
+            if (!subscribes.ContainsKey(button))
+                subscribes[button] = new List<Action>();
+
+            subscribes[button].Add(action);
         }
     }
 
-    public void AddUniqueSoundToButton(UnityEngine.UIElements.Button button, int indexRights)
+    public void UnsubscribeSoundFromButton(Button button)
     {
-        if (indexRights < 0 || indexRights > 3)
-        {
-            Debug.LogError("»ндекс не 0-3");
-            return;
-        }
+        if (button == null) return;
 
-        if (button != null)
+        if (subscribes.TryGetValue(button, out var actions))
         {
-            button.clicked += () => PlayButtonSound(indexRights);
+            foreach (var act in actions)
+            {
+                button.clicked -= act;
+            }
+            subscribes.Remove(button);
         }
     }
 

@@ -1,46 +1,44 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Класс контролирует жизни во время ответа на тест
 /// </summary>
 public class HeartContainer : MonoBehaviour
 {
-    [SerializeField] private GameObject heartPrefab;
+    private List<Heart> hearts = new();
 
-    private readonly List<GameObject> hearts = new();
-
-    public int HeartCount => hearts.Count;
+    public int AliveHeartCount => hearts.Count(heart => !heart.IsBroken);
 
     /// <summary>
     /// Необходимо вызвать вместе с инициализацией окна вопросов. Инициализация системы
     /// </summary>
-    /// <param name="heartNumber">Количество жизней, которые будут у игрока на старте</param>
-    public void InitializeHearts(int heartNumber)
+    public void InitializeHearts(IEnumerable<VisualElement> hearts)
     {
-        if (heartNumber <= 0) return;
-
-        foreach (var heart in hearts)
+        foreach (Image heart in hearts.Cast<Image>())
         {
-            Destroy(heart);
-        }
-        hearts.Clear();
-
-        for (int i = 0; i < heartNumber; i++)
-        {
-            HealOneHeart();
+            this.hearts.Add(new Heart(heart, false));
         }
     }
-    
+
+    public void ResetHearts()
+    {
+        foreach (Heart heart in hearts)
+        {
+            heart.ChangeBrokeStatus(false);
+        }
+    }
+
     /// <summary>
     /// Снимает одно сердце
     /// </summary>
     public void TakeOneDamage()
     {
-        if (HeartCount != 0)
+        if (AliveHeartCount != 0)
         {
-            Destroy(hearts[0]);
-            hearts.RemoveAt(0);
+            hearts.Last(heart => !heart.IsBroken).ChangeBrokeStatus(true);
         }
     }
 
@@ -49,6 +47,33 @@ public class HeartContainer : MonoBehaviour
     /// </summary>
     public void HealOneHeart()
     {
-        hearts.Add(Instantiate(heartPrefab, transform));
+        var brokenHeart = hearts.FirstOrDefault(heart => heart.IsBroken);
+        brokenHeart?.ChangeBrokeStatus(false);
+    }
+
+    private class Heart
+    {
+        public Image Image { get; private set; }
+        public bool IsBroken { get; private set; }
+
+        public Heart(Image image, bool isBroken)
+        {
+            Image = image;
+            IsBroken = isBroken;
+        }
+
+        public void ChangeBrokeStatus(bool newStatus)
+        {
+            if (newStatus)
+            {
+                Image.AddToClassList("heart--broken");
+            } 
+            else
+            {
+                Image.RemoveFromClassList("heart--broken");
+            }
+
+            IsBroken = newStatus;
+        }
     }
 }

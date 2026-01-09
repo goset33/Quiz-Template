@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3"/>
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Timeless.uss?fileID=7433441132597879392&amp;guid=e11cecd4ac7b21a46b95b7a556e47acf&amp;type=3#Timeless"/>
+    <RadialProgressBar border-size="50" clockwise="false" display-as-percentage="false" track-color="rgb(183, 183, 183)" progress-color="rgb(255, 236, 35)" style="flex-grow: 1; align-items: center; justify-content: center;"/>
+</ui:UXML>

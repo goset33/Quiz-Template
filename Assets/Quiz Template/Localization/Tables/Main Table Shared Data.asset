@@ -219,6 +219,18 @@ MonoBehaviour:
     m_Key: LOAD_SCREEN_TEXT
     m_Metadata:
       m_Items: []
+  - m_Id: 114076840618840064
+    m_Key: NEXT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 114085047709945856
+    m_Key: SHOW_ANSWER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119809467757842432
+    m_Key: DOUBLE_REWARD
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

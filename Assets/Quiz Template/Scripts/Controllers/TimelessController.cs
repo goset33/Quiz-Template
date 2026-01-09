@@ -1,66 +1,144 @@
-using DG.Tweening;
 using System;
-using TMPro;
-using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine.Localization;
+using UnityEngine.UIElements;
 
 public class TimelessController : AbstractController
 {
-    [SerializeField] private RectTransform popupWindow, notificationText;
+	private Label notificationText;
+	private VisualElement popupElementBackground, popupElement;
 
-   public static event Action<int> OnPopupButtonPressed;
+	private Label popupHeader, popupText;
+	private VisualElement insertedElement;
+	private Button firstNotPreferred, secondPreferred;
 
-    /// <summary>
-    /// Создает окно в соответствии с настройками
-    /// </summary>
-    /// <param name="settings">Настройки окна в виде специального класса</param>
-    public void CreatePopup(PopupSettings settings)
-    {
+	public static event Action<int> OnPopupButtonPressed;
+
+	public override void Init()
+	{
+		base.Init();
+
+		notificationText = root.Q<Label>("Notification");
+        popupElementBackground = root.Q<VisualElement>("PopupBG");
+        popupElement = root.Q<VisualElement>("Popup");
+
+        popupHeader = popupElement.Q<Label>("Header");
+		popupText = popupElement.Q<Label>("PopupText");
+		insertedElement = popupElement.Q<VisualElement>("InsertedElement");
+		firstNotPreferred = popupElement.Q<Button>("FirstNotPreferred");
+		secondPreferred = popupElement.Q<Button>("SecondPreferred");
+
+        popupElementBackground.visible = false;
+		notificationText.visible = false;
+
+		firstNotPreferred.clicked += () => ButtonPressed(0);
+		secondPreferred.clicked += () => ButtonPressed(1);
+	}
+
+	/// <summary>
+    /// РЎРѕР·РґР°РµС‚ РѕРєРЅРѕ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ РЅР°СЃС‚СЂРѕР№РєР°РјРё
+	/// </summary>
+    /// <param name="settings">РќР°СЃС‚СЂРѕР№РєРё РѕРєРЅР° РІ РІРёРґРµ СЃРїРµС†РёР°Р»СЊРЅРѕРіРѕ РєР»Р°СЃСЃР°</param>
+	public void CreatePopup(PopupSettings settings)
+	{
+
+		// Р”Р»СЏ РїР»Р°РІРЅРѕРіРѕ РїРѕСЏРІР»РµРЅРёСЏ: РїСЂРё СЃРѕР·РґР°РЅРёРё РґРѕР±Р°РІР»СЏС‚СЊ РєР»Р°СЃСЃ РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РјРµРЅСЏС‚СЊ opacity РґРѕ 1, РїСЂРё С‚РѕРј Р°РЅРёРјР°С†РёСЏ СѓРІРµР»РёС‡РµРЅРёСЏ РѕРєРЅР° СЃ Ease-In
+
+		ClearPopup();
+
         SoundManager.Instance.ChangeMusicState();
 
-        popupWindow.gameObject.SetActive(true);
-        popupWindow.sizeDelta = new Vector2(popupWindow.rect.width, (int) settings.size);
+		popupElement.AddToClassList(PopupSettings.sizeClasses[settings.size]);
 
-        RectTransform textTransform = popupWindow.GetChild(3).GetComponent<RectTransform>();
+		popupHeader.text = settings.title.GetLocalizedString();
+		popupText.text = settings.text.GetLocalizedString();
+		firstNotPreferred.text = settings.button1.GetLocalizedString();
+		secondPreferred.text = settings.button2.GetLocalizedString();
 
-        popupWindow.GetChild(2).GetComponent<TextMeshProUGUI>().text = settings.title.GetLocalizedString();
-        textTransform.GetComponent<TextMeshProUGUI>().text = settings.text.GetLocalizedString();
-        popupWindow.GetChild(5).GetComponentInChildren<TextMeshProUGUI>().text = settings.button1.GetLocalizedString();
-        popupWindow.GetChild(6).GetComponentInChildren<TextMeshProUGUI>().text = settings.button2.GetLocalizedString();
+		if (settings.objectElement != null && settings.objectController != null && (int) settings.size >= 1500)
+		{
+			VisualElement element = settings.objectElement.CloneTree();
 
-        if (settings.objectPrefab == null || (int)settings.size < 1000)
-        {
-            textTransform.offsetMin = new Vector2(textTransform.offsetMin.x, 145f);
-        }
-        else
-        {
-            textTransform.offsetMin = new Vector2(textTransform.offsetMin.x, 510f);
-            Instantiate(settings.objectPrefab, popupWindow.GetChild(4));
-        }
+			insertedElement.RemoveFromClassList("inserted-element--hide");
+            insertedElement.Add(element);
+			settings.objectController.Init(5f, this, element);
+		}
+
+        popupElementBackground.visible = true;
     }
 
-    public void ButtonPressed(int index)
-    {
-        popupWindow.gameObject.SetActive(false);
+	public void ButtonPressed(int index)
+	{
+		ClearPopup();
         SoundManager.Instance.ChangeMusicState();
-        OnPopupButtonPressed?.Invoke(index);
-    }
+		OnPopupButtonPressed?.Invoke(index);
+	}
 
-    /// <summary>
-    /// Создает всплывающий текст-уведомление
-    /// </summary>
-    /// <param name="localizedString">Локализованная строка текста, который будет показан</param>
-    public void CreateNotification(LocalizedString localizedString)
-    {
-        DOTween.Kill(0);
+	private void ClearPopup()
+	{
+        popupElementBackground.visible = false;
 
-        notificationText.GetComponent<TextMeshProUGUI>().text = localizedString.GetLocalizedString();
-        notificationText.position = new Vector2(Screen.width / 2f, Screen.height / 2.5f);
-        notificationText.GetComponent<TextMeshProUGUI>().color = Color.white;
+        insertedElement.AddToClassList("inserted-element--hide");
+        if (insertedElement.childCount > 0)
+		{
+            insertedElement.Clear();
+		}
 
-        DOTween.Sequence()
-            .Append(notificationText.DOAnchorPosY(notificationText.position.y + 1f, 2f))
-            .Join(notificationText.GetComponent<TextMeshProUGUI>().DOFade(0f, 2f))
-            .SetId(0);
-    }
+		HashSet<string> classes = popupElement.GetClasses().ToHashSet();
+        foreach (var _class in classes)
+		{
+			popupElement.RemoveFromClassList(_class);
+		}
+	}
+
+	/// <summary>
+    /// РЎРѕР·РґР°РµС‚ РІСЃРїР»С‹РІР°СЋС‰РёР№ С‚РµРєСЃС‚-СѓРІРµРґРѕРјР»РµРЅРёРµ
+	/// </summary>
+    /// <param name="localizedString">Р›РѕРєР°Р»РёР·РѕРІР°РЅРЅР°СЏ СЃС‚СЂРѕРєР° С‚РµРєСЃС‚Р°, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РїРѕРєР°Р·Р°РЅ</param>
+	public void CreateNotification(LocalizedString localizedString)
+	{
+		notificationText.text = localizedString.GetLocalizedString();
+		notificationText.visible = true;
+
+		notificationText.AddToClassList("notification--transition");
+		notificationText.schedule.Execute(() => {
+			notificationText.visible = false;
+			notificationText.RemoveFromClassList("notification--transition");
+		}).StartingIn(2001L);
+	}
+}
+
+public class PopupSettings
+{
+	public enum PopupSize
+	{
+		Small = 500,
+		Medium = 1000,
+		Big = 1500,
+		Large = 1800
+	}
+
+	public static Dictionary<PopupSize, string> sizeClasses = new() 
+	{ { PopupSize.Small, "popup-small" }, { PopupSize.Medium, "popup-medium" }, { PopupSize.Big, "popup-big" }, { PopupSize.Large, "popup-large" } };
+
+	public PopupSize size;
+	public VisualTreeAsset objectElement;
+	public AbstractObjectController objectController;
+	public LocalizedString title, text, button1, button2;
+
+	public PopupSettings(PopupSize _size, VisualTreeAsset element, AbstractObjectController objectController, LocalizedString[] strings)
+	{
+		if (strings == null || strings.Length != 4) return;
+
+		size = _size;
+		objectElement = element;
+		this.objectController = objectController;
+        title = strings[0];
+		text = strings[1];
+		button1 = strings[2];
+		button2 = strings[3];
+	}
+
+	public PopupSettings(PopupSize _size, LocalizedString[] strings) : this(_size, null, null, strings) { }
 }

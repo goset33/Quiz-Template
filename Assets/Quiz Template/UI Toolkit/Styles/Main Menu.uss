@@ -31,18 +31,23 @@
     gap: 12px;
     -unity-font-definition: url("project://database/Assets/TextMesh%20Pro/Examples%20&%20Extras/Fonts/Roboto-Bold.ttf?fileID=12800000&guid=4beb055f07aaff244873dec698d0363e&type=3#Roboto-Bold");
     margin-bottom: 3%;
-    transition-property: scale;
-    transition-duration: 0.1s;
-    -unity-background-image-tint-color: rgb(0, 119, 194);
+    transition-property: translate, scale;
+    transition-duration: 0.3s, 0.1s;
     background-image: url("project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&guid=9d241c14e7dc5774a99c5f73ad07bf3b&type=3#button");
     -unity-slice-scale: 1.6px;
     min-height: 70px;
     aspect-ratio: auto;
     max-height: 28%;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-top-left-radius: 43px;
+    border-top-right-radius: 43px;
+    border-bottom-right-radius: 43px;
+    border-bottom-left-radius: 43px;
 }
 
 .button-primary:hover {
-    background-color: rgba(0, 0, 0, 0.12);
+    translate: 0 -4%;
+    transition-duration: 0.3s;
 }
 
 .button-primary:active {
@@ -67,7 +72,7 @@
     justify-content: center;
     gap: 8px;
     margin-bottom: 3%;
-    transition-property: scale;
+    transition-property: all;
     transition-duration: 0.1s;
     background-image: url("project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&guid=9d241c14e7dc5774a99c5f73ad07bf3b&type=3#button");
     -unity-background-image-tint-color: rgba(255, 255, 255, 0.38);
@@ -90,6 +95,11 @@
 .button-secondary:hover {
     background-color: rgba(0, 0, 0, 0.12);
     border-color: rgba(0, 119, 194, 0.2);
+    transition-duration: 0.1s;
+    border-left-color: rgba(0, 0, 0, 0.2);
+    border-right-color: rgba(0, 0, 0, 0.2);
+    border-top-color: rgba(0, 0, 0, 0.2);
+    border-bottom-color: rgba(0, 0, 0, 0.2);
 }
 
 .button-secondary:active {

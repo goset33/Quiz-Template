@@ -237,6 +237,18 @@ MonoBehaviour:
     m_Localized: Preparation of game content...
     m_Metadata:
       m_Items: []
+  - m_Id: 114076840618840064
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 114085047709945856
+    m_Localized: Show answer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 119809467757842432
+    m_Localized: Double the reward
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

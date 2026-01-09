@@ -49,11 +49,11 @@ public class LoadController : AbstractController
     }
 
     /// <summary>
-    /// Основной метод для плавной анимации экрана загрузки
+    /// РћСЃРЅРѕРІРЅРѕР№ РјРµС‚РѕРґ РґР»СЏ РїР»Р°РІРЅРѕР№ Р°РЅРёРјР°С†РёРё СЌРєСЂР°РЅР° Р·Р°РіСЂСѓР·РєРё
     /// </summary>
-    /// <param name="targetAlpha">Целевое значение прозрачности, от 0 до 1</param>
-    /// <param name="duration">Время анимации</param>
-    /// <param name="callback">Ивент, вызывающийся по окончанию анимации</param>
+    /// <param name="targetAlpha">Р¦РµР»РµРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РїСЂРѕР·СЂР°С‡РЅРѕСЃС‚Рё, РѕС‚ 0 РґРѕ 1</param>
+    /// <param name="duration">Р’СЂРµРјСЏ Р°РЅРёРјР°С†РёРё</param>
+    /// <param name="callback">РРІРµРЅС‚, РІС‹Р·С‹РІР°СЋС‰РёР№СЃСЏ РїРѕ РѕРєРѕРЅС‡Р°РЅРёСЋ Р°РЅРёРјР°С†РёРё</param>
     IEnumerator FadeVisuals(float targetAlpha, float duration, Action callback = null)
     {
         Sequence fadeSequence = DOTween.Sequence();
@@ -80,16 +80,12 @@ public class LoadController : AbstractController
             fadeSequence.Append(DOTween.To(() => loadBar.value, x => loadBar.value = x, 33f, 0.3f));
         }
 
-        fadeSequence.OnComplete(() =>
-        {
-            if (targetAlpha == 0)
-            {
-                root.visible = false;
-            }
-            callback?.Invoke();
-        });
-
         fadeSequence.Play();
         yield return fadeSequence.WaitForCompletion();
+        if (targetAlpha == 0)
+        {
+            root.visible = false;
+        }
+        callback?.Invoke();
     }
 }

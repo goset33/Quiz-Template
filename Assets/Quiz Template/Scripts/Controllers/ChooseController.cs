@@ -108,6 +108,8 @@ public class ChooseController : AbstractController
 
         if (newState)
         {
+             quizListView?.ClearSelection();
+
             root.RemoveFromClassList("hidden-container");
             RefreshAllQuizData();
         }

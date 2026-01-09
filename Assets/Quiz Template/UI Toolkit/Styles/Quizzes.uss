@@ -44,14 +44,28 @@
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
-.hidden-container .unity-list-view,
+.hidden-container .unity-list-view {
+    display: none;
+    visibility: hidden;
+}
+
 .hidden-container .unity-template-container,
+.hidden-container .unity-template-container {
+    display: none;
+    visibility: hidden;
+}
+
+.hidden-container .unity-visual-element,
 .hidden-container .unity-visual-element {
     display: none;
     visibility: hidden;
 }
 
-.unity-list-view__item:hover,
+.unity-list-view__item:hover {
+    background-color: transparent;
+    color: rgb(27, 27, 27);
+}
+
 .unity-list-view__item:selected {
     background-color: transparent;
 }
@@ -71,4 +85,11 @@
     -unity-slice-scale: 0.5px;
     background-color: rgba(0, 0, 0, 0);
     -unity-background-image-tint-color: rgb(255, 228, 0);
+}
+
+.unity-progress-bar__container {
+    flex-grow: 1;
+    min-height: auto;
+    max-height: none;
+    height: auto;
 }
