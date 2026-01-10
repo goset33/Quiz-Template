@@ -12,9 +12,9 @@
         </ui:VisualElement>
         <ui:VisualElement name="MainZone" style="flex-grow: 1; padding-top: 5%; padding-right: 10%; padding-bottom: 10%; padding-left: 10%;">
             <ui:VisualElement style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Quiz%20Template/Images/button.png?fileID=21300000&amp;guid=9d241c14e7dc5774a99c5f73ad07bf3b&amp;type=3#button&quot;); -unity-slice-scale: 4.1px; padding-top: 10%; padding-bottom: 10%; padding-right: 5%; padding-left: 5%;">
-                <ui:ListView item-template="project://database/Assets/Quiz%20Template/UI%20Toolkit/Documents/Leaderboard%20Card.uxml?fileID=9197481963319205126&amp;guid=35354819744168c41ba500bca1177fdf&amp;type=3#Leaderboard Card" allow-remove="false" allow-add="false" fixed-item-height="220" selection-type="None" style="height: auto; flex-grow: 1;"/>
-                <ui:VisualElement class="separator"/>
-                <GradientElement gradient-from="rgb(255, 253, 240)" gradient-to="rgb(245, 255, 246)" name="UserPosition" class="user-position-background" style="height: 15%;"/>
+                <ui:ListView item-template="project://database/Assets/Quiz%20Template/UI%20Toolkit/Documents/Leaderboard%20Card.uxml?fileID=9197481963319205126&amp;guid=35354819744168c41ba500bca1177fdf&amp;type=3#Leaderboard Card" allow-remove="false" allow-add="false" fixed-item-height="220" selection-type="None" name="" style="height: 85%; flex-grow: 0;"/>
+                <ui:VisualElement class="separator" style="height: 1.5%;"/>
+                <GradientElement gradient-from="rgb(255, 253, 240)" gradient-to="rgb(245, 255, 246)" name="UserPosition" class="user-position-background" style="height: 15%; justify-content: center;"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

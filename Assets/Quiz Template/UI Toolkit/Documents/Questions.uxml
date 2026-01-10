@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3"/>
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3#BaseUSS"/>
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Questions.uss?fileID=7433441132597879392&amp;guid=b3d3a0e1ee79b3248b0ef48b49711dd5&amp;type=3#Questions"/>
     <ui:VisualElement class="background" style="flex-grow: 1;">
         <ui:VisualElement name="TopZone" style="flex-grow: 0; width: 100%; height: 7%; flex-direction: row; align-items: center; justify-content: space-between; margin-top: 1%;">
@@ -26,25 +26,25 @@
         </ui:VisualElement>
         <ui:VisualElement name="ButtonsZone" style="width: 100%; height: 40%; align-items: center;">
             <ui:VisualElement name="ButtonContainer" class="button-container">
-                <GradientButton name="VariantButton" gradient-from="rgb(219, 219, 219)" gradient-to="rgb(255, 255, 255)" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
+                <GradientButton name="VariantButton" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
             </ui:VisualElement>
             <ui:VisualElement name="ButtonContainer" class="button-container">
-                <GradientButton name="VariantButton" gradient-from="rgb(219, 219, 219)" gradient-to="rgb(255, 255, 255)" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
+                <GradientButton name="VariantButton" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
             </ui:VisualElement>
             <ui:VisualElement name="ButtonContainer" class="button-container">
-                <GradientButton name="VariantButton" gradient-from="rgb(219, 219, 219)" gradient-to="rgb(255, 255, 255)" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
+                <GradientButton name="VariantButton" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
             </ui:VisualElement>
             <ui:VisualElement name="ButtonContainer" class="button-container">
-                <GradientButton name="VariantButton" gradient-from="rgb(219, 219, 219)" gradient-to="rgb(255, 255, 255)" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
+                <GradientButton name="VariantButton" text="Answer" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text variant-button"/>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="FooterZone" style="flex-grow: 0; height: 10%; width: 100%; flex-direction: row; align-items: center; padding-top: 2%; padding-right: 5%; padding-bottom: 2%; padding-left: 5%; justify-content: center; margin-top: 1%;">
-            <ui:Button text="Button" double-click-selects-word="false" triple-click-selects-line="false" focusable="false" name="ShowRightButton" class="dynamic-text button show-answer-button" style="margin-right: 10%;">
+            <ui:Button text="Button" double-click-selects-word="false" triple-click-selects-line="false" focusable="false" name="ShowRightButton" class="dynamic-text show-answer-button">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(114085047709945856)"/>
                 </Bindings>
             </ui:Button>
-            <GradientButton text="Next" gradient-direction="Vertical" gradient-to="rgb(0, 87, 142)" gradient-from="rgb(0, 119, 194)" name="NextButton" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text next-button button" style="-unity-text-auto-size: best-fit 39px 102px;">
+            <GradientButton text="Next" gradient-direction="Vertical" gradient-to="rgb(0, 87, 142)" gradient-from="rgb(0, 119, 194)" name="NextButton" double-click-selects-word="false" triple-click-selects-line="false" class="dynamic-text next-button">
                 <Bindings>
                     <UnityEngine.Localization.LocalizedString property="text" table="GUID:a2b025560d9220e4f8f138865dba18d1" entry="Id(114076840618840064)"/>
                 </Bindings>

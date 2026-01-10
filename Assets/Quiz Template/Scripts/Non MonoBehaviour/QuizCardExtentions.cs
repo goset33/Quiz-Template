@@ -89,4 +89,25 @@ public static class QuizCardExtentions
         Sprite image = data.image;
         return quizzes.FirstOrDefault(quizCard => quizCard.image == data.image);
     }
+
+    public static Color ConvertHexToColor(string hex)
+    {
+        string pureHex = hex;
+        if (hex.StartsWith("#"))
+        {
+            pureHex = hex.Substring(1);
+        }
+        else if (hex.StartsWith("0x"))
+        {
+            pureHex= hex.Substring(2);
+        }
+
+        if (string.IsNullOrEmpty(pureHex) || pureHex.Length != 6) return Color.clear;
+
+        int r = int.Parse(pureHex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        int g = int.Parse(pureHex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        int b = int.Parse(pureHex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+
+        return new Color(r, g, b);
+    }
 }

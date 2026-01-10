@@ -16,6 +16,12 @@
     -unity-text-align: middle-center;
 }
 
+.hided {
+    opacity: 0;
+    display: none;
+    visibility: hidden;
+}
+
 .button {
     border-top-width: 0;
     border-right-width: 0;
@@ -44,11 +50,6 @@
 
 .button:active {
     scale: 0.95 0.95 0.95;
-    transition-duration: 0.1s;
-}
-
-.button--disabled {
-    visibility: hidden;
     transition-duration: 0.1s;
 }
 
@@ -141,3 +142,27 @@
     border-top-width: 0;
     border-bottom-width: 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

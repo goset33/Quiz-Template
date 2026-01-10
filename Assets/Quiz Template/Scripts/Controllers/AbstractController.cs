@@ -27,16 +27,19 @@ public abstract class AbstractController : MonoBehaviour
 
     public void ChangeVisibilityState()
     {
-        ChangeVisibilityState(!root.visible);
+        ChangeVisibilityState(root.ClassListContains("hided"));
     }
 
     public virtual void ChangeVisibilityState(bool newState)
     {
         if (root == null) return;
 
-        float newOpacity = newState ? 1f : 0f;
-
-        root.visible = newState;
-        root.style.opacity = newOpacity;
+        if (newState)
+        {
+            root.RemoveFromClassList("hided");
+        } else
+        {
+            root.AddToClassList("hided");
+        }
     }
 }

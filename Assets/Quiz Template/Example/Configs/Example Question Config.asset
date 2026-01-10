@@ -11,8 +11,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 427b70f3829b75c409efa5343fa793cd, type: 3}
   m_Name: Example Question Config
-  m_EditorClassIdentifier: 
-  wrongAnswerSprite: {fileID: 0}
-  wrongButtonColor: {r: 0.9529412, g: 0.32156864, b: 0.38431373, a: 1}
-  rightAnswerSprite: {fileID: 0}
-  rightButtonColor: {r: 0, g: 1, b: 0.11764706, a: 1}
+  m_EditorClassIdentifier: Assembly-CSharp::QuestionConfig
+  defaultAnswerFrom: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
+  defaultAnswerTo: {r: 1, g: 1, b: 1, a: 1}
+  wrongAnswerFrom: {r: 1, g: 0.2901961, b: 0.2901961, a: 1}
+  wrongAnswerTo: {r: 1, g: 0.41960785, b: 0.41960785, a: 1}
+  rightAnswerFrom: {r: 0.12156863, g: 0.65882355, b: 0.3529412, a: 1}
+  rightAnswerTo: {r: 0.15686275, g: 0.78039217, b: 0.43529412, a: 1}

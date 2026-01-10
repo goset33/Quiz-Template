@@ -12,8 +12,8 @@ public class QuestionController : AbstractController
 {
 	private GameManager gameManager;
 
-	public static event Action<int, int, int, bool> QuestionsEnded;
-	public static event Action AllReady, NextQuestionLoaded, WrongAnswer;
+	public static event Action<int, int, bool> QuestionsEnded;
+	public static event Action AllReady, NextQuestionLoaded, OnAnswered;
 
 	private int rightIndex;
 
@@ -25,8 +25,8 @@ public class QuestionController : AbstractController
 	private readonly string[] difficultClasses = new string[4] { "easy-background", "medium-background", "hard-background", "boss-background" };
 	private int reviveCount = 0;
 	private bool isAnswerShowed = false;
-    private bool isInitializing = false;
-    private List<IQuestion> cards = new();
+	private bool isInitializing = false;
+	private List<IQuestion> cards = new();
 
 	public int currentQuestion; // Хранит текущий номер вопроса НАЧИНАЯ С 1. (В коде требуется отнимать 1)
 	public int rightAnswers;
@@ -70,16 +70,20 @@ public class QuestionController : AbstractController
 		nextButton = root.Q<GradientButton>("NextButton");
 
 		for (int i = 0;  i < answerButtons.Count; i++)
-		{ 
-			int index = i;
+		{
+			answerButtons[i].GradientFrom = gameManager.questionConfig.defaultAnswerFrom;
+            answerButtons[i].GradientTo = gameManager.questionConfig.defaultAnswerTo;
+
+            int index = i;
 			answerButtons[i].clicked += () => DefaultAnswer(index);
 		}
 
 		nextButton.clicked += NextButtonPressed;
 		showRightButton.clicked += TellRightAnswerPressed;
 		hintButton.clicked += GetHintPressed;
-		showRightButton.visible = false;
-		nextButton.visible = false;
+
+        showRightButton.AddToClassList("hided");
+		nextButton.AddToClassList("hided");
 
 		heartContainer.InitializeHearts(heartContainerElement.Children());
 		timerHandler.InitTimer(timerText);
@@ -146,7 +150,8 @@ public class QuestionController : AbstractController
 		{
 			gameManager.InvokeNotification(2);
 			GameManager.Instance.OpenWindow<MenuController>();
-			return;
+            AllReady?.Invoke();
+            return;
 		}
 
 		await container.LoadQuestionsAsync();
@@ -162,9 +167,9 @@ public class QuestionController : AbstractController
 		questionsHardness = difficulties.SelectMany((x, i) => Enumerable.Repeat(i, x)).OrderBy(_ => Random.value).Take(cards.Count).ToArray();
 
 		heartContainer.ResetHearts();
-        timerHandler.ResetTime();
+		timerHandler.ResetTime();
 
-        timerHandler.ChangeVisibility(quizHardness > 1);
+		timerHandler.ChangeVisibility(quizHardness > 1);
 		if (quizHardness > 1)
 		{
 			float T = gameManager.config.questionTimer;
@@ -185,7 +190,7 @@ public class QuestionController : AbstractController
 		//cards = AIAnswerParser.ParseJsonAnswer(json);
 		//cards = MixQuestions(cards);
 
-        Dictionary<string, object> data = new() { { "Имя квиза", gameManager.chosenQuiz.GetName() }, { "Уровень сложности квиза", quizHardness } };
+		Dictionary<string, object> data = new() { { "Имя квиза", gameManager.chosenQuiz.GetName() }, { "Уровень сложности квиза", quizHardness } };
 		YG2.MetricaSend("QuizStart", data);
 
 		LoadNextQuestion(cards[currentQuestion - 1]);
@@ -239,11 +244,11 @@ public class QuestionController : AbstractController
 
 		MainTypeQuestion question = card as MainTypeQuestion;
 		var wrongs = question.WrongAnswers.OrderBy(_ => Random.value).Take(Mathf.Min(QuestionDifficult + 1, 3)).ToList(); // Неправильные ответы рандомно
-        List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); //  Все рандомные варианты ответов
-        for (int i = 0; i < allAnswers.Count; i++)
+		List<string> allAnswers = new(wrongs.Append(question.RightAnswer).OrderBy(_ => Random.value)); //  Все рандомные варианты ответов
+		for (int i = 0; i < allAnswers.Count; i++)
 		{
 			GradientButton button = answerButtons[i];
-			button.visible = true;
+			button.RemoveFromClassList("hided");
 			button.text = allAnswers[i];
 
 			if (allAnswers[i] == question.RightAnswer)
@@ -269,7 +274,7 @@ public class QuestionController : AbstractController
 	/// <param name="index">Индекс кнопки</param>
 	private void DefaultAnswer(int index)
 	{
-		if (nextButton != null && nextButton.visible) return;
+		if (nextButton != null && !nextButton.ClassListContains("hided")) return;
 
 		bool isRight = index == rightIndex;
 		var colorFrom = isRight ? gameManager.questionConfig.rightAnswerFrom : gameManager.questionConfig.wrongAnswerFrom;
@@ -278,15 +283,19 @@ public class QuestionController : AbstractController
 		answerButtons[index].GradientFrom = colorFrom;
 		answerButtons[index].GradientTo = colorTo;
 
-        for (int i = 0; i < answerButtons.Count; i++)
-        {
-            if (i != index)
-            {
-                answerButtons[i].AddToClassList("variant-button--inactive");
-            }
-        }
+		for (int i = 0; i < answerButtons.Count; i++)
+		{
+			if (i != index)
+			{
+				answerButtons[i].AddToClassList("variant-button--inactive");
+			}
+			else
+			{
+				answerButtons[i].AddToClassList("variant-button--choosed");
+			}
+		}
 
-        Answered(isRight);
+		Answered(isRight);
 	}
 
 	/// <summary>
@@ -306,42 +315,43 @@ public class QuestionController : AbstractController
 			button.pickingMode = PickingMode.Ignore;
 		}
 
-		nextButton.visible = true;
+		nextButton.RemoveFromClassList("hided");
 
-		if (isRight)
+        OnAnswered?.Invoke();
+        if (isRight)
 		{
 			rightAnswers++;
-			gameManager.AddExperience(1);
+            nextButton.AddToClassList("next-button--big");
+            gameManager.AddExperience(1);
 			GameManager.ChangeCash(AccruedCash);
 			print("Right!");
 		}
 		else
 		{
-			WrongAnswer?.Invoke();
 			heartContainer.TakeOneDamage();
 
-            if (heartContainer.AliveHeartCount == 0)
+			if (heartContainer.AliveHeartCount == 0)
 			{
+				Debug.Log("Сердца закончились, проигрыш");
 				if (reviveCount < 2)
 				{
 					reviveCount++;
-					gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Large, loseCounterElement, new LoseCounter(), lackOfLivesLocales));
-					TimelessController.OnPopupButtonPressed += WhenDeathButtonPressed;
+					gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Big, loseCounterElement, new LoseCounter(), lackOfLivesLocales), WhenDeathButtonPressed);
 				}
 				else
 				{
-					isWinning = false;
+                    Debug.Log("Возрождений больше нет, сердца кончились, конец раунда");
+                    isWinning = false;
 				}
 			}
 
-			showRightButton.visible = true;
-			print("Incorrect!");
+			showRightButton.RemoveFromClassList("hided");
+            print("Incorrect!");
 		}
 	}
 
 	private void WhenDeathButtonPressed(int buttonIndex)
 	{
-		TimelessController.OnPopupButtonPressed -= WhenDeathButtonPressed;
 		if (buttonIndex == 0)
 		{
 			isWinning = false;
@@ -358,12 +368,12 @@ public class QuestionController : AbstractController
 		if (reviveCount < 2)
 		{
 			reviveCount++;
-			gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Large, loseCounterElement, new LoseCounter(), outOfTimeLocales));
-			TimelessController.OnPopupButtonPressed += TimeEndButtonPressed;
+			gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Big, loseCounterElement, new LoseCounter(), outOfTimeLocales), TimeEndButtonPressed);
 		}
 		else
 		{
-			isWinning = false;
+			Debug.Log("Возрождений больше нет, время закончилось, конец раунда");
+            isWinning = false;
 		}
 	}
 
@@ -423,7 +433,10 @@ public class QuestionController : AbstractController
 		isAnswerShowed = true;
 		if (cards[currentQuestion - 1] is MainTypeQuestion)
 		{
-			answerButtons[rightIndex].GradientFrom = gameManager.questionConfig.rightAnswerFrom;
+			answerButtons[rightIndex].RemoveFromClassList("variant-button--inactive");
+			answerButtons[rightIndex].AddToClassList("variant-button--choosed");
+
+            answerButtons[rightIndex].GradientFrom = gameManager.questionConfig.rightAnswerFrom;
 			answerButtons[rightIndex].GradientTo = gameManager.questionConfig.rightAnswerTo;
 		}
 	}
@@ -435,14 +448,12 @@ public class QuestionController : AbstractController
 	{
 		if (isAnswerShowed) return;
 
-		gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales));
-		TimelessController.OnPopupButtonPressed += GetAnswerTold;
+        timerHandler.Pause();
+        gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales), GetAnswerTold);
 	}
 
 	private void GetAnswerTold(int pressedIndex)
 	{
-		TimelessController.OnPopupButtonPressed -= GetAnswerTold;
-		timerHandler.ChangeTimePauseState();
 		if (pressedIndex == 1)
 		{
 			YG2.RewardedAdvShow("4", ShowAnswerTold);
@@ -451,7 +462,7 @@ public class QuestionController : AbstractController
 
 	private void ShowAnswerTold()
 	{
-		Dictionary<string, object> data = new() { 
+        Dictionary<string, object> data = new() { 
 			{ "Имя квиза", gameManager.chosenQuiz.GetName() }, 
 			{ "Уровень сложности квиза", quizHardness }, 
 			{ "Уровень сложности вопроса", QuestionDifficult },
@@ -467,16 +478,13 @@ public class QuestionController : AbstractController
 	{
 		if (QuestionDifficult == 3 || isAnswerShowed) return;
 
-		timerHandler.ChangeTimePauseState();
-		gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, getHintLocales));
-		TimelessController.OnPopupButtonPressed += GetHint;
+		timerHandler.Pause();
+		gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Medium, getHintLocales), GetHint);
 	}
 
 	private void GetHint(int pressedIndex)
 	{
-		TimelessController.OnPopupButtonPressed -= GetHint;
-		timerHandler.ChangeTimePauseState();
-		if (pressedIndex == 1)
+        if (pressedIndex == 1)
 		{
 			YG2.RewardedAdvShow("2", ShowHintAnswer);
 		}
@@ -484,12 +492,15 @@ public class QuestionController : AbstractController
 
 	private void ShowHintAnswer()
 	{
-		Dictionary<string, object> data = new() { 
+        timerHandler.Resume();
+
+        Dictionary<string, object> data = new() { 
 			{ "Имя квиза", gameManager.chosenQuiz.GetName() }, 
 			{ "Уровень сложности квиза", quizHardness }, 
 			{ "Уровень сложности вопроса", QuestionDifficult },
 			{ "Текст вопроса", cards[currentQuestion - 1].QuestionText }};
 		YG2.MetricaSend("HintUsed", data);
+
 		ShowRightAnswer();
 	}
 
@@ -499,9 +510,12 @@ public class QuestionController : AbstractController
 	private void ClearScreen()
 	{
 		isAnswerShowed = false;
-		hintButton.RemoveFromClassList("hint-button--blocked");
-		showRightButton.visible = false;
-		nextButton.visible = false;
+
+		showRightButton.AddToClassList("hided");
+        nextButton.AddToClassList("hided");
+
+        hintButton.RemoveFromClassList("hint-button--blocked");
+		nextButton.RemoveFromClassList("next-button--big");
 
 		foreach (var difficultClass in difficultClasses)
 		{
@@ -511,10 +525,11 @@ public class QuestionController : AbstractController
 		answerButtons.ForEach(button =>
 		{
 			button.RemoveFromClassList("variant-button--inactive");
+			button.RemoveFromClassList("variant-button--choosed");
+			button.AddToClassList("hided");
 			button.GradientFrom = gameManager.questionConfig.defaultAnswerFrom;
 			button.GradientTo = gameManager.questionConfig.defaultAnswerTo;
 			button.pickingMode = PickingMode.Position;
-			button.visible = false;
 
 			SoundManager.Instance.UnsubscribeSoundFromButton(button);
 		});
@@ -525,9 +540,20 @@ public class QuestionController : AbstractController
 	/// </summary>
 	private void Finish()
 	{
-		//if (isWinning) gameManager.IncrementQuizHardness();
+        //if (isWinning) gameManager.IncrementQuizHardness();
 
-		QuestionsEnded?.Invoke(rightAnswers, cards.Count, reviveCount, isWinning);
+        Dictionary<string, object> data = new() {
+            { "Имя квиза", GameManager.Instance.chosenQuiz.GetName() },
+            { "Уровень сложности квиза", quizHardness },
+            { "Количество верных ответов", rightAnswers },
+            { "Количество возрождений", reviveCount },
+            { "Игрок прошел квиз?", isWinning } };
+        YG2.MetricaSend("QuizEnded", data);
+
+        QuestionsEnded?.Invoke(rightAnswers, cards.Count, isWinning);
+
+		timerHandler.ResetTime();
+		ClearScreen();
 	}
 
 	/// <summary>
@@ -545,15 +571,13 @@ public class QuestionController : AbstractController
 
 	protected override void BackInMenu()
 	{
-		timerHandler.ChangeTimePauseState();
-		gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales));
-		TimelessController.OnPopupButtonPressed += BackToMenuAgreed;
+        timerHandler.Pause(); 
+		gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, backInMenuLocales), BackToMenuAgreed);
 	}
 
 	private void BackToMenuAgreed(int pressedIndex)
 	{
-		TimelessController.OnPopupButtonPressed -= BackToMenuAgreed;
-		timerHandler.ChangeTimePauseState();
+        timerHandler.ResetTime(); 
 		if (pressedIndex == 1)
 		{
 			Dictionary<string, object> data = new() { 

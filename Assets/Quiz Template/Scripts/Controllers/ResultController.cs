@@ -61,20 +61,11 @@ public class ResultController : AbstractController
 		}
 	}
 
-	public void LoadResult(int rightAnswers, int allAnswers, int revives, bool isGood)
+	public void LoadResult(int rightAnswers, int allAnswers, bool isGood)
 	{
-		doubleButton.visible = true;
+		doubleButton.RemoveFromClassList("hided");
 
 		int hardness = GameManager.Instance.GetQuizHardness();
-
-		Dictionary<string, object> data = new() { 
-			{ "Имя квиза", GameManager.Instance.chosenQuiz.GetName() }, 
-			{ "Уровень сложности квиза", hardness }, 
-			{ "Количество верных ответов", rightAnswers },
-			{ "Количество возрождений", revives },
-			{ "Игрок прошел квиз?", isGood } };
-		YG2.MetricaSend("QuizEnded", data);
-
 		int index = isGood ? 0 : 1;
 		headerText.text = headerLocales[index].GetLocalizedString();    
 
@@ -123,7 +114,7 @@ public class ResultController : AbstractController
 
 	private void MultiplyReward()
 	{
-        doubleButton.visible = false;
+		doubleButton.AddToClassList("hided");
 
 		Dictionary<string, object> data = new() {
 			{ "Имя квиза", GameManager.Instance.chosenQuiz.GetName() },

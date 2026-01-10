@@ -78,18 +78,21 @@
     border-bottom-width: 0;
     border-left-width: 0;
     width: 100%;
-    transition-duration: 0.1s;
+    transition-duration: 0.2s;
     border-top-left-radius: 55px;
     border-top-right-radius: 55px;
     border-bottom-right-radius: 55px;
     border-bottom-left-radius: 55px;
-    -unity-text-align: middle-center;
     white-space: normal;
     height: 80%;
-    padding-top: 2%;
-    padding-right: 2%;
-    padding-bottom: 2%;
-    padding-left: 2%;
+    padding-right: 5%;
+    padding-left: 5%;
+    -unity-text-align: middle-left;
+    -unity-font-style: bold;
+    padding-top: 4%;
+    padding-bottom: 4%;
+    -unity-text-auto-size: best-fit 10px 86px;
+    transition-property: all;
 }
 
 .variant-button:hover {
@@ -109,6 +112,26 @@
     transition-timing-function: ease-in;
 }
 
+.variant-button--choosed {
+    color: rgb(255, 255, 255);
+    scale: 1.05 1.05 1.05;
+    transition-property: scale, translate;
+    transition-duration: 0.3s, 0.1s;
+    transition-timing-function: ease-out-sine, ease;
+}
+
+.variant-button--choosed:hover {
+    transition-duration: 0.1s, 0.1s;
+    translate: 0 -5%;
+    transition-property: translate, scale;
+}
+
+.variant-button--choosed:active {
+    scale: 1 1;
+    transition-property: scale;
+    transition-duration: 0.1s;
+}
+
 .next-button {
     height: 100%;
     border-top-width: 0;
@@ -123,11 +146,13 @@
     -unity-font-style: bold;
     transition-duration: 0.1s;
     -unity-background-image-tint-color: rgb(255, 255, 255);
-    min-width: 40%;
     margin-left: 4px;
-    max-width: 50%;
-    flex-shrink: 1;
-    flex-grow: 1;
+    -unity-text-auto-size: best-fit 39px 102px;
+    width: 40%;
+    min-width: auto;
+    max-width: none;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
 
 .next-button:hover {
@@ -141,10 +166,14 @@
     transition-duration: 0.1s;
 }
 
+.next-button--big {
+    width: 70%;
+    transition-duration: 0.1s;
+}
+
 .show-answer-button {
     width: 40%;
     height: 100%;
-    -unity-background-image-tint-color: rgba(255, 255, 255, 0.41);
     border-top-width: 7px;
     border-right-width: 7px;
     border-bottom-width: 7px;
@@ -156,15 +185,17 @@
     color: rgb(0, 119, 194);
     -unity-font-style: bold;
     transition-property: all;
-    display: flex;
-    margin-right: 5%;
     flex-grow: 1;
     max-width: 40%;
+    margin-right: 5%;
+    transition-duration: 0.1s;
+    background-color: rgba(255, 255, 255, 0.64);
 }
 
 .show-answer-button:hover {
     transition-duration: 0.1s;
-    background-color: rgba(0, 0, 0, 0.19);
+    background-color: rgba(255, 255, 255, 0.35);
+    translate: 0 -5%;
 }
 
 .show-answer-button:active {

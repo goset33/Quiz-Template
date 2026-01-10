@@ -240,9 +240,9 @@ public class GameManager : MonoBehaviour
 		SaveQuizCardProgress();
 	}
 
-	public void InvokePopup(PopupSettings settings)
+	public void InvokePopup(PopupSettings settings, Action<int> callback)
 	{
-		timelessController.CreatePopup(settings);
+		timelessController.CreatePopup(settings, callback);
 	}
 
 	public void InvokeNotification(int notifyIndex)
@@ -301,8 +301,8 @@ public class GameManager : MonoBehaviour
 			controllers[currentWindowType].ChangeVisibilityState(false);
 		}
 
-		controllers[typeof(T)].ChangeVisibilityState(true);
-		currentWindowType = typeof(T);
+        currentWindowType = typeof(T);
+        controllers[typeof(T)].ChangeVisibilityState(true);
 
 		YG2.InterstitialAdvShow();
 	}
@@ -312,8 +312,8 @@ public class GameManager : MonoBehaviour
 		if (currentWindowType != null)
 			controllers[currentWindowType].ChangeVisibilityState(false);
 
-		await controllers[typeof(T)].ChangeVisibilityStateAsync(true);
-		currentWindowType = typeof(T);
+        currentWindowType = typeof(T);
+        await controllers[typeof(T)].ChangeVisibilityStateAsync(true);
 
 		YG2.InterstitialAdvShow();
 	}
@@ -326,9 +326,9 @@ public class GameManager : MonoBehaviour
 		});
 	}
 
-	private void OnQuestionsSolved(int arg1, int arg2, int arg3, bool isItGood)
+	private void OnQuestionsSolved(int arg1, int arg2, bool isItGood)
 	{
 		OpenWindow<ResultController>();
-		resultController.LoadResult(arg1, arg2, arg3, isItGood);
+		resultController.LoadResult(arg1, arg2, isItGood);
 	}
 }

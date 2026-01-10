@@ -224,6 +224,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: quizzes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: settingsController
       value: 
       objectReference: {fileID: 0}
@@ -235,6 +239,10 @@ PrefabInstance:
       propertyPath: leaderboardController
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2702332924067682122, guid: dffd8de6cfc425243993da100c841dab, type: 3}
+      propertyPath: 'quizzes.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f923f8b65a8b7a43b408228ff56b132, type: 2}
     - target: {fileID: 4150746042448487324, guid: dffd8de6cfc425243993da100c841dab, type: 3}
       propertyPath: m_LocalPosition.x
       value: 374.29892
@@ -1042,8 +1050,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4eee68c362a6a04cac17df38f84fcad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResultController
-  rewardButton: {fileID: 0}
-  backButton: {fileID: 0}
   headerLocales:
   - m_TableReference:
       m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1

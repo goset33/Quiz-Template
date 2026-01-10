@@ -59,12 +59,6 @@ MonoBehaviour:
   shouldShuffle: 1
   loadController: {fileID: 0}
   timelessController: {fileID: 0}
-  menuController: {fileID: 0}
-  settingsController: {fileID: 0}
-  leaderboardController: {fileID: 0}
-  chooseController: {fileID: 0}
-  hardnessController: {fileID: 0}
-  questionController: {fileID: 0}
   resultController: {fileID: 0}
 --- !u!114 &3956301894370319385
 MonoBehaviour:
@@ -101,6 +95,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4941304878924873749, guid: 0b0c95c6701266d49aeca82b6463aac6, type: 2}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -197,6 +192,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4941304878924873749, guid: 0b0c95c6701266d49aeca82b6463aac6, type: 2}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -292,7 +288,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 5756195843770140213, guid: 0b0c95c6701266d49aeca82b6463aac6, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 6fcc687f440516b499d9e64b42b14a62, type: 3}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 6fcc687f440516b499d9e64b42b14a62, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

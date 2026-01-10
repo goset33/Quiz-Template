@@ -13,7 +13,7 @@ public class TimelessController : AbstractController
 	private VisualElement insertedElement;
 	private Button firstNotPreferred, secondPreferred;
 
-	public static event Action<int> OnPopupButtonPressed;
+    private Action<int> callback;
 
 	public override void Init()
 	{
@@ -29,10 +29,10 @@ public class TimelessController : AbstractController
 		firstNotPreferred = popupElement.Q<Button>("FirstNotPreferred");
 		secondPreferred = popupElement.Q<Button>("SecondPreferred");
 
-        popupElementBackground.visible = false;
-		notificationText.visible = false;
+		popupElementBackground.AddToClassList("hided");
+		notificationText.AddToClassList("hided");
 
-		firstNotPreferred.clicked += () => ButtonPressed(0);
+        firstNotPreferred.clicked += () => ButtonPressed(0);
 		secondPreferred.clicked += () => ButtonPressed(1);
 	}
 
@@ -40,13 +40,14 @@ public class TimelessController : AbstractController
     /// Создает окно в соответствии с настройками
 	/// </summary>
     /// <param name="settings">Настройки окна в виде специального класса</param>
-	public void CreatePopup(PopupSettings settings)
+	public void CreatePopup(PopupSettings settings, Action<int> callback)
 	{
 
 		// Для плавного появления: при создании добавлять класс который будет менять opacity до 1, при том анимация увеличения окна с Ease-In
 
 		ClearPopup();
 
+		this.callback = callback;
         SoundManager.Instance.ChangeMusicState();
 
 		popupElement.AddToClassList(PopupSettings.sizeClasses[settings.size]);
@@ -62,22 +63,26 @@ public class TimelessController : AbstractController
 
 			insertedElement.RemoveFromClassList("inserted-element--hide");
             insertedElement.Add(element);
+
 			settings.objectController.Init(5f, this, element);
+            this.callback += _ => settings.objectController.Dispose();
 		}
 
-        popupElementBackground.visible = true;
+		popupElementBackground.RemoveFromClassList("hided");
     }
 
 	public void ButtonPressed(int index)
 	{
 		ClearPopup();
         SoundManager.Instance.ChangeMusicState();
-		OnPopupButtonPressed?.Invoke(index);
+
+		callback?.Invoke(index);
+		callback = null;
 	}
 
 	private void ClearPopup()
 	{
-        popupElementBackground.visible = false;
+		popupElementBackground.AddToClassList("hided");
 
         insertedElement.AddToClassList("inserted-element--hide");
         if (insertedElement.childCount > 0)
@@ -99,11 +104,11 @@ public class TimelessController : AbstractController
 	public void CreateNotification(LocalizedString localizedString)
 	{
 		notificationText.text = localizedString.GetLocalizedString();
-		notificationText.visible = true;
+		notificationText.RemoveFromClassList("hided");
 
 		notificationText.AddToClassList("notification--transition");
 		notificationText.schedule.Execute(() => {
-			notificationText.visible = false;
+			notificationText.AddToClassList("hided");
 			notificationText.RemoveFromClassList("notification--transition");
 		}).StartingIn(2001L);
 	}

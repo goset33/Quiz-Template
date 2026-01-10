@@ -25,7 +25,7 @@ public class LoadController : AbstractController
 
         new Delayer(this).IntervalForOneFrame(() =>
         {
-            if (!root.visible) return;
+            if (root.ClassListContains("hided")) return;
 
             currentOffsetX.offset.value -= 10f * Time.deltaTime;
             currentOffsetY.offset.value += 10f * Time.deltaTime;
@@ -58,13 +58,13 @@ public class LoadController : AbstractController
     {
         Sequence fadeSequence = DOTween.Sequence();
 
-        if (targetAlpha > 0 && !root.visible)
+        if (targetAlpha > 0 && root.ClassListContains("hided"))
         {
-            root.visible = true;
+            root.RemoveFromClassList("hided");
             root.style.opacity = 0f;
             loadBar.value = 0;
         }
-        else if (targetAlpha == 0 && root.visible)
+        else if (targetAlpha == 0 && !root.ClassListContains("hided"))
         {
             root.style.opacity = 1f;
 
@@ -84,7 +84,7 @@ public class LoadController : AbstractController
         yield return fadeSequence.WaitForCompletion();
         if (targetAlpha == 0)
         {
-            root.visible = false;
+            root.AddToClassList("hided");
         }
         callback?.Invoke();
     }

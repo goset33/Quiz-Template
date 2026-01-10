@@ -88,7 +88,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 321015472803840
-    m_Localized: You answered {global.right Answers} of {global.allAnswers} questions
+    m_Localized: You answered {global.rightAnswers} of {global.allAnswers} questions
       correctly.
     m_Metadata:
       m_Items:
@@ -204,7 +204,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 74915228713308160
-    m_Localized: You answered {global.right Answers} questions correctly.
+    m_Localized: You answered {global.rightAnswers} questions correctly.
     m_Metadata:
       m_Items:
       - rid: 6898860568132976666

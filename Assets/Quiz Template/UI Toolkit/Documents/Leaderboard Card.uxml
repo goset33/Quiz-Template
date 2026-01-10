@@ -1,9 +1,9 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3"/>
+    <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/BaseUSS.uss?fileID=7433441132597879392&amp;guid=0d44cfccb0178034ebdbe525647efc14&amp;type=3#BaseUSS"/>
     <Style src="project://database/Assets/Quiz%20Template/UI%20Toolkit/Styles/Leaderboard.uss?fileID=7433441132597879392&amp;guid=21857b11f643c3d4496e973592c5aec4&amp;type=3#Leaderboard"/>
     <ui:VisualElement name="CardBackground" class="card-background">
         <ui:VisualElement name="PositionBackground" class="position-background">
-            <ui:Label text="0" name="PositionText" class="dynamic-text" style="flex-shrink: 1; flex-grow: 1; width: 100%; height: 100%; -unity-text-align: middle-center; -unity-font-style: bold; -unity-text-auto-size: best-fit 10px 154px; padding-top: 20%; padding-right: 20%; padding-bottom: 20%; padding-left: 20%;"/>
+            <ui:Label text="&#129351;" name="PositionText" class="dynamic-text position-text"/>
         </ui:VisualElement>
         <ui:VisualElement name="Separator" class="card-separator"/>
         <ui:Label text="Nickname Label" name="NameText" class="dynamic-text" style="width: 50%; height: 100%; -unity-text-align: middle-left; -unity-font-style: bold; white-space: pre; padding-top: 0%; padding-right: 5%; padding-bottom: 0%; padding-left: 5%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-auto-size: best-fit 1px 100px;"/>
