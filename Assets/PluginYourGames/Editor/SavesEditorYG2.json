@@ -1,11 +1,11 @@
 {
-  "idSave": 4017,
+  "idSave": 4034,
   "quizCards": [
     {
       "cardId": "Minecraft",
       "level": 3,
       "maxExp": 90,
-      "exp": 56
+      "exp": 62
     },
     {
       "cardId": "Brawl Stars",
@@ -40,7 +40,7 @@
     "Genshin Impact",
     "Test Empty"
   ],
-  "cash": -2147483450,
+  "cash": -2147483426,
   "musicVolume": {
     "EqualityComparer": {},
     "CurrentValue": 2,

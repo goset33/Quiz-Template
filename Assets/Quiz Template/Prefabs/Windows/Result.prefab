@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5764669495507377154
+--- !u!1 &5706988414032777180
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1360697455777047333}
-  - component: {fileID: 2543829978785511620}
-  - component: {fileID: 5604554917336409302}
+  - component: {fileID: 7911409370840652605}
+  - component: {fileID: 5808718499838434323}
+  - component: {fileID: 2678422008016561035}
   m_Layer: 0
-  m_Name: Leaderboards
+  m_Name: Result
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1360697455777047333
+--- !u!4 &7911409370840652605
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5764669495507377154}
+  m_GameObject: {fileID: 5706988414032777180}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 5.6203613, y: 2.8376465, z: -5.3491516}
@@ -33,13 +33,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2543829978785511620
+--- !u!114 &5808718499838434323
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5764669495507377154}
+  m_GameObject: {fileID: 5706988414032777180}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 1027bdeb873f87d439b142ac5f90935f, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: b8db7c3af4b775f4ba8167628016fe3c, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 05330a34f2dd7f54198ab6b64c81578b, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1
@@ -56,24 +56,48 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &5604554917336409302
+--- !u!114 &2678422008016561035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5764669495507377154}
+  m_GameObject: {fileID: 5706988414032777180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83d908dc8a7f53d4db54bfd69df29459, type: 3}
+  m_Script: {fileID: 11500000, guid: e4eee68c362a6a04cac17df38f84fcad, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LeaderboardController
-  leaderboardCardTemplate: {fileID: 9197481963319205126, guid: 35354819744168c41ba500bca1177fdf, type: 3}
-  youLocale:
-    m_TableReference:
+  m_EditorClassIdentifier: Assembly-CSharp::ResultController
+  headerLocales:
+  - m_TableReference:
       m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
     m_TableEntryReference:
-      m_KeyId: 73405258087878656
+      m_KeyId: 320526794444800
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
+    m_TableEntryReference:
+      m_KeyId: 19541494590951424
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  textLocales:
+  - m_TableReference:
+      m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
+    m_TableEntryReference:
+      m_KeyId: 74915228713308160
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  - m_TableReference:
+      m_TableCollectionName: GUID:a2b025560d9220e4f8f138865dba18d1
+    m_TableEntryReference:
+      m_KeyId: 321015472803840
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0

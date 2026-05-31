@@ -14,13 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Localization-Assets-English (en)
   m_GUID: c8c5a5e0b34aaf9419896dba0b6e90bf
-  m_SerializeEntries:
-  - m_GUID: 5b89c009cc1e1e94b9da1c5f17536221
-    m_Address: ChatGPT Image Dec 7, 2025, 03_48_30 PM
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 25a2f3cbdefb2b84fa502e5f9577e320, type: 2}
   m_SchemaSet:
