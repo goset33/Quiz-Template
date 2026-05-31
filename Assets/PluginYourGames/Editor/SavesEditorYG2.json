@@ -1,5 +1,5 @@
 {
-  "idSave": 4034,
+  "idSave": 4046,
   "quizCards": [
     {
       "cardId": "Minecraft",
@@ -37,8 +37,7 @@
     "Minecraft",
     "Brawl Stars",
     "Fortnite",
-    "Genshin Impact",
-    "Test Empty"
+    "Genshin Impact"
   ],
   "cash": -2147483426,
   "musicVolume": {
