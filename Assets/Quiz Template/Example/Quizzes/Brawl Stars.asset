@@ -20,4 +20,8 @@ MonoBehaviour:
   - "\u0431\u0441"
   - bs
   image: {fileID: 21300000, guid: 89af33dff0990be49938e4c9b66699ce, type: 3}
-  testContainer: {fileID: 11400000, guid: f79850e218a0fdc439e5f93df6e4fcd2, type: 2}
+  localizedContainers:
+  - language: ru
+    container: {fileID: 11400000, guid: f79850e218a0fdc439e5f93df6e4fcd2, type: 2}
+  - language: en
+    container: {fileID: 11400000, guid: 14f11addb22e53f478677a4d0cf5c3b7, type: 2}

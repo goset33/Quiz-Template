@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 
 /// <summary>
-/// Класс парсит JSON, который возвращает AIRequestHandler.GenerateQuestionsAsync в список из IQuestion
+/// Класс парсит JSON, который возвращает <see cref="AIRequestHandler.GenerateQuestionsAsync"/> в список из <see cref="IQuestion"/>
 /// </summary>
 public static class AIAnswerParser
 {

@@ -145,7 +145,7 @@ public class QuestionController : AbstractController
 
 		if (quizHardness == 0) YG2.saves.isFirstQuiz = false;
 
-		QuestionContainer container = quizCard.testContainer;
+		QuestionContainer container = quizCard.GetContainerForLanguage(GameManager.Language);
 		if (container == null)
 		{
 			gameManager.InvokeNotification(2);
@@ -448,7 +448,6 @@ public class QuestionController : AbstractController
 	{
 		if (isAnswerShowed) return;
 
-        timerHandler.Pause();
         gameManager.InvokePopup(new PopupSettings(PopupSettings.PopupSize.Small, showAnswerLocales), GetAnswerTold);
 	}
 
@@ -487,6 +486,10 @@ public class QuestionController : AbstractController
         if (pressedIndex == 1)
 		{
 			YG2.RewardedAdvShow("2", ShowHintAnswer);
+		}
+		else
+		{
+			timerHandler.Resume();
 		}
 	}
 
@@ -577,9 +580,10 @@ public class QuestionController : AbstractController
 
 	private void BackToMenuAgreed(int pressedIndex)
 	{
-        timerHandler.ResetTime(); 
 		if (pressedIndex == 1)
 		{
+            timerHandler.ResetTime();
+
 			Dictionary<string, object> data = new() { 
 				{ "Имя квиза", gameManager.chosenQuiz.GetName() }, 
 				{ "Уровень сложности квиза", quizHardness }, 
@@ -590,6 +594,10 @@ public class QuestionController : AbstractController
 				{ "Количество сердец", heartContainer.AliveHeartCount } };
 			YG2.MetricaSend("QuizLeave", data);
 			base.BackInMenu();
+		}
+		else 
+		{
+            timerHandler.Resume();
 		}
 	}
 }

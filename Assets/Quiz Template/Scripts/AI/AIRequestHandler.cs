@@ -73,14 +73,12 @@ public static class AIRequestHandler
             var responseContent = await response.Content.ReadAsStringAsync();
             JObject parsedResponse = JObject.Parse(responseContent);
 
-            var choices = parsedResponse["choices"];
-            if (choices == null) return "*** 1";
-            if (choices.Count() == 0) return "*** 2";
-            if (choices[0] == null) return "*** 3";
-            var message = choices![0]!["message"];
-            if (message == null) return "*** 4";
-            if (message["content"] == null) return "*** 5";
-            var answer = message["content"]!.ToString();
+            var answer = parsedResponse["choices"]?[0]?["message"]?["content"]?.ToString();
+
+            if (answer == null)
+            {
+                return "Error: Wrong JSON structure";
+            }
 
             return answer;
         }

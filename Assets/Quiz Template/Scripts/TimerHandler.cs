@@ -5,258 +5,248 @@ using UnityEngine.UIElements;
 
 public class TimerHandler : MonoBehaviour
 {
-	public static event Action OnTimeEnd; // Вызывается когда время истекло
+    public static event Action OnTimeEnd;
 
     private Label timerText;
+    private Coroutine timerCoroutine;
+    private readonly WaitForSeconds oneSecond = new WaitForSeconds(1f);
 
-	private float currentTime = 0f;	// Текущее время (в секундах)
-    private float perQuestionTime = 0f; // Если локальный режим, запоминаем заданное время для восстановления. Игнор при глобальном режиме
-
-	private bool isGlobalMode = true; // Режим: true = глобальный таймер (не сбрасывается между вопросами), false = локальный (восстанавливается)
     private bool isPaused = false;
+    private float currentTime = 0f;
+    private float perQuestionTime = 0f;
+    private bool isGlobalMode = true;
 
-	private Coroutine timerCoroutine = null;
-	private readonly WaitForSeconds oneSecond = new WaitForSeconds(1f);
+    private bool IsEnabled => timerText != null && timerText.parent != null && !timerText.parent.ClassListContains("hided");
 
-	public bool IsEnabled
-	{
-		get
-		{
-			if (timerText == null || timerText.parent == null) return false;
-			return !timerText.parent.ClassListContains("hided");
-		}
-	}
+    /// <summary>
+    /// РџРѕРґРїРёСЃС‹РІР°РµС‚ РІРЅСѓС‚СЂРµРЅРЅРёРµ РѕР±СЂР°Р±РѕС‚С‡РёРєРё РЅР° QuestionController СЃРѕР±С‹С‚РёСЏ.
+    /// </summary>
+    public void InitTimer(Label label)
+    {
+        timerText = label ?? throw new ArgumentNullException(nameof(label));
+        UpdateLabelText();
 
-	/// <summary>
-	/// Инициализация. Передавайте Label, который будет показывать время.
-	/// Подписывает внутренние обработчики на QuestionController события.
-	/// </summary>
-	public void InitTimer(Label label)
-	{
-		timerText = label ?? throw new ArgumentNullException(nameof(label));
-		UpdateLabelText();
+        QuestionController.NextQuestionLoaded += WhenNextQuestion;
+        QuestionController.OnAnswered += OnAnswered;
+    }
 
-		QuestionController.NextQuestionLoaded += WhenNextQuestion;
-		QuestionController.OnAnswered += OnAnswered;
-	}
+    void OnDisable()
+    {
+        QuestionController.NextQuestionLoaded -= WhenNextQuestion;
+        QuestionController.OnAnswered -= OnAnswered;
+        ResetTime();
+    }
 
-	void OnDisable()
-	{
-		QuestionController.NextQuestionLoaded -= WhenNextQuestion;
-		QuestionController.OnAnswered -= OnAnswered;
-		ResetTime(); 
-	}
+    /// <summary>
+    /// РџРѕР»РЅС‹Р№ СЃР±СЂРѕСЃ С‚Р°Р№РјРµСЂР°: РѕСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РєРѕСЂСѓС‚РёРЅСѓ, РѕС‡РёС‰Р°РµС‚ С‚РµРєСѓС‰РµРµ РІСЂРµРјСЏ Рё СЃРЅРёРјР°РµС‚ РїР°СѓР·Сѓ.
+    /// Р’С‹РїРѕР»РЅСЏРµС‚СЃСЏ РІСЃРµРіРґР° (РґР°Р¶Рµ РµСЃР»Рё РІРёР·СѓР°Р»СЊРЅРѕ СЃРєСЂС‹С‚).
+    /// </summary>
+    public void ResetTime()
+    {
+        isPaused = false;
+        currentTime = 0f;
 
-	/// <summary>
-	/// Полный сброс таймера: останавливает корутину, очищает текущее время и снимает паузу.
-	/// Выполняется всегда (даже если визуально скрыт)
-	/// </summary>
-	public void ResetTime()
-	{
-		isPaused = false;
-		currentTime = 0f;
-		perQuestionTime = 0f;
-		isGlobalMode = true;
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
 
-		if (timerCoroutine != null)
-		{
-			StopCoroutine(timerCoroutine);
-			timerCoroutine = null;
-		}
+        UpdateLabelText();
+    }
 
-		UpdateLabelText();
-	}
-
-	/// <summary>
-	/// Отображение/скрытие таймера визуально.
-	/// Если переключаем в скрытое - останавливаем internal coroutine (без изменения currentTime).
-	/// Если переключаем в видимое - пытаемся возобновить корутину (если есть время и таймер не в паузе).
-	/// </summary>
-	public void ChangeVisibility(bool visible)
-	{
-		if (timerText == null || timerText.parent == null) return;
+    /// <summary>
+    /// РћС‚РѕР±СЂР°Р¶РµРЅРёРµ/СЃРєСЂС‹С‚РёРµ С‚Р°Р№РјРµСЂР° РІРёР·СѓР°Р»СЊРЅРѕ.
+    /// Р•СЃР»Рё РїРµСЂРµРєР»СЋС‡Р°РµРј РІ СЃРєСЂС‹С‚РѕРµ - РѕСЃС‚Р°РЅР°РІР»РёРІР°РµРј internal coroutine (Р±РµР· РёР·РјРµРЅРµРЅРёСЏ currentTime).
+    /// Р•СЃР»Рё РїРµСЂРµРєР»СЋС‡Р°РµРј РІ РІРёРґРёРјРѕРµ - РїС‹С‚Р°РµРјСЃСЏ РІРѕР·РѕР±РЅРѕРІРёС‚СЊ РєРѕСЂСѓС‚РёРЅСѓ (РµСЃР»Рё РµСЃС‚СЊ РІСЂРµРјСЏ Рё С‚Р°Р№РјРµСЂ РЅРµ РІ РїР°СѓР·Рµ).
+    /// </summary>
+    public void ChangeVisibility(bool visible)
+    {
+        if (timerText == null || timerText.parent == null) return;
 
         ResetTime();
 
         if (visible)
-		{
-			timerText.parent.RemoveFromClassList("hided");
-		}
-		else
-		{
-			timerText.parent.AddToClassList("hided");
-		}
+        {
+            timerText.parent.RemoveFromClassList("hided");
+        }
+        else
+        {
+            timerText.parent.AddToClassList("hided");
+        }
     }
 
     /// <summary>
-    /// Устанавливает время и режим, и запускает таймер
+    /// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РІСЂРµРјСЏ Рё СЂРµР¶РёРј, Рё Р·Р°РїСѓСЃРєР°РµС‚ С‚Р°Р№РјРµСЂ.
     /// </summary>
-    /// <param name="seconds">начальное время в секундах.</param>
-    /// <param name="globalMode">true = глобальный таймер; false = локальный (перезагружается на perQuestionTime при следующем вопросе</param>
+    /// <param name="seconds">РЅР°С‡Р°Р»СЊРЅРѕРµ РІСЂРµРјСЏ РІ СЃРµРєСѓРЅРґР°С….</param>
+    /// <param name="globalMode">true = РіР»РѕР±Р°Р»СЊРЅС‹Р№ С‚Р°Р№РјРµСЂ; false = Р»РѕРєР°Р»СЊРЅС‹Р№.</param>
     public void SetTime(float seconds, bool globalMode)
-	{
-		if (!IsEnabled) return;
+    {
+        if (!IsEnabled) return;
 
-		seconds = Mathf.Max(0f, seconds);
+        seconds = Mathf.Max(0f, seconds);
 
-		isGlobalMode = globalMode;
-		currentTime = seconds;
+        isGlobalMode = globalMode;
+        currentTime = seconds;
 
-		if (!isGlobalMode)
-			perQuestionTime = seconds;
-		else
-			perQuestionTime = 0f;
+        if (!isGlobalMode)
+            perQuestionTime = seconds;
+        else
+            perQuestionTime = 0f;
 
-		isPaused = false;
+        isPaused = false;
 
-		UpdateLabelText();
-		RestartCoroutineIfNeeded();
-	}
+        UpdateLabelText();
+        RestartCoroutineIfNeeded();
+    }
 
-	/// <summary>
-	/// Добавляет/восстанавливает время на таймере
-	/// </summary>
-	public void RestoreSomeTime(float addingTime)
-	{
-		if (!IsEnabled) return;
+    /// <summary>
+    /// Р”РѕР±Р°РІР»СЏРµС‚/РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РІСЂРµРјСЏ РЅР° С‚Р°Р№РјРµСЂРµ.
+    /// Р’ Р»РѕРєР°Р»СЊРЅРѕРј СЂРµР¶РёРјРµ РќР• РѕР±РЅРѕРІР»СЏРµС‚ perQuestionTime, С‡С‚РѕР±С‹ СЃР»РµРґСѓСЋС‰РёРµ РІРѕРїСЂРѕСЃС‹ РЅР°С‡РёРЅР°Р»РёСЃСЊ СЃ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Рј РІСЂРµРјРµРЅРµРј.
+    /// Р”РѕР±Р°РІР»РµРЅРЅРѕРµ РІСЂРµРјСЏ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ С‚РѕР»СЊРєРѕ Рє С‚РµРєСѓС‰РµРјСѓ РІРѕРїСЂРѕСЃСѓ.
+    /// </summary>
+    public void RestoreSomeTime(float addingTime)
+    {
+        if (!IsEnabled) return;
 
-		addingTime = Mathf.Max(0f, addingTime);
+        addingTime = Mathf.Max(0f, addingTime);
 
         currentTime += addingTime;
 
         UpdateLabelText();
-		RestartCoroutineIfNeeded();
-	}
+        RestartCoroutineIfNeeded();
+    }
 
-	/// <summary>
-	/// Явная пауза
-	/// </summary>
-	public void Pause()
-	{
-		isPaused = true;
-		if (timerCoroutine != null)
-		{
-			StopCoroutine(timerCoroutine);
-			timerCoroutine = null;
-		}
-	}
+    /// <summary>
+    /// РЇРІРЅР°СЏ РїР°СѓР·Р°.
+    /// </summary>
+    public void Pause()
+    {
+        isPaused = true;
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
+    }
 
-	/// <summary>
-	/// Явное возобновление 
-	/// </summary>
-	public void Resume()
-	{
-		isPaused = false;
-		if (IsEnabled && currentTime > 0f && timerCoroutine == null)
-		{
-			timerCoroutine = StartCoroutine(TimerCoroutine());
-		}
-	}
+    /// <summary>
+    /// РЇРІРЅРѕРµ РІРѕР·РѕР±РЅРѕРІР»РµРЅРёРµ.
+    /// </summary>
+    public void Resume()
+    {
+        isPaused = false;
+        if (IsEnabled && currentTime > 0f && timerCoroutine == null)
+        {
+            timerCoroutine = StartCoroutine(TimerCoroutine());
+        }
+    }
 
-	/// <summary>
-	/// Вызывается, когда пользователь ответил: ставим таймер на паузу.
-	/// </summary>
-	private void OnAnswered()
-	{
-		if (!IsEnabled) return;
-		Pause();
-	}
+    /// <summary>
+    /// Р’С‹Р·С‹РІР°РµС‚СЃСЏ, РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РѕС‚РІРµС‚РёР» РЅР° РІРѕРїСЂРѕСЃ.
+    /// </summary>
+    private void OnAnswered()
+    {
+        if (!IsEnabled) return;
+        Pause();
+    }
 
-	/// <summary>
-	/// Вызывается при загрузке следующего вопроса:
-	/// - Снимаем паузу (Resume).
-	/// - Если локальный режим — восстанавливаем время на perQuestionTime.
-	/// </summary>
-	private void WhenNextQuestion()
-	{
-		if (!IsEnabled) return;
+    /// <summary>
+    /// Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ СЃР»РµРґСѓСЋС‰РµРіРѕ РІРѕРїСЂРѕСЃР°:
+    /// - РЎРЅРёРјР°РµРј РїР°СѓР·Сѓ (Resume).
+    /// - Р•СЃР»Рё Р»РѕРєР°Р»СЊРЅС‹Р№ СЂРµР¶РёРј вЂ” РІРѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІСЂРµРјСЏ РЅР° perQuestionTime.
+    /// </summary>
+    public void WhenNextQuestion()
+    {
+        if (!IsEnabled) return;
 
-		if (!isGlobalMode)
-		{
-			currentTime = perQuestionTime;
-		}
+        if (!isGlobalMode)
+        {
+            currentTime = perQuestionTime;
+        }
 
-		Resume();
-		UpdateLabelText();
-	}
+        Resume();
+        UpdateLabelText();
+    }
 
-	/// <summary>
-	/// Перезапускает/запускает корутину таймера, если нужно.
-	/// </summary>
-	private void RestartCoroutineIfNeeded()
-	{
-		if (timerCoroutine != null)
-		{
-			StopCoroutine(timerCoroutine);
-			timerCoroutine = null;
-		}
+    /// <summary>
+    /// РџРµСЂРµР·Р°РїСѓСЃРєР°РµС‚/Р·Р°РїСѓСЃРєР°РµС‚ РєРѕСЂСѓС‚РёРЅСѓ С‚Р°Р№РјРµСЂР°, РµСЃР»Рё РЅСѓР¶РЅРѕ.
+    /// </summary>
+    private void RestartCoroutineIfNeeded()
+    {
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
 
-		if (!isPaused && IsEnabled && currentTime > 0f)
-		{
-			timerCoroutine = StartCoroutine(TimerCoroutine());
-		}
-	}
+        if (!isPaused && IsEnabled && currentTime > 0f)
+        {
+            timerCoroutine = StartCoroutine(TimerCoroutine());
+        }
+    }
 
-	/// <summary>
-	/// Основная корутина таймера.
-	/// Каждую секунду уменьшает currentTime, обновляет визуал.
-	/// Останавливается, если:
-	/// - время закончилось (тогда вызывает OnTimeEnd),
-	/// - элемент стал скрыт (IsEnabled == false) — корутина корректно завершится,
-	/// - явно остановлена извне (StopCoroutine).
-	/// </summary>
-	private IEnumerator TimerCoroutine()
-	{
-		while (currentTime > 0f)
-		{
-			if (!IsEnabled)
-			{
-				timerCoroutine = null;
-				yield break;
-			}
+    /// <summary>
+    /// РћСЃРЅРѕРІРЅР°СЏ РєРѕСЂСѓС‚РёРЅР° С‚Р°Р№РјРµСЂР°.
+    /// РљР°Р¶РґСѓСЋ СЃРµРєСѓРЅРґСѓ СѓРјРµРЅСЊС€Р°РµС‚ currentTime, РѕР±РЅРѕРІР»СЏРµС‚ РІРёР·СѓР°Р».
+    /// РћСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ, РµСЃР»Рё:
+    /// - РІСЂРµРјСЏ Р·Р°РєРѕРЅС‡РёР»РѕСЃСЊ (С‚РѕРіРґР° РІС‹Р·С‹РІР°РµС‚ OnTimeEnd);
+    /// - СЌР»РµРјРµРЅС‚ СЃС‚Р°Р» СЃРєСЂС‹С‚ (IsEnabled == false);
+    /// - СЏРІРЅРѕ РѕСЃС‚Р°РЅРѕРІР»РµРЅР° РёР·РІРЅРµ (StopCoroutine).
+    /// </summary>
+    private IEnumerator TimerCoroutine()
+    {
+        while (currentTime > 0f)
+        {
+            if (!IsEnabled)
+            {
+                timerCoroutine = null;
+                yield break;
+            }
 
-			yield return oneSecond;
+            yield return oneSecond;
 
-			if (isPaused || !IsEnabled)
-			{
-				timerCoroutine = null;
-				yield break;
-			}
+            if (isPaused || !IsEnabled)
+            {
+                timerCoroutine = null;
+                yield break;
+            }
 
 #if UNITY_EDITOR
-			if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.T))
-			{
-				currentTime = 0f;
-			}
+            if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.T))
+            {
+                currentTime = 0f;
+            }
 #endif
 
-			currentTime = Mathf.Max(0f, currentTime - 1f);
-			UpdateLabelText();
+            currentTime = Mathf.Max(0f, currentTime - 1f);
+            UpdateLabelText();
 
-			if (currentTime <= 0f)
-			{
-				Debug.Log("Время закончилось; вызов OnTimeEnd");
+            if (currentTime <= 0f)
+            {
+                Debug.Log("Р’СЂРµРјСЏ Р·Р°РєРѕРЅС‡РёР»РѕСЃСЊ; РІС‹Р·РѕРІ OnTimeEnd");
                 OnTimeEnd?.Invoke();
 
                 ResetTime();
-				yield break;
-			}
-		}
+                yield break;
+            }
+        }
 
-		timerCoroutine = null;
-	}
+        timerCoroutine = null;
+    }
 
-	/// <summary>
-	/// Обновляет текст в Label (MM:SS)
-	/// </summary>
-	private void UpdateLabelText()
-	{
-		if (timerText == null) return;
+    /// <summary>
+    /// РћР±РЅРѕРІР»СЏРµС‚ С‚РµРєСЃС‚ РІ Label (MM:SS)
+    /// </summary>
+    private void UpdateLabelText()
+    {
+        if (timerText == null) return;
 
-		int totalSeconds = Mathf.Max(0, Mathf.RoundToInt(currentTime));
-		int minutes = totalSeconds / 60;
-		int seconds = totalSeconds % 60;
+        int totalSeconds = Mathf.Max(0, Mathf.RoundToInt(currentTime));
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
 
-		timerText.text = $"{minutes:D2}:{seconds:D2}";
-	}
+        timerText.text = minutes.ToString("D2") + ":" + seconds.ToString("D2");
+    }
 }

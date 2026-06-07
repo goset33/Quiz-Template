@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.Localization.Settings;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using YG;
@@ -42,12 +43,14 @@ public class GameManager : MonoBehaviour
 	/// </summary>
 	private void Awake()
 	{
-		// Место для дебаг строк
-		
-		// Удалить потом обязательно
+#if UNITY_EDITOR
+        // Место для дебаг строк
 
-		// Настройка локализации
-		LocalizationSettings.InitializationOperation.Completed += LoadLocale;
+#endif
+
+
+        // Настройка локализации
+        LocalizationSettings.InitializationOperation.Completed += LoadLocale;
 
 		// Присвоение инстанса и подписки на ивенты
 		Instance = this;
@@ -74,15 +77,74 @@ public class GameManager : MonoBehaviour
 		foreach (var controller in allControllers)
 		{
 			controllers[controller.GetType()] = controller;
-			controller.Init();
-
-			if (controller is not LoadController && controller is not TimelessController)
-			{
-				controller.ChangeVisibilityState(false);
-			}
 		}
-		controllers[typeof(MenuController)].ChangeVisibilityState(true);
-		currentWindowType = typeof(MenuController);
+	}
+
+	private IEnumerator Start()
+	{
+		yield return null;
+
+		IEnumerator WaitForAllControllersReady()
+		{
+			bool allReady;
+			int maxFrames = 30;
+			int framesWaited = 0;
+
+			do
+			{
+				allReady = true;
+				foreach (var controller in controllers.Values)
+				{
+					var uiDocument = controller.GetComponent<UIDocument>();
+					if (uiDocument == null)
+					{
+						Debug.LogError($"[{controller.name}] UIDocument missing!");
+						continue;
+					}
+
+					if (uiDocument.rootVisualElement == null)
+					{
+						allReady = false;
+						break;
+					}
+				}
+
+				if (!allReady)
+				{
+					yield return null;
+					framesWaited++;
+					if (framesWaited >= maxFrames)
+					{
+						Debug.LogError("UI Toolkit did not initialize in time!");
+						yield break;
+					}
+				}
+			} while (!allReady);
+	}
+
+		yield return StartCoroutine(WaitForAllControllersReady());
+
+		foreach (var controller in controllers.Values)
+		{
+			controller.Init();
+		}
+
+		foreach (var controller in controllers.Values)
+		{
+			if (controller is LoadController || controller is TimelessController)
+				continue;
+			controller.ChangeVisibilityState(false);
+		}
+
+		if (controllers.TryGetValue(typeof(MenuController), out var menu))
+		{
+			menu.ChangeVisibilityState(true);
+			currentWindowType = typeof(MenuController);
+		}
+		else
+		{
+			Debug.LogError("MenuController not found!");
+		}
 	}
 
 	private void AfterSDKInitializing()

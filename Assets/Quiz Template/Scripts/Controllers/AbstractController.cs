@@ -9,6 +9,8 @@ public abstract class AbstractController : MonoBehaviour
 
     public virtual void Init()
     {
+        Debug.Log($"[{name}] Starting show...");
+        
         root = GetComponent<UIDocument>().rootVisualElement;
 
         var backInMenu = root.Q<Button>("Back");

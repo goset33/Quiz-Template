@@ -46,6 +46,7 @@ public class SoundManager : MonoBehaviour
 
         YG2.saves.musicVolume.AsObservable().Subscribe(value => SetMusicVolume(value / 100f)).AddTo(GameManager.disposables);
         YG2.saves.vfxVolume.AsObservable().Subscribe(value => SetVfxVolume(value / 100f)).AddTo(GameManager.disposables);
+        musicSource.Play();
     }
 
     /// <summary>
@@ -71,12 +72,24 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Ставит и снимает музыку с паузы
     /// </summary>
-    public void ChangeMusicState()
+    public void ChangeMusicState(bool? newState = null)
     {
-        if (musicSource.isPlaying)
+        if (newState == null)
+        {
+            if (musicSource.isPlaying)
+            {
+                musicSource.Pause();
+            }
+            else
+            {
+                musicSource.UnPause();
+            }
+        }
+        else if (newState == false)
         {
             musicSource.Pause();
-        } else
+        }
+        else
         {
             musicSource.UnPause();
         }

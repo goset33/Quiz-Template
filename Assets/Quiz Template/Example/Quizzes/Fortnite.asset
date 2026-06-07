@@ -19,4 +19,8 @@ MonoBehaviour:
   - "\u0424\u043E\u0440\u0442\u043D\u0430\u0438\u0442"
   - "\u0424\u043E\u0440\u0442\u0438\u043D\u0430\u0439\u0442"
   image: {fileID: 21300000, guid: 845fe154b140593439a2619d9074470f, type: 3}
-  testContainer: {fileID: 11400000, guid: 000a1f57e42733c4086232c652008230, type: 2}
+  localizedContainers:
+  - language: ru
+    container: {fileID: 11400000, guid: 000a1f57e42733c4086232c652008230, type: 2}
+  - language: en
+    container: {fileID: 11400000, guid: f695e9be87419f14b8f5e91933dae96b, type: 2}

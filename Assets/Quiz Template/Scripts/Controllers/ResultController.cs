@@ -50,12 +50,12 @@ public class ResultController : AbstractController
 	public override void ChangeVisibilityState(bool newState)
 	{
 		base.ChangeVisibilityState(newState);
-		SoundManager.Instance.ChangeMusicState();
-		if (newState)
+        SoundManager.Instance.ChangeMusicState(!newState);
+        if (newState)
 		{
 			SoundManager.JingleEnded += ShowUI;
-		}
-		else
+        }
+        else
 		{
 			SoundManager.JingleEnded -= ShowUI;
 		}

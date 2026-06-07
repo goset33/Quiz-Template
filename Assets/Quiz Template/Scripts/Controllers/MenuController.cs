@@ -8,6 +8,7 @@ public class MenuController : AbstractController
     public override void Init()
     {
         base.Init();
+
         root.Query<Button>().ForEach(button =>
         {
             switch (button.name)

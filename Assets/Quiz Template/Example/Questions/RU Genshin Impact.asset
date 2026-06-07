@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a62cfd1312c517d4f8cb4b7dd80671d1, type: 3}
-  m_Name: Minecraft
+  m_Name: RU Genshin Impact
   m_EditorClassIdentifier: 
   fileName: Mega Quiz Games.xlsx
-  sheetName: "\u041C\u0430\u0439\u043D\u043A\u0440\u0430\u0444\u0442"
+  sheetName: Genshin Impact

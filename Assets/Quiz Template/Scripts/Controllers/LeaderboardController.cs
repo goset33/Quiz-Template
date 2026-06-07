@@ -102,9 +102,9 @@ public class LeaderboardController : AbstractController
 
 			cached.positionText.text = data.position switch
 			{
-				1 => "🥇",
-				2 => "🥈",
-				3 => "🥉",
+				1 => "<sprite=0>",
+				2 => "<sprite=1>",
+				3 => "<sprite=2>",
 				_ => $"{data.position}"
 			};
 

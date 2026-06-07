@@ -1,21 +1,46 @@
+п»їusing System;
+using System.Collections.Generic;
 using UnityEngine;
+
+[Serializable]
+public class LocalizedQuestionContainer
+{
+    public string language; // "ru", "en"
+    public QuestionContainer container;
+}
 
 [CreateAssetMenu(fileName = "New Quiz Card", menuName = "Quiz Objects/Quiz Card", order = 51)]
 public class QuizCard : ScriptableObject
 {
-    // Количество вопросов, которое должно быть в каждой сложности (Легкая, средняя, жесткая, босс)
-    // Если 0, то все что есть
+    // РљРѕР»РёС‡РµСЃС‚РІРѕ РІРѕРїСЂРѕСЃРѕРІ РґР»СЏ РєР°Р¶РґРѕРіРѕ СѓСЂРѕРІРЅСЏ СЃР»РѕР¶РЅРѕСЃС‚Рё (Easy, Medium, Hard, Boss)
+    // Р•СЃР»Рё 0, С‚Рѕ РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ РІСЃРµ РґРѕСЃС‚СѓРїРЅС‹Рµ РІРѕРїСЂРѕСЃС‹
     public int[] questionsAmount = new int[4];
-
-    public string[] names = new string[1]; // Первое указанное имя будет использоваться в промпте
+    public string[] names = new string[1]; // РџРµСЂРІРѕРµ РёРјСЏ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РІ РїСЂРѕРјРїС‚Рµ
     public Sprite image;
 
-    public const int MIN_EXP = 30; // Начальное значение для 1-го уровня
+    public const int MIN_EXP = 30; // РќР°С‡Р°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РѕРїС‹С‚Р° РґР»СЏ СѓСЂРѕРІРЅСЏ 1
 
-    public QuestionContainer testContainer;
+    [Header("Localization")]
+    // РЎРїРёСЃРѕРє РєРѕРЅС‚РµР№РЅРµСЂРѕРІ РІРѕРїСЂРѕСЃРѕРІ РґР»СЏ СЂР°Р·РЅС‹С… СЏР·С‹РєРѕРІ
+    public List<LocalizedQuestionContainer> localizedContainers = new List<LocalizedQuestionContainer>();
 
     public string GetName()
     {
         return names[0];
+    }
+
+    public QuestionContainer GetContainerForLanguage(string language)
+    {
+        foreach (var localized in localizedContainers)
+        {
+            if (localized.container != null && 
+                string.Equals(localized.language, language, StringComparison.OrdinalIgnoreCase))
+            {
+                return localized.container;
+            }
+        }
+
+        Debug.LogError($"[QuizCard] No QuestionContainer found for language '{language}'");
+        return null;
     }
 }

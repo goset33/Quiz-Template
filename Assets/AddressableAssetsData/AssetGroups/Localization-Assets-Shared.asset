@@ -20,13 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 1
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5b89c009cc1e1e94b9da1c5f17536221
-    m_Address: ChatGPT Image Dec 7, 2025, 03_48_30 PM
-    m_ReadOnly: 1
-    m_SerializedLabels:
-    - Locale-en
-    - Locale-ru
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2b025560d9220e4f8f138865dba18d1
     m_Address: Assets/Quiz Template/Localization/Tables/Main Table Shared Data.asset
     m_ReadOnly: 1
